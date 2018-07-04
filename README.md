@@ -12,4 +12,4 @@ Run ```npm install``` to download the packages required for the webserver. After
 Alternatively, if you are using Firefox, just double-click ```index.html``` to open it in your browser.
 
 
-[Try the live demo, now!](../index.html)
+[Try the live demo, now!](./index.html)
