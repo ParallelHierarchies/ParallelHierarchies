@@ -1,0 +1,22 @@
+{
+  "name": "Parallel Hierarchies Visualization",
+  "version": "1.0.0",
+  "description": "Interactive information visualization for hierarchies in multi-dimensional, categorical datasets",
+  "main": "server.js",
+  "dependencies": {
+    "connect": "^3.6.5",
+    "csv-parse": "^2.4.0",
+    "csv-stringify": "^3.0.0",
+    "serve-static": "^1.13.1"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.wdf.sap.corp/D071538/ParallelHierarchiesRewrite.git"
+  },
+  "author": "Zana Vosough, Marius Hogräfer"
+}
