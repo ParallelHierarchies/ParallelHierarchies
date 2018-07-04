@@ -15,3 +15,5 @@
   * minimization of intersections between flows by reordering catgories, either using a greedy approach or the barycentric method for partitioned graphs
   * seperate view for items filtered per dimension as well as globally
   * fisheye lense to increase readability of small categories
+  
+[Try the live demo, now!](../index.html)
