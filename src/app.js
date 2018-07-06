@@ -58,7 +58,7 @@ let runActiveConfiguration = function() {
 };
 
 
-// EVENT LISTENERS TO UI COMPONENTS ////////////////////////////////////////////////////////////////
+// EVENT LISTENERS OF UI COMPONENTS ////////////////////////////////////////////////////////////////
 
 d3.select('#toggleGuiding').on('change', function() {
   d3.select('body').classed('lines', this.checked);
