@@ -99,7 +99,7 @@ nav#uiControls > #rulers > .ruler > div.delete::before {
 #datasetModal > div.modalBody {
   width: 400px;
   margin: 0 auto;
-  margin-top: 25%;
+  margin-top: 200px;
   padding: 20px;
   background: #fff;
   border-radius: 2px;
