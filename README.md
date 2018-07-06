@@ -2,7 +2,7 @@
 Implementation for **Parallel Hierarchies**, an interactive information
 visualization for hierarchical data in multi-dimensional, categorical datasets.
 
-[Visit our project page for further information](https://parallelhierarchies.github.io/ParallelHierarchies)
+[Visit our project page for further information including a live demo](https://parallelhierarchies.github.io/ParallelHierarchies)
 
 ## Prerequisites
   * Latest version of Firefox or Chrome
