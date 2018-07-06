@@ -9,8 +9,8 @@ parallelHierarchies.ui = function() {
   let dropDownMenu;
   let tooltip;
   let timestampSliders;
+  let swapDatasetButton;
   let title;
-  let guideLinesCheckbox;
   let rulerLength = 1000;
 
   let ui = function(selection) {
@@ -34,6 +34,7 @@ parallelHierarchies.ui = function() {
     // get a list of properties in the items (=dimension names)
     let keys = dataProvider.getSchema().dimensions;
 
+    dropDownMenu.selectAll('option').remove();
     for (let l = 0; l < keys.length; l++) {
       let label = keys[l];
 
@@ -50,28 +51,6 @@ parallelHierarchies.ui = function() {
     tooltip.append('p').attr('class', 'heading');
     tooltip.append('ul').attr('class', 'body');
     tooltip.classed('hidden', true);
-
-    timestampSliders.on('change', settimestamp);
-    timestampSliders.each(function(slider) {
-      // this.min = 0;
-      // this.max = data.schema.timestamps.length - 1;
-      // if (this.max === 0) this.disabled = true;
-      this.step = 1;
-      this.value = 0;
-    });
-  };
-
-  /**
-   * Takes the values of both sliders and sets the timestamps in parallelHierarchies accordingly.
-   */
-  let settimestamp = function() {
-    let timestamps = [];
-    let valid = true;
-    timestampSliders.each(function(s) {
-      timestamps.push(data.schema.timestamps[this.value]);
-      valid = valid && this.value <= 1;
-    });
-    if (valid) hierarchies.timestamps(timestamps);
   };
 
   /**
@@ -149,7 +128,7 @@ parallelHierarchies.ui = function() {
       }
     }
     tooltip.classed('hidden', false);
-  }
+  };
 
   /**
    * Set the selection that will display the name of the visualization.
@@ -186,6 +165,13 @@ parallelHierarchies.ui = function() {
     if (!arguments.length) return timestampSliders;
     if (typeof _ === 'object') timestampSliders = _;
     else throw Error('ui: timestampSliders must be of type object');
+    return ui;
+  };
+
+  ui.swapDatasetButton = function(_) {
+    if (!arguments.length) return swapDatasetButton;
+    if (typeof _ === 'object') swapDatasetButton = _;
+    else throw Error('ui: swapDatasetButton must be of type object');
     return ui;
   };
 

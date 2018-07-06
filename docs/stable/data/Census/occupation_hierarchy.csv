@@ -1,0 +1,608 @@
+start;end;description
+0;0;N/A (less than 16 years old/unemployed who never worked/NILF who last worked prior to 1985)
+3;202;MANAGERIAL AND PROFESSIONAL SPECIALTY OCCUPATIONS
+3;42;Executive, Administrative, and Managerial Occupations
+3;3;Legislators
+4;4;Chief executives and general administrators, public administration
+5;5;Administrators and officials, public administration
+6;6;Administrators, protective services
+7;7;Financial managers
+8;8;Personnel and labor relations managers
+9;12;Purchasing managers
+13;13;Managers, marketing, advertising, and public relations
+14;14;Administrators, education and related fields
+15;15;Managers, medicine and health
+16;16;Postmasters and mail superintendents
+17;17;Managers, food serving and lodging establishments
+18;18;Managers, properties and real estate
+19;20;Funeral directors (part 1359)
+21;21;Managers, service organizations, n.e.c.
+22;22;Managers and administrators, n.e.c.
+23;42;Management Related Occupations
+23;23;Accountants and auditors
+24;24;Underwriters
+25;25;Other financial officers
+26;26;Management analysts
+27;27;Personnel, training, and labor relations specialists
+28;28;Purchasing agents and buyers, farm products
+29;32;Buyers, wholesale and retail trade except farm products
+33;33;Purchasing agents and buyers, n.e.c.
+34;34;Business and promotion agents
+35;35;Construction inspectors
+36;36;Inspectors and compliance officers, except construction
+37;42;Management related occupations, n.e.c.
+43;202;Professional Specialty Occupations
+43;63;Engineers, Architects, and Surveyors
+43;43;Architects
+44;62;Engineers
+44;44;Aerospace
+45;45;Metallurgical and materials
+46;46;Mining
+47;47;Petroleum
+48;48;Chemical
+49;52;Nuclear
+53;53;Civil
+54;54;Agricultural
+55;55;Electrical and electronic
+56;56;Industrial
+57;57;Mechanical
+58;58;Marine and naval architects
+59;62;Engineers, n.e.c.
+63;63;Surveyors and mapping scientists
+64;68;Mathematical and Computer Scientists
+64;64;Computer systems analysts and scientists
+65;65;Operations and systems researchers and analysts
+66;66;Actuaries
+67;67;Statisticians
+68;68;Mathematical scientists, n.e.c.
+69;83;Natural Scientists
+69;72;Physicists and astronomers
+73;73;Chemists, except biochemists
+74;74;Atmospheric and space scientists
+75;75;Geologists and geodesists
+76;76;Physical scientists, n.e.c.
+77;77;Agricultural and food scientists
+78;78;Biological and life scientists
+79;82;Forestry and conservation scientists
+83;83;Medical scientists
+84;94;Health Diagnosing Occupations
+84;84;Physicians
+85;85;Dentists
+86;86;Veterinarians
+87;87;Optometrists
+88;88;Podiatrists
+89;94;Health diagnosing practitioners, n.e.c.
+95;112;Health Assessment and Treating Occupations
+95;95;Registered nurses
+96;96;Pharmacists
+97;97;Dietitians
+98;105;Therapists
+98;98;Respiratory therapists
+99;102;Occupational therapists
+103;103;Physical therapists
+104;104;Speech therapists
+105;105;Therapists, n.e.c.
+106;112;Physicians' assistants
+113;154;Teachers, Postsecondary
+113;113;Earth, environmental, and marine science teachers
+114;114;Biological science teachers
+115;115;Chemistry teachers
+116;116;Physics teachers
+117;117;Natural science teachers, n.e.c.
+118;118;Psychology teachers
+119;122;Economics teachers
+123;123;History teachers
+124;124;Political science teachers
+125;125;Sociology teachers
+126;126;Social science teachers, n.e.c.
+127;127;Engineering teachers
+128;128;Mathematical science teachers
+129;132;Computer science teachers
+133;133;Medical science teachers
+134;134;Health specialties teachers
+135;135;Business, commerce, and marketing teachers
+136;136;Agriculture and forestry teachers
+137;137;Art, drama, and music teachers
+138;138;Physical education teachers
+139;142;Education teachers
+143;143;English teachers
+144;144;Foreign language teachers
+145;145;Law teachers
+146;146;Social work teachers
+147;147;Theology teachers
+148;148;Trade and industrial teachers
+149;152;Home economics teachers
+153;153;Teachers, postsecondary, n.e.c.
+154;154;Postsecondary teachers, subject not specified
+155;162;Teachers, Except Postsecondary
+155;155;Teachers, prekindergarten and kindergarten
+156;156;Teachers, elementary school
+157;157;Teachers, secondary school
+158;158;Teachers, special education
+159;162;Teachers, n.e.c.
+163;163;Counselors, Educational and Vocational
+164;165;Librarians, Archivists, and Curators
+164;164;Librarians
+165;165;Archivists and curators
+166;173;Social Scientists and Urban Planners
+166;166;Economists
+167;167;Psychologists
+168;168;Sociologists
+169;172;Social scientists, n.e.c.
+173;173;Urban planners
+174;177;Social, Recreation, and Religious Workers
+174;174;Social workers
+175;175;Recreation workers
+176;176;Clergy
+177;177;Religious workers, n.e.c.
+178;182;Lawyers and Judges
+178;178;Lawyers
+179;182;Judges
+183;202;Writers, Artists, Entertainers, and Athletes
+183;183;Authors
+184;184;Technical writers
+185;185;Designers
+186;186;Musicians and composers
+187;187;Actors and directors
+188;188;Painters, sculptors, craft-artists, and artist printmakers
+189;192;Photographers
+193;193;Dancers
+194;194;Artists, performers, and related workers, n.e.c.
+195;196;Editors and reporters
+197;197;Public relations specialists
+198;198;Announcers
+199;202;Athletes
+203;402;TECHNICAL, SALES, AND ADMINISTRATIVE SUPPORT OCCUPATIONS
+203;242;Technicians and Related Support Occupations
+203;212;Health Technologists and Technicians
+203;203;Clinical laboratory technologists and technicians
+204;204;Dental hygienists
+205;205;Health record technologists and technicians
+206;206;Radiologic technicians
+207;207;Licensed practical nurses
+208;212;Health technologists and technicians, n.e.c.
+213;242;Technologists and Technicians, Except Health
+213;222;Engineering and Related Technologists and Technicians
+213;213;Electrical and electronic technicians
+214;214;Industrial engineering technicians
+215;215;Mechanical engineering technicians
+216;216;Engineering technicians, n.e.c.
+217;217;Drafting occupations
+218;222;Surveying and mapping technicians
+223;225;Science Technicians
+223;223;Biological technicians
+224;224;Chemical technicians
+225;225;Science technicians, n.e.c.
+226;242;Technicians, Except Health, Engineering, and Science
+226;226;Airplane pilots and navigators
+227;227;Air traffic controllers
+228;228;Broadcast equipment operators
+229;232;Computer programmers
+233;233;Tool programmers, numerical control
+234;234;Legal assistants
+235;242;Technicians, n.e.c.
+243;302;Sales Occupations
+243;252;Supervisors and Proprietors, Sales Occupations
+253;257;Sales Representatives, Finance and Business Services
+253;253;Insurance sales occupations
+254;254;Real estate sales occupations
+255;255;Securities and financial services sales occupations
+256;256;Advertising and related sales occupations
+257;257;Sales occupations, other business services
+258;262;Sales Representatives, Commodities, Except Retail
+258;258;Sales engineers
+259;262;Sales representatives, mining, manufacturing, and wholesale
+263;282;Sales Workers, Retail and Personal Services
+263;263;Sales workers, motor vehicles and boats
+264;264;Sales workers, apparel
+265;265;Sales workers, shoes
+266;266;Sales workers, furniture and home furnishings
+267;267;Sales workers, radio, TV, hi-fi, and appliances
+268;268;Sales workers, hardware and building supplies
+269;273;Sales workers, parts
+274;274;Sales workers, other commodities
+275;275;Sales counter clerks
+276;276;Cashiers
+277;277;Street and door-to-door sales workers
+278;282;News vendors
+283;302;Sales Related Occupations
+283;283;Demonstrators, promoters and models, sales
+284;284;Auctioneers
+285;302;Sales support occupations, n.e.c.
+303;402;Administrative Support Occupations, Including Clerical
+303;307;Supervisors, Administrative Support Occupations
+303;303;Supervisors, general office
+304;304;Supervisors, computer equipment operators
+305;305;Supervisors, financial records processing
+306;306;Chief communications operators
+307;307;Supervisors, distribution, scheduling, and adjusting clerks
+308;312;Computer Equipment Operators
+308;308;Computer operators
+309;312;Peripheral equipment operators
+313;315;Secretaries, Stenographers, and Typists
+313;313;Secretaries
+314;314;Stenographers
+315;315;Typists
+316;324;Information Clerks
+316;316;Interviewers
+317;317;Hotel clerks
+318;318;Transportation ticket and reservation agents
+319;322;Receptionists
+323;324;Information clerks, n.e.c.
+325;336;Records Processing Occupations, Except Financial
+325;325;Classified-ad clerks
+326;326;Correspondence clerks
+327;327;Order clerks
+328;328;Personnel clerks, except payroll and timekeeping
+329;334;Library clerks
+335;335;File clerks
+336;336;Records clerks
+337;344;Financial Records Processing Occupations
+337;337;Bookkeepers, accounting, and auditing clerks
+338;338;Payroll and timekeeping clerks
+339;342;Billing clerks
+343;343;Cost and rate clerks
+344;344;Billing, posting, and calculating machine operators
+345;347;Duplicating, Mail and Other Office Machine Operators
+345;345;Duplicating machine operators
+346;346;Mail preparing and paper handling machine operators
+347;347;Office machine operators, n.e.c.
+348;353;Communications Equipment Operators
+348;352;Telephone operators
+353;353;Communications equipment operators, n.e.c.
+354;358;Mail and Message Distributing Occupations
+354;354;Postal clerks, except mail carriers
+355;355;Mail carriers, postal service
+356;356;Mail clerks, except postal service
+357;358;Messengers
+359;374;Material Recording, Scheduling, and Distributing Clerks
+359;362;Dispatchers
+363;363;Production coordinators
+364;364;Traffic, shipping, and receiving clerks
+365;365;Stock and inventory clerks
+366;366;Meter readers
+368;372;Weighers, measurers, checkers, and samplers
+373;373;Expediters
+374;374;Material recording, scheduling, and distributing clerks, n.e.c.
+375;378;Adjusters and Investigators
+375;375;Insurance adjusters, examiners, and investigators
+376;376;Investigators and adjusters, except insurance
+377;377;Eligibility clerks, social welfare
+378;378;Bill and account collectors
+379;402;Miscellaneous Administrative Support Occupations
+379;382;General office clerks
+383;383;Bank tellers
+384;384;Proofreaders
+385;385;Data-entry keyers
+386;386;Statistical clerks
+387;388;Teachers' aides
+389;402;Administrative support occupations, n.e.c.
+403;472;SERVICE OCCUPATIONS
+403;412;Private Household Occupations
+403;403;Launderers and ironers
+404;404;Cooks, private household
+405;405;Housekeepers and butlers
+406;406;Child care workers, private household
+407;412;Private household cleaners and servants
+413;432;Protective Service Occupations
+413;415;Supervisors, Protective Service Occupations
+413;413;Supervisors, firefighting and fire prevention occupations
+414;414;Supervisors, police and detectives
+415;415;Supervisors, guards
+416;417;Firefighting and Fire Prevention Occupations
+416;416;Fire inspection and fire prevention occupations
+417;417;Firefighting occupations
+418;424;Police and Detectives
+418;422;Police and detectives, public service
+423;423;Sheriffs, bailiffs, and other law enforcement officers
+424;424;Correctional institution officers
+425;432;Guards
+425;425;Crossing guards
+426;426;Guards and police, except public service
+427;432;Protective service occupations, n.e.c.
+433;472;Service Occupations, Except Protective and Household
+433;444;Food Preparation and Service Occupations
+433;433;Supervisors, food preparation and service occupations
+434;434;Bartenders
+435;435;Waiters and waitresses
+436;437;Cooks
+438;438;Food counter, fountain and related occupations
+439;442;Kitchen workers, food preparation '/waitresses' assistants
+443;443;Waiters'/waitresses' assistants
+444;444;Miscellaneous food preparation occupations
+445;447;Health Service Occupations
+445;445;Dental assistants
+446;446;Health aides, except nursing
+447;447;Nursing aides, orderlies, and attendants
+448;455;Cleaning and Building Service Occupations, Except Household
+448;448;Supervisors, cleaning and building service workers
+449;452;Maids and housemen
+453;453;Janitors and cleaners
+454;454;Elevator operators
+455;455;Pest control occupations
+456;472;Personal Service Occupations
+456;456;Supervisors, personal service occupations
+457;457;Barbers
+458;458;Hairdressers and cosmetologists
+459;460;Attendants, amusement and recreation facilities 's assistants (part 5264)
+461;461;Guides
+462;462;Ushers
+463;463;Public transportation attendants
+464;464;Baggage porters and bellhops
+465;465;Welfare service aides
+466;466;Family child care providers
+467;467;Early childhood teacher's assistants
+468;468;Child care workers, n.e.c.
+469;472;Personal service occupations, n.e.c.
+473;476;Farm Operators and Managers
+473;473;Farmers, except horticultural
+474;474;Horticultural specialty farmers
+475;475;Managers, farms, except horticultural
+476;476;Managers, horticultural specialty farms
+477;493;Other Agricultural and Related Occupations
+477;484;Farm Occupations, Except Managerial
+477;478;Supervisors, farm workers
+479;482;Farm workers
+483;483;Marine life cultivation workers
+484;484;Nursery workers
+485;493;Related Agricultural Occupations
+485;485;Supervisors, related agricultural occupations
+486;486;Groundskeepers and gardeners, except farm
+487;487;Animal caretakers, except farm
+488;488;Graders and sorters, agricultural products
+489;493;Inspectors, agricultural products
+494;496;Forestry and Logging Occupations
+494;494;Supervisors, forestry and logging workers
+495;495;Forestry workers, except logging
+496;496;Timber cutting and logging occupations
+497;502;Fishers, Hunters, and Trappers
+497;497;Captains and other officers, fishing vessels
+498;498;Fishers
+499;502;Hunters and trappers
+503;702;PRECISION PRODUCTION, CRAFT, AND REPAIR OCCUPATIONS
+503;552;Mechanics and Repairers
+503;504;Supervisors, mechanics and repairers
+505;552;Mechanics and Repairers, Except Supervisors
+505;517;Vehicle and Mobile Equipment Mechanics and Repairers
+505;506;Automobile mechanics (part 6111)
+506;506;Automobile mechanic apprentices
+507;507;Bus, truck, and stationary engine mechanics
+508;508;Aircraft engine mechanics
+509;513;Small engine repairers
+514;514;Automobile body and related repairers
+515;515;Aircraft mechanics, except engine
+516;516;Heavy equipment mechanics
+517;517;Farm equipment mechanics
+518;518;Industrial machinery repairers
+519;522;Machinery maintenance occupations
+523;533;Electrical and Electronic Equipment Repairers
+523;524;Electronic repairers, communications and industrial   equipment
+525;525;Data processing equipment repairers
+526;526;Household appliance and power tool repairers
+527;528;Telephone line installers and repairers
+529;532;Telephone installers and repairers
+533;533;Miscellaneous electrical and electronic equipment repairers
+534;534;Heating, air conditioning, and refrigeration mechanics
+535;552;Miscellaneous Mechanics and Repairers
+535;535;Camera, watch, and musical instrument repairers
+536;537;Locksmiths and safe repairers
+538;538;Office machine repairers
+539;542;Mechanical controls and valve repairers
+543;543;Elevator installers and repairers
+544;546;Millwrights
+547;548;Specified mechanics and repairers, n.e.c.
+549;552;Not specified mechanics and repairers
+553;612;Construction Trades
+553;562;Supervisors, Construction Occupations
+553;553;Supervisors, brickmasons, stonemasons, and tile setters
+554;554;Supervisors, carpenters and related workers
+555;555;Supervisors, electricians and power transmission installers
+556;556;Supervisors, painters, paperhangers, and plasterers
+557;557;Supervisors, plumbers, pipefitters, and steamfitters
+558;562;Supervisors, construction, n.e.c.
+563;612;Construction Trades, Except Supervisors
+563;564;Brickmasons and stonemasons (part 6412, part 6413)
+564;564;Brickmason and stonemason apprentices
+565;565;Tile setters, hard and soft
+566;566;Carpet installers
+567;572;Carpenters (part 6422)
+569;572;Carpenter apprentices (part 6422)
+573;574;Drywall installers
+575;576;Electricians (part 6432)
+576;576;Electrician apprentices
+577;578;Electrical power installers and repairers
+579;582;Painters, construction and maintenance
+583;583;Paperhangers
+584;584;Plasterers
+585;587;Plumbers, pipefitters, and steamfitters (part 645)
+587;587;Plumber, pipefitter, and steamfitter apprentices
+588;588;Concrete and terrazzo finishers
+589;592;Glaziers
+593;593;Insulation workers
+594;594;Paving, surfacing, and tamping equipment operators
+595;595;Roofers
+596;596;Sheetmetal duct installers
+597;597;Structural metal workers
+598;598;Drillers, earth
+599;612;Construction trades, n.e.c.
+613;627;Extractive Occupations
+613;613;Supervisors, extractive occupations
+614;614;Drillers, oil well
+615;615;Explosives workers
+616;616;Mining machine operators
+617;627;Mining occupations, n.e.c.
+628;702;Precision Production Occupations
+628;633;Supervisors, production occupations
+634;655;Precision Metal Working Occupations
+634;635;Tool and die makers (part 6811)
+635;635;Tool and die maker apprentices
+636;636;Precision assemblers, metal
+637;642;Machinists (part 6813)
+639;642;Machinist apprentices (part 6813)
+643;643;Boilermakers
+644;644;Precision grinders, filers, and tool sharpeners
+645;645;Patternmakers and model makers, metal
+646;646;Lay-out workers
+647;648;Precious stones and metals workers (Jewelers)
+649;652;Engravers, metal
+653;654;Sheet metal workers (part 6824)
+654;654;Sheet metal worker apprentices
+655;655;Miscellaneous precision metal workers
+656;665;Precision Woodworking Occupations
+656;656;Patternmakers and model makers, wood
+657;657;Cabinet makers and bench carpenters
+658;658;Furniture and wood finishers
+659;665;Miscellaneous precision woodworkers
+666;674;Precision Textile, Apparel, and Furnishings Machine Workers
+666;666;Dressmakers
+667;667;Tailors
+668;668;Upholsterers
+669;673;Shoe repairers
+674;674;Miscellaneous precision apparel and fabric workers
+675;685;Precision Workers, Assorted Materials
+675;675;Hand molders and shapers, except jewelers
+676;676;Patternmakers, lay-out workers, and cutters
+677;677;Optical goods workers
+678;678;Dental laboratory and medical appliance technicians
+679;682;Bookbinders
+683;683;Electrical and electronic equipment assemblers
+684;685;Miscellaneous precision workers, n.e.c.
+686;688;Precision Food Production Occupations
+686;686;Butchers and meat cutters
+687;687;Bakers
+688;688;Food batchmakers
+689;693;Precision Inspectors, Testers, and Related Workers
+689;692;Inspectors, testers, and graders
+693;693;Adjusters and calibrators
+694;702;Plant and System Operators
+694;694;Water and sewage treatment plant operators
+695;695;Power plant operators
+696;698;Stationary engineers (part 693, 7668)
+699;702;Miscellaneous plant and system operators
+703;902;OPERATORS, FABRICATORS, AND LABORERS
+703;802;Machine Operators, Assemblers, and Inspectors
+703;782;Machine Operators and Tenders, Except Precision
+703;716;Metal Working and Plastic Working Machine Operators
+703;703;Lathe and turning machine set-up operators
+704;704;Lathe and turning machine operators
+705;705;Milling and planing machine operators
+706;706;Punching and stamping press machine operators
+707;707;Rolling machine operators
+708;708;Drilling and boring machine operators
+709;712;Grinding, abrading, buffing, and polishing machine   operators
+713;713;Forging machine operators
+714;714;Numerical control machine operators
+715;716;Miscellaneous metal, plastic, stone, and glass working   achine operators
+717;718;Fabricating machine operators, n.e.c.
+719;725;Metal and Plastic Processing Machine Operators
+719;722;Molding and casting machine operators
+723;723;Metal plating machine operators
+724;724;Heat treating equipment operators
+725;725;Miscellaneous metal and plastic processing machine operators
+726;733;Woodworking Machine Operators
+726;726;Wood lathe, routing, and planing machine operators
+727;727;Sawing machine operators
+728;728;Shaping and joining machine operators
+729;732;Nailing and tacking machine operators
+733;733;Miscellaneous woodworking machine operators
+734;737;Printing Machine Operators
+734;734;Printing press operators
+735;735;Photoengravers and lithographers
+736;736;Typesetters and compositors
+737;737;Miscellaneous printing machine operators
+738;752;Textile, Apparel, and Furnishings Machine Operators
+738;738;Winding and twisting machine operators
+739;742;Knitting, looping, taping, and weaving machine operators
+743;743;Textile cutting machine operators
+744;744;Textile sewing machine operators
+745;746;Shoe machine operators
+747;747;Pressing machine operators
+748;748;Laundering and dry cleaning machine operators
+749;752;Miscellaneous textile machine operators
+753;782;Machine Operators, Assorted Materials
+753;753;Cementing and gluing machine operators
+754;754;Packaging and filling machine operators
+755;755;Extruding and forming machine operators
+756;756;Mixing and blending machine operators
+757;757;Separating, filtering, and clarifying machine operators
+758;758;Compressing and compacting machine operators
+759;762;Painting and paint spraying machine operators
+763;763;Roasting and baking machine operators, food
+764;764;Washing, cleaning, and pickling machine operators
+765;765;Folding machine operators
+766;767;Furnace, kiln, and oven operators, except food
+768;768;Crushing and grinding machine operators
+769;772;Slicing and cutting machine operators
+773;773;Motion picture projectionists
+774;776;Photographic process machine operators
+777;778;Miscellaneous machine operators, n.e.c. (part 7479, 7665, 7679)
+779;782;Machine operators, not specified
+783;795;Fabricators, Assemblers, and Hand Working Occupations
+783;783;Welders and cutters
+784;784;Solderers and brazers
+785;785;Assemblers
+786;786;Hand cutting and trimming occupations
+787;788;Hand molding, casting, and forming occupations
+789;792;Hand painting, coating, and decorating occupations
+793;794;Hand engraving and printing occupations
+795;795;Miscellaneous hand working occupations
+796;802;Production Inspectors, Testers, Samplers, and Weighers
+796;796;Production inspectors, checkers, and examiners
+797;797;Production testers
+798;798;Production samplers and weighers
+799;802;Graders and sorters, except agricultural
+803;863;Transportation and Material Moving Occupations
+803;822;Motor Vehicle Operators
+803;803;Supervisors, motor vehicle operators
+804;805;Truck drivers
+806;807;Driver-sales workers
+808;808;Bus drivers
+809;812;Taxicab drivers and chauffeurs
+813;813;Parking lot attendants
+814;822;Motor transportation occupations, n.e.c.
+823;842;Transportation Occupations, Except Motor Vehicles
+823;827;Rail Transportation Occupations
+823;823;Railroad conductors and yardmasters
+824;824;Locomotive operating occupations
+825;825;Railroad brake, signal, and switch operators
+826;827;Rail vehicle operators, n.e.c.
+828;842;Water Transportation Occupations
+828;828;Ship captains and mates, except fishing boats
+829;832;Sailors and deckhands
+833;833;Marine engineers
+834;842;Bridge, lock, and lighthouse tenders
+843;863;Material Moving Equipment Operators
+843;843;Supervisors, material moving equipment operators
+844;844;Operating engineers
+845;847;Longshore equipment operators
+848;848;Hoist and winch operators
+849;852;Crane and tower operators
+853;854;Excavating and loading machine operators
+855;855;Grader, dozer, and scraper operators
+856;858;Industrial truck and tractor equipment operators
+859;863;Miscellaneous material moving equipment operators
+864;902;Handlers, Equipment Cleaners, Helpers, and Laborers
+864;864;Supervisors, handlers, equipment cleaners, and laborers, n.e.c.
+865;865;Helpers, mechanics, and repairers
+866;868;Helpers, Construction, and Extractive Occupations
+866;866;Helpers, construction trades
+867;867;Helpers, surveyor
+868;868;Helpers, extractive occupations
+869;873;Construction laborers
+874;874;Production helpers
+875;884;Freight, Stock, and Material Handlers
+875;875;Garbage collectors
+876;876;Stevedores
+877;877;Stock handlers and baggers
+878;882;Machine feeders and offbearers
+883;884;Freight, stock, and material handlers, n.e.c.
+885;886;Garage and service station related occupations
+887;887;Vehicle washers and equipment cleaners
+888;888;Hand packers and packagers occupations
+889;902;Laborers, except construction
+903;908;MILITARY OCCUPATIONS (Includes only uniquely military occupations.
+903;903;Commissioned officers and warrant officers
+904;904;Non-commissioned officers and other enlisted personnel
+905;908;Military occupation, rank not specified
+909;999;EXPERIENCED UNEMPLOYED NOT CLASSIFIED BY OCCUPATION
+909;999;Unemployed, last worked 1984 or earlier

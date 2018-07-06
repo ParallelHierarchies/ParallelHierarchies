@@ -1,0 +1,284 @@
+start;end;description
+0;0;N/A (less than 16 years old/unemployed who never worked/nilf who last worked prior to 1985)
+10;39;AGRICULTURE, FORESTRY, AND FISHERIES
+10;10;Agricultural production, crops
+11;11;Agricultural production, livestock
+12;12;Veterinary services
+13;20;Landscape and horticultural services
+21;30;Agricultural services, n.e.c.
+31;31;Forestry
+32;39;Fishing, hunting, and trapping
+40;59;MINING
+40;40;Metal mining
+41;41;Coal mining
+42;42;Oil and gas extraction
+43;59;Nonmetallic mining and quarrying, except fuel
+60;99;CONSTRUCTION
+100;399;MANUFACTURING
+100;229;Nondurable Goods
+100;129;Food and kindred products
+100;100;Meat products
+101;101;Dairy products
+102;109;Canned, frozen and preserved fruits and vegetables
+110;110;Grain mill products
+111;111;Bakery products
+112;119;Sugar and confectionery products
+120;120;Beverage industries
+121;121;Miscellaneous food preparations and kindred products
+122;129;Not specified food industries
+130;131;Tobacco manufactures
+132;150;Textile mill products
+132;139;Knitting mills
+140;140;Dyeing and finishing textiles, except wool and knit   goods
+141;141;Carpets and rugs
+142;149;Yarn, thread, and fabric mills
+150;150;Miscellaneous textile mill products
+151;159;Apparel and other finished textile products
+151;151;Apparel and accessories, except knit
+152;159;Miscellaneous fabricated textile products
+160;170;Paper and allied products
+160;160;Pulp, paper, and paperboard mills
+161;161;Miscellaneous paper and pulp products
+162;170;Paperboard containers and boxes
+171;179;Printing, publishing, and allied industries
+171;171;Newspaper publishing and printing
+172;179;Printing, publishing, and allied industries, except   newspapers
+180;199;Chemicals and allied products
+180;180;Plastics, synthetics, and resins
+181;181;Drugs
+182;189;Soaps and cosmetics
+190;190;Paints, varnishes, and related products
+191;191;Agricultural chemicals
+192;199;Industrial and miscellaneous chemicals
+200;209;Petroleum and coal products
+200;200;Petroleum refining
+201;209;Miscellaneous petroleum and coal products
+210;219;Rubber and miscellaneous plastics products
+210;210;Tires and inner tubes
+211;211;Other rubber products, and plastics footwear and   belting
+212;219;Miscellaneous plastics products
+220;229;Leather and leather products
+220;220;Leather tanning and finishing
+221;221;Footwear, except rubber and plastic
+222;229;Leather products, except footwear
+230;399;Durable Goods
+230;241;Lumber and wood products, except furniture
+230;230;Logging
+231;231;Sawmills, planing mills, and millwork
+232;240;Wood buildings and mobile homes
+241;241;Miscellaneous wood products
+242;249;Furniture and fixtures
+250;269;Stone, clay, glass, and concrete products
+250;250;Glass and glass products
+251;251;Cement, concrete, gypsum, and plaster products
+252;260;Structural clay products
+261;261;Pottery and related products
+262;269;Miscellaneous nonmetallic mineral and stone products
+270;309;Metal industries
+270;270;Blast furnaces, steelworks, rolling and finishing mills
+271;271;Iron and steel foundries
+272;279;Primary aluminum industries
+280;280;Other primary metal industries
+281;281;Cutlery, handtools, and general hardware
+282;289;Fabricated structural metal products
+290;290;Screw machine products
+291;291;Metal forgings and stampings
+292;299;Ordnance
+300;300;Miscellaneous fabricated metal products
+301;309;Not specified metal industries
+310;339;Machinery and computing equipment
+310;310;Engines and turbines
+311;311;Farm machinery and equipment
+312;319;Construction and material handling machines
+320;320;Metalworking machinery
+321;321;Office and accounting machines
+322;330;Computers and related equipment .e.c.
+331;331;Machinery, except electrical, n.e.c.
+332;339;Not specified machinery
+340;350;Electrical machinery, equipment, and supplies
+340;340;Household appliances
+341;341;Radio, TV, and communication equipment
+342;349;Electrical machinery, equipment, and supplies, n.e.c.
+350;350;Not specified electrical machinery, equipment, and   supplies
+351;370;Transportation equipment
+351;351;Motor vehicles and motor vehicle equipment
+352;359;Aircraft and parts
+360;360;Ship and boat building and repairing
+361;361;Railroad locomotives and equipment
+362;369;Guided missiles, space vehicles, and parts
+370;370;Cycles and miscellaneous transportation equipment
+371;389;Professional and photographic equipment, and watches
+371;371;Scientific and controlling instruments
+372;379;Medical, dental, and optical instruments and supplies
+380;380;Photographic equipment and supplies
+381;389;Watches, clocks, and clockwork operated devices
+390;390;Toys, amusement, and sporting goods
+391;391;Miscellaneous manufacturing industries
+392;399;Not specified manufacturing industries
+400;499;TRANSPORTATION, COMMUNICATIONS, AND OTHER PUBLIC UTILITIES
+400;439;Transportation
+400;400;Railroads
+401;401;Bus service and urban transit
+402;409;Taxicab service
+410;410;Trucking service
+411;411;Warehousing and storage
+412;419;U.S. Postal Service
+420;420;Water transportation
+421;421;Air transportation
+422;431;Pipe lines, except natural gas
+432;439;Services incidental to transportation
+440;449;Communications
+440;440;Radio and television broadcasting and cable
+441;441;Telephone communications
+442;449;Telegraph and miscellaneous communications services
+450;499;Utilities and sanitary services
+450;450;Electric light and power
+451;451;Gas and steam supply systems
+452;469;Electric and gas, and other combinations
+470;470;Water supply and irrigation
+471;471;Sanitary services
+472;499;Not specified utilities
+500;579;WHOLESALE TRADE
+500;539;Durable Goods
+500;500;Motor vehicles and equipment
+501;501;Furniture and home furnishings
+502;509;Lumber and construction materials
+510;510;Professional and commercial equipment and supplies
+511;511;Metals and minerals, except petroleum
+512;520;Electrical goods
+521;529;Hardware, plumbing and heating supplies
+530;530;Machinery, equipment, and supplies
+531;531;Scrap and waste materials
+532;539;Miscellaneous wholesale, durable goods
+540;579;Nondurable Goods
+540;540;Paper and paper products
+541;541;Drugs, chemicals and allied products
+542;549;Apparel, fabrics, and notions -product raw materials
+550;550;Groceries and related products
+551;551;Farm-product raw materials
+552;559;Petroleum products
+560;560;Alcoholic beverages
+561;561;Farm supplies
+562;570;Miscellaneous wholesale, nondurable goods
+571;579;Not specified wholesale trade
+580;699;RETAIL TRADE
+580;580;Lumber and building material retailing
+581;581;Hardware stores
+582;589;Retail nurseries and garden stores
+590;590;Mobile home dealers
+591;591;Department stores
+592;599;Variety stores
+600;600;Miscellaneous general merchandise stores
+601;601;Grocery stores
+602;609;Dairy products stores .e.c.
+610;610;Retail bakeries
+611;611;Food stores, n.e.c.
+612;619;Motor vehicle dealers
+620;620;Auto and home supply stores
+621;621;Gasoline service stations
+622;622;Miscellaneous vehicle dealers
+623;629;Apparel and accessory stores, except shoe
+630;630;Shoe stores
+631;631;Furniture and home furnishings stores
+632;632;Household appliance stores
+633;639;Radio, TV, and computer stores
+640;640;Music stores
+641;641;Eating and drinking places
+642;649;Drug stores
+650;650;Liquor stores
+651;651;Sporting goods, bicycles, and hobby stores
+652;659;Book and stationery stores
+660;660;Jewelry stores
+661;661;Gift, novelty, and souvenir shops
+662;662;Sewing, needlework and piece goods stores
+663;669;Catalog and mail order houses
+670;670;Vending machine operators
+671;671;Direct selling establishments
+672;680;Fuel dealers
+681;681;Retail florists
+682;690;Miscellaneous retail stores
+691;699;Not specified retail trade
+700;720;FINANCE, INSURANCE, AND REAL ESTATE
+700;700;Banking
+701;701;Savings institutions, including credit unions
+702;709;Credit agencies, n.e.c.
+710;710;Security, commodity brokerage, and investment companies
+711;711;Insurance
+712;720;Real estate, including real estate-insurance offices
+721;760;BUSINESS AND REPAIR SERVICES
+721;721;Advertising
+722;730;Services to dwellings and other buildings
+731;731;Personnel supply services
+732;739;Computer and data processing services .e.c.
+740;740;Detective and protective services
+741;741;Business services, n.e.c.
+742;749;Automotive rental and leasing, without drivers
+750;750;Automotive parking and carwashes
+751;751;Automotive repair and related services
+752;759;Electrical repair shops
+760;760;Miscellaneous repair services
+761;799;PERSONAL SERVICES
+761;761;Private households
+762;769;Hotels and motels
+770;770;Lodging places, except hotels and motels
+771;771;Laundry, cleaning, and garment services
+772;779;Beauty shops
+780;780;Barber shops
+781;781;Funeral service and crematories
+782;789;Shoe repair shops
+790;790;Dressmaking shops
+791;799;Miscellaneous personal services
+800;811;ENTERTAINMENT AND RECREATION SERVICES
+800;800;Theaters and motion pictures
+801;801;Video tape rental
+802;809;Bowling centers
+810;811;Miscellaneous entertainment and recreation services
+812;899;PROFESSIONAL AND RELATED SERVICES
+812;819;Offices and clinics of physicians
+820;820;Offices and clinics of dentists
+821;821;Offices and clinics of chiropractors
+822;829;Offices and clinics of optometrists .e.c.
+830;830;Offices and clinics of health practitioners, n.e.c.
+831;831;Hospitals
+832;839;Nursing and personal care facilities .e.c.
+840;840;Health services, n.e.c.
+841;841;Legal services
+842;849;Elementary and secondary schools
+850;850;Colleges and universities
+851;851;Vocational schools
+852;859;Libraries .e.c.
+860;860;Educational services, n.e.c.
+861;861;Job training and vocational rehabilitation services
+862;862;Child day care services
+863;869;Family child care homes .e.c.
+870;870;Residential care facilities, without nursing
+871;871;Social services, n.e.c.
+872;872;Museums, art galleries, and zoos
+873;879;Labor unions .e.c.
+880;880;Religious organizations
+881;881;Membership organizations, n.e.c.
+882;889;Engineering, architectural, and surveying services
+890;890;Accounting, auditing, and bookkeeping services
+891;891;Research, development, and testing services
+892;892;Management and public relations services
+893;899;Miscellaneous professional and related services
+900;939;PUBLIC ADMINISTRATION
+900;900;Executive and legislative offices
+901;909;General government, n.e.c.
+910;920;Justice, public order, and safety
+921;921;Public finance, taxation, and monetary policy
+922;929;Administration of human resources programs
+930;930;Administration of environmental quality and housing programs
+931;931;Administration of economic programs
+932;939;National security and international affairs
+940;991;ACTIVE DUTY MILITARY
+940;959;Armed Forces
+940;940;Army
+941;941;Air Force
+942;949;Navy
+950;950;Marines
+951;951;Coast Guard
+952;959;Armed Forces, Branch not specified
+960;991;Military Reserves or National Guard
+992;999;EXPERIENCED UNEMPLOYED NOT CLASSIFIED BY INDUSTRY
+992;999;Unemployed, last worked 1984 or earlier

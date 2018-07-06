@@ -33,16 +33,12 @@ let parallelHierarchies = function() {
   const easing = d3.easePolyOut;
 
   const fisheye = d3.fisheye.circular().radius(200).distortion(5);
-  let useCategoryFisheye = true;
+  let useCategoryFisheye = false;
   let useCategoryDragging = !useCategoryFisheye;
   let useIntersectionMinimization = true;
   let useGreedyMinimization = false;
 
   let isDraggingActive = false;
-
-  // list of dimension objects that are currently visible. The index in this list sets the position
-  // on the screen for this dimension
-  const activeDimensions = [];
 
   // D3 SELECTIONS
   let svgContainer; // <svg> selection the parallelHiearchies are drawn onto

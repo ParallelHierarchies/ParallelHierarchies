@@ -1,0 +1,118 @@
+start;end;description
+0;1;NOT SPANISH/HISPANIC
+0;1;Not Spanish/Hispanic (FOSDIC circle)
+2;2;Mexican (FOSDIC circle)
+3;3;Puerto Rican (FOSDIC circle)
+4;4;Cuban (FOSDIC circle)
+5;5;Other Spanish/Hispanic (FOSDIC circle)
+6;199;NOT SPANISH/HISPANIC
+6;199;Not Spanish/Hispanic
+200;209;SPANIARD
+200;200;Spaniard
+201;201;Andalusian
+202;202;Asturian
+203;203;Castillian
+204;204;Catalonian
+205;205;Balearic Islander
+206;206;Gallego
+207;207;Valencian
+208;208;Canarian
+209;209;Spanish Basque
+210;220;MEXICAN
+210;210;Mexican
+211;211;Mexican American
+212;212;Mexicano
+213;213;Chicano
+214;214;La Raza
+215;215;Mexican American Indian
+216;216;Reserve Spanish/Hispanic 1
+217;217;Reserve Spanish/Hispanic 2
+218;218;Mexico
+219;219;Reserve Spanish/Hispanic 3
+220;220;Reserve Spanish/Hispanic 4
+221;230;CENTRAL AMERICAN
+221;221;Costa Rican
+222;222;Guatemalan
+223;223;Honduran
+224;224;Nicaraguan
+225;225;Panamanian
+226;226;Salvadoran
+227;227;Central American
+228;228;Central American Indian
+229;229;Canal Zone
+230;230;Reserve Spanish/Hispanic 5
+231;249;SOUTH AMERICAN
+231;231;Argentinean
+232;232;Bolivian
+233;233;Chilean
+234;234;Colombian
+235;235;Ecuadorian
+236;236;Paraguayan
+237;237;Peruvian
+238;238;Uruguayan
+239;239;Venezuelan
+240;240;Reserve Spanish/Hispanic 6
+241;241;Reserve Spanish/Hispanic 7
+242;242;Reserve Spanish/Hispanic 8
+243;243;Reserve Spanish/Hispanic 9
+244;244;Reserve Spanish/Hispanic 10
+245;245;Reserve Spanish/Hispanic 11
+246;246;Reserve Spanish/Hispanic 12
+247;247;South American Indian
+248;248;Criollo
+249;249;South American
+250;260;LATIN AMERICAN
+250;250;Latin American
+251;251;Latin
+252;252;Latino
+253;253;Reserve Spanish/Hispanic 13
+254;254;Reserve Spanish/Hispanic 14
+255;255;Reserve Spanish/Hispanic 15
+256;256;Reserve Spanish/Hispanic 16
+257;257;Reserve Spanish/Hispanic 17
+258;258;Reserve Spanish/Hispanic 18
+259;259;Reserve Spanish/Hispanic 19
+260;260;Reserve Spanish/Hispanic 20
+261;270;PUERTO RICAN
+261;261;Puerto Rican
+262;262;Reserve Spanish/Hispanic 21
+263;263;Reserve Spanish/Hispanic 22
+264;264;Reserve Spanish/Hispanic 23
+265;265;Reserve Spanish/Hispanic 24
+266;266;Reserve Spanish/Hispanic 25
+267;267;Reserve Spanish/Hispanic 26
+268;268;Reserve Spanish/Hispanic 27
+269;269;Reserve Spanish/Hispanic 28
+270;270;Reserve Spanish/Hispanic 29
+271;274;CUBAN
+271;271;Cuban
+272;272;Reserve Spanish/Hispanic 30
+273;273;Reserve Spanish/Hispanic 31
+274;274;Reserve Spanish/Hispanic 32
+275;289;DOMINICAN
+275;275;Dominican
+276;276;Reserve Spanish/Hispanic 33
+277;277;Reserve Spanish/Hispanic 34
+278;278;Reserve Spanish/Hispanic 35
+279;279;Reserve Spanish/Hispanic 36
+280;280;Reserve Spanish/Hispanic 37
+281;281;Reserve Spanish/Hispanic 38
+282;282;Reserve Spanish/Hispanic 39
+283;283;Reserve Spanish/Hispanic 40
+284;284;Reserve Spanish/Hispanic 41
+285;285;Reserve Spanish/Hispanic 42
+286;286;Reserve Spanish/Hispanic 43
+287;287;Reserve Spanish/Hispanic 44
+288;288;Reserve Spanish/Hispanic 45
+289;289;Reserve Spanish/Hispanic 46
+290;999;OTHER SPANISH/HISPANIC
+290;290;Hispanic
+291;291;Spanish
+292;292;Californio
+293;293;Tejano
+294;294;Nuevo Mexicano
+295;295;Spanish American
+296;296;Spanish American Indian
+297;297;Meso American Indian
+298;298;Mestizo
+299;999;Other Spanish/Hispanic, n.e.c.

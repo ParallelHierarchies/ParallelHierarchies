@@ -89,6 +89,46 @@ nav#uiControls > #rulers > .ruler > div.delete::before {
   content: 'x';
 }
 
+#datasetModal {
+  position: absolute;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.73);
+}
+#datasetModal > div.modalBody {
+  width: 400px;
+  margin: 0 auto;
+  margin-top: 25%;
+  padding: 20px;
+  background: #fff;
+  border-radius: 2px;
+}
+#datasetModal > div.modalBody > h2 {
+  margin-top: 0;
+}
+#datasetModal > div.modalBody > ul {
+  margin: 0;
+  padding: 0;
+  padding-bottom: 10px;
+}
+#datasetModal > div.modalBody > ul > li {
+  list-style: none;
+  padding-top: 10px;
+}
+#datasetModal > div.modalBody > ul > li > button {
+  border: none;
+  background: none;
+  padding: 0;
+  font-size: 16px;
+  color: #555;
+  cursor: pointer;
+}
+#datasetModal > div.modalBody > ul > li > button:hover {
+  color: #000;
+  text-decoration: underline;
+}
+
 #tooltip {
   position: absolute;
   left: 0;

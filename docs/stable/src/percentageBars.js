@@ -30,6 +30,8 @@ parallelHierarchies.percentageBars = function() {
 
     width = (Object.keys(dimensions).length + 1) * barWidth + padding*3;
 
+    root.selectAll('*').remove();
+
     root.style('width', `${width}px`);
     dropdownMenu = root.append('select').style('width', `${width}px`);
 
