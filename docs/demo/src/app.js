@@ -58,10 +58,7 @@ let runActiveConfiguration = function() {
   svg.call(hierarchies);
 };
 
-// EVENT LISTENERS OF UI COMPONENTS /
-d3.select('#datasetModal').classed('hidden', true);
-runActiveConfiguration();
-///////////////////////////////////////////////////////////////
+// EVENT LISTENERS OF UI COMPONENTS ////////////////////////////////////////////////////////////////
 
 d3.select('#toggleGuiding').on('change', function() {
   d3.select('body').classed('lines', this.checked);
