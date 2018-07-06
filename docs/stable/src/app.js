@@ -91,3 +91,7 @@ d3.select('#datasetModal').selectAll('li button').on('click', function() {
   runActiveConfiguration();
   d3.select('#datasetModal').classed('hidden', true);
 });
+
+d3.select('#datasetModal div.hide').on('click', function() {
+  d3.select('#datasetModal').classed('hidden', true);
+});

@@ -99,10 +99,19 @@ nav#uiControls > #rulers > .ruler > div.delete::before {
 #datasetModal > div.modalBody {
   width: 400px;
   margin: 0 auto;
-  margin-top: 25%;
+  margin-top: 200px;
   padding: 20px;
   background: #fff;
   border-radius: 2px;
+}
+#datasetModal > div.modalBody > div.hide {
+  float: right;
+  color: #aaa;
+  cursor: pointer;
+}
+#datasetModal > div.modalBody > div.hide:hover {
+  color: #333;
+  font-weight: bold;
 }
 #datasetModal > div.modalBody > h2 {
   margin-top: 0;
