@@ -1,6 +1,6 @@
 ## Features
 ### Concepts from Parallel Sets
-  * Distribution of values per dimension and co-occurence of values between dimensions (similar to **Parallel Sets**)
+  * Distribution of values per dimension and co-occurence of values between dimensions
   * horizontal reordering of dimensions
   * vertical reordering of categories per dimension
   * adding/removing dimensions to/from the view
