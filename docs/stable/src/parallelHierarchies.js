@@ -49,7 +49,7 @@ let parallelHierarchies = function() {
   // SVG configuration
   let width = 1600; // maximum horizontal space of visualization
   let height = 900; // maximum vertical space of visualization
-  let margin = { 'left': 100, 'top': 100, 'right': 100, 'bottom': 100 };
+  let margin = { 'left': 125, 'top': 100, 'right': 125, 'bottom': 100 };
   let dimensionHeaderPadding = 150;
 
   let percentageBarGenerator;
