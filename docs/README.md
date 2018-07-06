@@ -17,3 +17,8 @@
   * fisheye lense to increase readability of small categories
 
 [Try the live demo, now!](./demo/index.html)
+
+## Experimental Version
+You may also try out the [experimental version](./demo/beta.html) that extends the functionality of Parallel Hierarchies with new features like
+multiple hierarchy selection per dimenion, an accordion mode to change width of categories and a dark color scheme. Does not
+allow minimization of ribbon intersections (yet).
