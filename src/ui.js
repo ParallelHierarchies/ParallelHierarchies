@@ -32,7 +32,7 @@ parallelHierarchies.ui = function() {
     if (title != null) title.text(data.schema.title);
 
     // get a list of properties in the items (=dimension names)
-    let keys = dataProvider.getSchema().dimensions;
+    let keys = dataProvider.getSchema().dimensions.filter(d => d !== 'RACE');
 
     dropDownMenu.selectAll('option').remove();
     for (let l = 0; l < keys.length; l++) {
