@@ -35,16 +35,51 @@ nav#uiControls > #dimensionPicker {
   color: #000;
   opacity: .73;
   border: none;
-  padding: 0.4rem 1rem;
+  padding: 0.4rem;
   margin: 0 0 0 1rem;
-  border: 1px solid #ccc;
-  border-radius: 4px;
   transition: box-shadow 0.2s;
+  border-bottom: 2px solid #ccc;
+}
+nav#uiControls input {
+  display: none;
+}
+nav#uiControls input+label {
+  color: #ccc;
+  margin-right: 10px;
+  cursor: pointer;
+}
+nav#uiControls i {
+  font-size: 15px;
+}
+nav#uiControls label > i,
+nav#uiControls button > i {
+  margin-right: 10px;
+}
+nav#uiControls button {
+  border-radius: 2px;
+}
+nav#uiControls button.circle {
+  width: 30px;
+  height: 30px;
+  border-radius: 15px;
+  border: 1px solid #ccc;
+  padding: 0;
+}
+nav#uiControls button.circle > i {
+  margin-right: 0;
+}
+nav#uiControls input:checked+label {
+  font-weight: bold;
+  color: steelblue;
 }
 nav#uiControls input:disabled+label {
   color: #ccc;
 }
-
+nav#uiControls button:hover,
+nav#uiControls > .inputGroup:hover,
+nav#uiControls > #dimensionPicker:hover {
+  border-color: steelblue;
+}
 nav#uiControls > .inputGroup button {
   padding: 0rem 0.75rem;
 }
@@ -139,6 +174,10 @@ nav#uiControls > #rulers > .ruler > div.delete::before {
 #datasetModal > div.modalBody > ul > li > button:hover {
   color: #000;
   text-decoration: underline;
+}
+#datasetModal > div.modalBody > ul > li > button > i {
+  font-size: 15px;
+  margin-right: 10px;
 }
 
 #tooltip {

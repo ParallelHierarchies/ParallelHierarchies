@@ -35,6 +35,7 @@ parallelHierarchies.ui = function() {
     let keys = dataProvider.getSchema().dimensions;
 
     dropDownMenu.selectAll('option').remove();
+    dropDownMenu.append('option').text('add dimension ...').attr('disabled', true);
     for (let l = 0; l < keys.length; l++) {
       let label = keys[l];
 
