@@ -87,7 +87,7 @@ parallelHierarchies.dimension = function() {
   let drawAncestors = function() {
     // linear scale that interpolates the ancestor color between a light gray and the signature
     // color of the dimension (assumes maximum level 5)
-    let fillColor = d3.scaleLinear().domain([0, 4]).range([data.color, '#969696']);
+    let fillColor = d3.scaleLinear().domain([0, data.levels.length]).range([data.color, '#969696']);
 
     root.select('.ancestors').remove();
 
