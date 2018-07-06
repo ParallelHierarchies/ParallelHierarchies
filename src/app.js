@@ -83,6 +83,8 @@ d3.select('button#swapDataset').on('click', function() {
   d3.select('#datasetModal').classed('hidden', false);
 });
 
+d3.select('#reset').on('click', runActiveConfiguration);
+
 d3.select('#datasetModal').selectAll('li button').on('click', function() {
   const presetName = d3.event.target.value;
   activeConfiguration = CONFIGURATIONS[presetName];
