@@ -1,0 +1,142 @@
+.clickable:hover {
+  cursor: pointer;
+}
+
+.grabbable:hover {
+  cursor: grab;
+}
+
+.dragging {
+  cursor: grabbing;
+}
+
+.grabbable.dragging:hover {
+  cursor: grabbing;
+}
+
+.hidden {
+  display: none;
+}
+
+g.parallelHierachies {
+  font-family: Raleway;
+  font-feature-settings: "lnum";
+}
+
+g.dimension {
+
+}
+
+g.dimension .header {
+  text-anchor: middle;
+  fill: #333;
+}
+
+g.dimension .header > .title {
+  font-size: 24px;
+  font-weight: light;
+}
+
+g.dimension .header > .title > .remove {
+  color: #aaa;
+  font-size: 15px;
+}
+
+g.dimension .header > .title > .remove:hover {
+  fill: red;
+  cursor: pointer;
+}
+
+g.dimension .header > text.selected {
+  font-size: 13px;
+  fill: #888;
+  fill: #333;
+}
+
+g.dimension .header > g.dropdown text.option {
+  fill: #888;
+}
+g.dimension .header > g.dropdown text.option.active {
+  font-weight: bold;
+  fill: #555;
+}
+g.dimension .header > g.dropdown text.option.clickable:hover,
+g.dimension .header > text.selected:hover {
+  fill: #333;
+}
+
+g.dimension > .ancestors > g.level > text {
+  fill: #2b2b2b;
+  font-weight: bold;
+}
+
+g.dimension > .ancestors > g.level > g.siblings > rect.sibling {
+  fill-opacity: 0.5;
+  transition: fill-opacity 0.2s;
+}
+g.dimension > .ancestors > g.level > g.siblings > rect.sibling.highlight {
+  fill-opacity: 0.73;
+}
+
+g.category {
+
+}
+g.category > .box > rect.max {
+  fill: #aaa;
+}
+g.category > .box > rect.diff.increase {
+  fill: lightcoral;
+}
+g.category > .box > rect.diff.decrease {
+  fill: lightseagreen;
+}
+g.category > text.hierarchyIndicator {
+  fill: #eee;
+}
+
+g.category > .label > rect.background {
+  fill: #4d4d4d;
+  fill-opacity: 0.85;
+}
+g.category > .label > text {
+  font-weight: bold;
+  fill: #F6F6F6
+}
+
+g.ribbon {
+
+}
+g.ribbon path {
+  stroke-opacity: 0.3;
+  fill: none;
+}
+g.ribbon.inactive path.main {
+  stroke-opacity: 0.15;
+}
+g.ribbon path.main {
+  stroke: #a0a0a0;
+  cursor: pointer;
+}
+g.ribbon path.diff.increase {
+  stroke: lightcoral;
+}
+g.ribbon path.diff.decrease {
+  stroke: lightseagreen;
+}
+
+g.ribbon path.partial {
+  display: none;
+  stroke: #a0a0a0;
+  fill: none;
+  cursor: pointer;
+}
+
+g.ribbon.highlight path.main {
+  stroke-opacity: 0.73;
+  stroke: #bbb;
+}
+
+g.ribbon.highlight path.partial {
+  display: block;
+  stroke-opacity: 0.5;
+}

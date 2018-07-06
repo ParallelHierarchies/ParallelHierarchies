@@ -16,4 +16,4 @@
   * seperate view for items filtered per dimension as well as globally
   * fisheye lense to increase readability of small categories
 
-[Try the live demo, now!](./stable/index.html)
+[Try the live demo, now!](./demo/index.html)
