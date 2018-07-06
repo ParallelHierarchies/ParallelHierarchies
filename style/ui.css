@@ -41,6 +41,9 @@ nav#uiControls > #dimensionPicker {
   border-radius: 4px;
   transition: box-shadow 0.2s;
 }
+nav#uiControls input:disabled+label {
+  color: #ccc;
+}
 
 nav#uiControls > .inputGroup button {
   padding: 0rem 0.75rem;

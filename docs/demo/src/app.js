@@ -54,6 +54,7 @@ let runActiveConfiguration = function() {
   hierarchies.ui(ui);
 
   d3.select('#rulers').call(ui);
+  d3.select('#draggingRadio').node().checked = true;
   svg.call(hierarchies);
 };
 
@@ -67,17 +68,16 @@ d3.select('#addRuler').on('click', () => ui.addRuler());
 d3.selectAll('#fisheyeRadio,#draggingRadio').on('change', function() {
   ui.setCategoryInteraction(d3.event.target.value);
 });
-d3.select('#draggingRadio').node().checked = false;
 
 d3.select('#toggleIntersectionMinimization').on('change', function() {
   hierarchies.useIntersectionMinimization(this.checked);
+  d3.select('#toggleGreedyMinimization').node().disabled = !this.checked;
 });
 d3.select('#toggleIntersectionMinimization').node().checked = true;
 
 d3.select('#toggleGreedyMinimization').on('change', function() {
   hierarchies.useGreedyMinimization(this.checked);
 });
-d3.select('#toggleGreedyMinimization').node().checked = false;
 
 d3.select('button#swapDataset').on('click', function() {
   d3.select('#datasetModal').classed('hidden', false);
