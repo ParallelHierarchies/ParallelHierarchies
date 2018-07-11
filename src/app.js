@@ -34,20 +34,20 @@ let runActiveConfiguration = function() {
     .itemValue('Value');
 
   hierarchies = parallelHierarchies()
-    .width(WIDTH)
-    .height(HEIGHT)
+    .width(window.innerWidth - 20)
+    .height(window.innerHeight - 250)
     .color(d3.scaleOrdinal().range(COLORS))
     .percentageBarSelection(d3.select('#percentageBars'))
     .dataProvider(dataProvider);
 
   ui = parallelHierarchies.ui()
     .hierarchies(hierarchies)
-    .dropDownMenu(d3.select('nav > select'))
+    .dropDownMenu(d3.select('nav select'))
     .tooltip(d3.select('#tooltip'))
     .rulerLength(WIDTH - 20)
     .timestampSliders(d3.selectAll('#sliderV1,#sliderV2'))
     .swapDatasetButton(d3.select('button#swapDataset'))
-    .title(d3.select('nav > h1'));
+    .title(d3.select('nav h1'));
 
   ui.setCategoryInteraction('drag');
 
@@ -60,6 +60,17 @@ let runActiveConfiguration = function() {
 
 // EVENT LISTENERS OF UI COMPONENTS ////////////////////////////////////////////////////////////////
 
+window.addEventListener('resize', () => {
+  svg
+    .attr('width', window.innerWidth - 20)
+    .attr('height', window.innerHeight - 250);
+
+  if (hierarchies != null)
+    hierarchies
+      .width(window.innerWidth - 20)
+      .height(window.innerHeight - 250)
+      .onResize()
+});
 d3.select('#toggleGuiding').on('change', function() {
   d3.select('body').classed('lines', this.checked);
 });

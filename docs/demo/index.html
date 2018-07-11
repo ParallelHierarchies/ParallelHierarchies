@@ -14,31 +14,33 @@
   </head>
   <body class="">
     <nav id="uiControls">
-      <h1 id="title">Parallel Hierarchies</h1>
+      <h1 id="title" class="container" style="width: 30%">Parallel Hierarchies</h1>
 
-      <div class="inputGroup" id="percentageBars" style="border: 1px solid #ccc"></div>
+      <div class="container" style="width: 65%; float:right">
+        <div class="inputGroup" id="percentageBars" style="border: 1px solid #ccc"></div>
 
-      <button class="circle" id="reset" style="color: firebrick" title="reset visualization to default values" ><i class="material-icons">cached</i></button>
-      <button class="circle" id="swapDataset" style="color:steelblue" title="change the dataset"><i class="material-icons">folder</i></button>
+        <button class="circle" id="reset" style="color: firebrick" title="reset visualization to default values" ><i class="material-icons">cached</i></button>
+        <button class="circle" id="swapDataset" style="color:steelblue" title="change the dataset"><i class="material-icons">folder</i></button>
 
-      <span class="inputGroup">
-        <input id="toggleIntersectionMinimization" type="checkbox" />
-        <label for="toggleIntersectionMinimization" title="minimize ribbon intersections using the barycentric method">Optimize Intersections</label>
-        <input id="toggleGreedyMinimization" type="checkbox" />
-        <label for="toggleGreedyMinimization" title="use a greedy algorithm to enhance results of barycentric method">Use Greedy</label>
-      </span>
+        <span class="inputGroup">
+          <input id="toggleIntersectionMinimization" type="checkbox" />
+          <label for="toggleIntersectionMinimization" title="minimize ribbon intersections using the barycentric method">Optimize Intersections</label>
+          <input id="toggleGreedyMinimization" type="checkbox" />
+          <label for="toggleGreedyMinimization" title="use a greedy algorithm to enhance results of barycentric method">Use Greedy</label>
+        </span>
 
-      <span class="inputGroup">
-        <input id="fisheyeRadio" type="radio" name="fisheyeRadio" value="fisheye" />
-        <label for="fisheyeRadio" title="use fisheye effect on categories"><i class="material-icons">search</i>Fisheye</label>
-        <input id="draggingRadio" type="radio" name="fisheyeRadio" value="drag" checked="true"/>
-        <label for="draggingRadio" title="use dragging interaction on categories"><i class="material-icons">pan_tool</i>Dragging</label>
-      </span>
+        <span class="inputGroup">
+          <input id="fisheyeRadio" type="radio" name="fisheyeRadio" value="fisheye" />
+          <label for="fisheyeRadio" title="use fisheye effect on categories"><i class="material-icons">search</i>Fisheye</label>
+          <input id="draggingRadio" type="radio" name="fisheyeRadio" value="drag" checked="true"/>
+          <label for="draggingRadio" title="use dragging interaction on categories"><i class="material-icons">pan_tool</i>Dragging</label>
+        </span>
 
-      <button id="addRuler" class="style" title="add a guiding line for vertical comparison tasks"><i class="material-icons">border_horizontal</i>Ruler</button>
+        <button id="addRuler" class="style" title="add a guiding line for vertical comparison tasks"><i class="material-icons">border_horizontal</i>Ruler</button>
 
-      <select id="dimensionPicker" title="add another dimension to the visualization"></select>
-      <div id="rulers"></div>
+        <select id="dimensionPicker" title="add another dimension to the visualization"></select>
+        <div id="rulers"></div>
+      </div>
     </nav>
 
     <svg id="parallelHierarchies" style="margin-top: 50px"></svg>

@@ -264,6 +264,12 @@ let parallelHierarchies = function() {
     drawPercentageBars();
   };
 
+  hierarchies.onResize = function() {
+    scaleX.range([margin.left, width - margin.right]);
+    scaleY.range([0, height - margin.top - margin.bottom - dimensionHeaderPadding]);
+    draw();
+  };
+
   /**
    * Categories represent the possible values of a dimension. The bigger the category visually, the
    * more items contain this value for that dimesion.

@@ -6,11 +6,11 @@ nav#uiControls {
   padding-bottom: 2rem;
 }
 
-nav#uiControls > * {
+nav#uiControls * {
   display: inline-block;
 }
 
-nav#uiControls > h1 {
+nav#uiControls h1 {
   color: #525252;
   padding: 0;
   margin: 0;
@@ -27,8 +27,8 @@ nav#uiControls button:hover {
 }
 
 nav#uiControls button,
-nav#uiControls > .inputGroup,
-nav#uiControls > #dimensionPicker {
+nav#uiControls .inputGroup,
+nav#uiControls #dimensionPicker {
   font-size: 1rem;
   float: right;
   background: #fff;
@@ -76,11 +76,11 @@ nav#uiControls input:disabled+label {
   color: #ccc;
 }
 nav#uiControls button:hover,
-nav#uiControls > .inputGroup:hover,
-nav#uiControls > #dimensionPicker:hover {
+nav\#uiControls .inputGroup:hover,
+nav\#uiControls #dimensionPicker:hover {
   border-color: steelblue;
 }
-nav#uiControls > .inputGroup button {
+nav\#uiControls .inputGroup button {
   padding: 0rem 0.75rem;
 }
 
@@ -88,12 +88,12 @@ nav#uiControls #dimensionPicker {
   width: 200px;
 }
 
-nav#uiControls > #rulers > .ruler {
+nav\#uiControls #rulers > .ruler {
   position: absolute;
   left: 20px;
   top: 10;
 }
-nav#uiControls > #rulers > .ruler > div.handle {
+nav\#uiControls #rulers > .ruler > div.handle {
   position: absolute;
   left: 20px;
   top: -9px;
@@ -103,12 +103,12 @@ nav#uiControls > #rulers > .ruler > div.handle {
   border: 1px solid #555;
   border-radius: 50%;
 }
-nav#uiControls > #rulers > .ruler > div.guideline {
+nav\#uiControls #rulers > .ruler > div.guideline {
   height: 0;
   border: none;
   border-bottom: 1px dotted #555;
 }
-nav#uiControls > #rulers > .ruler > div.delete {
+nav\#uiControls #rulers > .ruler > div.delete {
   position: absolute;
   right: 0px;
   top: 22px;
@@ -123,7 +123,7 @@ nav#uiControls > #rulers > .ruler > div.delete {
   transform: translateY(-28px);
   text-align: center;
 }
-nav#uiControls > #rulers > .ruler > div.delete::before {
+nav\#uiControls #rulers > .ruler > div.delete::before {
   content: 'x';
 }
 
