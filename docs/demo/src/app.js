@@ -42,7 +42,7 @@ let runActiveConfiguration = function() {
 
   ui = parallelHierarchies.ui()
     .hierarchies(hierarchies)
-    .dropDownMenu(d3.select('nav select'))
+    .dropDownMenu(d3.select('#dimensionPicker'))
     .tooltip(d3.select('#tooltip'))
     .rulerLength(WIDTH - 20)
     .timestampSliders(d3.selectAll('#sliderV1,#sliderV2'))
