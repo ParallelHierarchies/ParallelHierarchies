@@ -1,6 +1,5 @@
 # Parallel Hierarchies
-Implementation for **Parallel Hierarchies**, an interactive information
-visualization for hierarchical data in multi-dimensional, categorical datasets.
+Implementation for **Parallel Hierarchies**, a visualization for cross-tabulating hierarchical aggregates.
 
 [Visit our project page for further information including a live demo](https://parallelhierarchies.github.io/)
 
