@@ -33,6 +33,12 @@ parallelHierarchies.dataProvider = function() {
    * @return {object} Promise that the data was loaded
    */
   provider.loadData = function() {
+    if (itemList != null && schema != null) {
+      return new Promise((resolve, reject) => {
+        resolve({schema, itemList});
+      })
+    }
+
     if (itemFile === '') throw('dataProvider: itemFile not set');
     if (schemaFile === '') throw('dataProvider: schemaFile not set');
 
@@ -41,66 +47,13 @@ parallelHierarchies.dataProvider = function() {
       .then(() => {
         return {schema, itemList};
       });
-
-    // return new Promise(function(resolve, reject) {
-    //   // first load the schema, then load the items
-    //   d3.json(schemaFile, function(error, data) {
-    //     if (error) throw error;
-
-    //     // set the relevant parts of the schema
-    //     schema = {};
-    //     schema.title = (data.title || '');
-    //     schema.hierarchies = (data.hierarchies || {});
-    //     schema.unit = (data.unit || '');
-    //     schema.labels = (data.labels || {});
-    //     schema.timestamps = (data.timestamps || [itemValue]);
-    //     schema.numerical = (data.numerical || []);
-    //     schema.dimensions = schema.hierarchies.map(function(h) { return h.label });
-
-    //     // load the items
-    //     d3.csv(itemFile, function(error, data) {
-    //       if (error) throw error;
-
-    //       // save the items from data array in dictionary object 'items'
-    //       if (itemList == null) {
-    //         itemList = data;
-    //       }
-
-    //       if (itemList[0][itemID] == null) {
-    //         itemList.forEach(function(item, i) { item[itemID] = i });
-    //       }
-
-    //       let levels = [];
-    //       Object.values(schema.hierarchies).forEach(function(h) { levels = levels.concat(h.levels) });
-
-    //       Object.keys(itemList[0]).forEach(function(dim) {
-    //         if (dim === itemValue || dim === itemID || dim === 'timestamps') return;
-    //         if (levels.indexOf(dim) === -1 && schema.dimensions.indexOf(dim) === -1) {
-    //           schema.dimensions.push(dim);
-    //         }
-    //       });
-
-    //       resolve({'schema': schema, 'itemList': itemList});
-    //     });
-    //   });
-    // });
   };
 
   let getSchema = async function() {
     if (schemaPromise === undefined) {
       schemaPromise = fetch(schemaFile)
         .then(response => response.json())
-        .then((jsonData) => {
-        // set the relevant parts of the schema
-          schema = {};
-          schema.title = (jsonData.title || '');
-          schema.hierarchies = (jsonData.hierarchies || {});
-          schema.unit = (jsonData.unit || '');
-          schema.labels = (jsonData.labels || {});
-          schema.timestamps = (jsonData.timestamps || [itemValue]);
-          schema.numerical = (jsonData.numerical || []);
-          schema.dimensions = schema.hierarchies.map(h => h.label);
-        });
+        .then(schemaFromJSON);
     }
 
     await schemaPromise;
@@ -108,37 +61,51 @@ parallelHierarchies.dataProvider = function() {
     return schema;
   };
 
+  let schemaFromJSON = function(jsonData) {
+    // set the relevant parts of the schema
+    schema = {};
+    schema.title = (jsonData.title || '');
+    schema.hierarchies = (jsonData.hierarchies || {});
+    schema.unit = (jsonData.unit || '');
+    schema.labels = (jsonData.labels || {});
+    schema.timestamps = (jsonData.timestamps || [itemValue]);
+    schema.numerical = (jsonData.numerical || []);
+    schema.dimensions = schema.hierarchies.map(h => h.label);
+  }
+
   let getItemList = async function() {
     if (itemListPromise === undefined) {
       itemListPromise = fetch(itemFile)
-        .then(response => response.text())
-        .then(text => d3.csvParse(text))
-        .then((csvData) => {
-          // save the items from data array in dictionary object 'items'
-          if (itemList == null) {
-            itemList = csvData;
-          }
+      .then(response => response.text())
+      .then(text => d3.csvParse(text))
+      .then(itemCSVtoItemList);
+    }
 
-          if (itemList[0][itemID] == null) {
-            itemList.forEach((item, i) => { item[itemID] = i; });
-          }
+    await itemListPromise;
 
-          let levels = [];
-          Object.values(schema.hierarchies).forEach((h) => { levels = levels.concat(h.levels); });
+    return itemList;
+  };
 
-          Object.keys(itemList[0]).forEach((dim) => {
-            if (dim === itemValue || dim === itemID || dim === 'timestamps') return;
-            if (levels.indexOf(dim) === -1 && schema.dimensions.indexOf(dim) === -1) {
-              schema.dimensions.push(dim);
-            }
-          });
-        });
+  let itemCSVtoItemList = function(csvData) {
+    // save the items from data array in dictionary object 'items'
+    if (itemList == null) {
+      itemList = csvData;
+    }
+
+    if (itemList[0][itemID] == null) {
+      itemList.forEach((item, i) => { item[itemID] = i; });
+    }
+
+    let levels = [];
+    Object.values(schema.hierarchies).forEach((h) => { levels = levels.concat(h.levels); });
+
+    Object.keys(itemList[0]).forEach((dim) => {
+      if (dim === itemValue || dim === itemID || dim === 'timestamps') return;
+      if (levels.indexOf(dim) === -1 && schema.dimensions.indexOf(dim) === -1) {
+        schema.dimensions.push(dim);
       }
-
-      await itemListPromise;
-
-      return itemList;
-    };
+    });
+  };
 
   /**
    * Since the items are stored in csv for storage reasons, hierarchies are stored 'flat' inside the
@@ -226,6 +193,13 @@ parallelHierarchies.dataProvider = function() {
     if (schema == null) throw Error('provider: schema not loaded or set');
     return schema;
   }
+
+  provider.setSchemaFromJSON = function(newSchema) {
+    schemaFromJSON(newSchema);
+  };
+  provider.setItemListFromCSV = function(itemsFromCSV) {
+    itemCSVtoItemList(itemsFromCSV);
+  };
 
 
   // GETTERS + SETTERS for parameters //////////////////////////////////////////////////////////////

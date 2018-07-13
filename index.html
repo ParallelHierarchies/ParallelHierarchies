@@ -57,6 +57,19 @@
           <li><button value="census10k"><i class="material-icons">folder_open</i>1990 Census (sample of 10k)</button></li>
           <li><button value="census100k"><i class="material-icons">folder_open</i>1990 Census (sample of 100k)</button></li>
         </ul>
+
+        <div class="ownDataset">
+          <div id="addHierarchyGroup">
+            <input id="userHierarchyLabel" />
+            <input id="userHierarchyLevels" />
+            <button id="addUserHierarchyButton">+</button>
+          </div>
+
+          <div id="userHierarchies"></div>
+          <input id="userItems" type="file" accept=".csv" />
+
+          <button id="userSchemaLoad">Load</button>
+        </div>
       </div>
 
     </div>
@@ -73,6 +86,7 @@
     <script type="text/javascript" src="./src/ui.js"></script>
     <script type="text/javascript" src="./src/intersectionOptimizer.js"></script>
     <script type="text/javascript" src="./src/percentageBars.js"></script>
+    <script type="text/javascript" src="./src/customSchemaLoader.js"></script>
     <script type="text/javascript" src="./src/app.js"></script>
   </body>
 </html>

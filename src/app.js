@@ -24,14 +24,26 @@ let dataProvider;
 let hierarchies;
 let ui;
 
+let mySchemaLoader = customSchemaLoader()
+  .itemsFileInput(d3.select('#userItems').node())
+  .onLoadEnd(function() {
+    runActiveConfiguration(mySchemaLoader.schema, mySchemaLoader.itemList);
+    d3.select('#datasetModal').classed('hidden', true);
+  });
+
 let activeConfiguration = CONFIGURATIONS['ontology'];
 
-let runActiveConfiguration = function() {
+let runActiveConfiguration = function(presetSchema, presetItemList) {
   dataProvider = parallelHierarchies.dataProvider()
     .itemFile(activeConfiguration.itemsURI)
     .schemaFile(activeConfiguration.schemaURI)
     .itemID('ID')
     .itemValue('Value');
+
+  if (presetSchema && presetItemList) {
+    dataProvider.setSchemaFromJSON(mySchemaLoader.schema);
+    dataProvider.setItemListFromCSV(mySchemaLoader.itemList);
+  }
 
   hierarchies = parallelHierarchies()
     .width(window.innerWidth - 20)
@@ -104,4 +116,25 @@ d3.select('#datasetModal').selectAll('li button').on('click', function() {
 
 d3.select('#datasetModal div.hide').on('click', function() {
   d3.select('#datasetModal').classed('hidden', true);
+});
+
+d3.select('#userSchemaLoad').on('click', () => {
+  if (d3.select('#userItems').node().files.length === 0) return;
+
+  mySchemaLoader.loadSchemaAndItems();
+});
+d3.select('#addUserHierarchyButton').on('click', function() {
+  const label = d3.select('#userHierarchyLabel').node().value;
+  const levels = d3.select('#userHierarchyLevels').node().value.split(',').map(s => s.trim());
+
+  if (label.length === 0 || levels.length === 1) return;
+
+  mySchemaLoader.addUserHierarchy(label, levels);
+
+  let entry = d3.select('#userHierarchies').append('div');
+  entry.append('div').attr('class', 'label').text(label);
+  entry.append('div').attr('class', 'levels').text(levels.join(', '));
+
+  d3.select('#userHierarchyLabel').node().value = '';
+  d3.select('#userHierarchyLevels').node().value = '';
 });
