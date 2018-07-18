@@ -137,7 +137,7 @@ nav#uiControls #rulers > .ruler > div.delete::before {
 #datasetModal > div.modalBody {
   width: 400px;
   margin: 0 auto;
-  margin-top: 200px;
+  margin-top: 150px;
   padding: 20px;
   background: #fff;
   border-radius: 2px;
@@ -154,16 +154,16 @@ nav#uiControls #rulers > .ruler > div.delete::before {
 #datasetModal > div.modalBody > h2 {
   margin-top: 0;
 }
-#datasetModal > div.modalBody > ul {
+#datasetModal > div.modalBody ul {
   margin: 0;
   padding: 0;
   padding-bottom: 10px;
 }
-#datasetModal > div.modalBody > ul > li {
+#datasetModal > div.modalBody ul > li {
   list-style: none;
   padding-top: 10px;
 }
-#datasetModal > div.modalBody > ul > li > button {
+#datasetModal > div.modalBody ul > li > button {
   border: none;
   background: none;
   padding: 0;
@@ -171,13 +171,93 @@ nav#uiControls #rulers > .ruler > div.delete::before {
   color: #555;
   cursor: pointer;
 }
-#datasetModal > div.modalBody > ul > li > button:hover {
+#datasetModal > div.modalBody ul > li > button#toggleCustom {
+  margin-top: 25px;
+}
+#datasetModal > div.modalBody ul > li > button:hover {
   color: #000;
   text-decoration: underline;
 }
-#datasetModal > div.modalBody > ul > li > button > i {
+#datasetModal > div.modalBody ul > li > button > i {
   font-size: 15px;
   margin-right: 10px;
+}
+#ownDataset {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  background: rgba(227,242,253, 0.5);
+}
+#ownDataset h3 {
+  font-size: 16px;
+  margin: 5px 0;
+  color: steelblue;
+}
+#ownDataset p {
+  font-size: 14px;
+  margin: 5px 0;
+}
+#ownDataset p.data_info {
+  color: #888;
+  font-size: 14px;
+  margin: 10px 0 15px;
+}
+#ownDataset input[type=text] {
+  padding: 4px;
+}
+#ownDataset .label {
+  margin-right: 10px;
+}
+#ownDataset .label::after {
+  content: ": ";
+}
+#ownDataset button {
+  padding: 4px;
+  background: #fff;
+  border: 1px solid #ccc;
+}
+#datasetModal > div.modalBody #ownDataset li {
+  border-top: 1px solid #ccc;
+  padding: 5px 0;
+  margin: 0;
+  cursor: pointer;
+}
+#ownDataset button#userSchemaStart {
+  margin-top: 10px;
+  padding: 5px;
+  border-color: steelblue;
+  border-radius: 3px;
+  color: steelblue;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+#ownDataset p#userSchemaError {
+  color: firebrick;
+}
+#ownDataset p#userSchemaError::before {
+  content: "Error: ";
+}
+#ownDataset button#userSchemaStart:hover {
+  padding: 5px;
+  color: #fff;
+  background: steelblue;
+}
+#datasetModal > div.modalBody #ownDataset li:hover {
+  background: #eee;
+}
+#datasetModal > div.modalBody #ownDataset li:first-of-type {
+  border-top: none;
+}
+#datasetModal > div.modalBody #userHierarchies {
+  margin-top: 10px;
+  max-height: 125px;
+  overflow-y: scroll;
+}
+#datasetModal > div.modalBody #ownDataset button.delete_level {
+  color: firebrick;
+  float: right;
+  padding: 2px;
+  margin-right: 5px;
 }
 
 #tooltip {

@@ -33,7 +33,7 @@ let mySchemaLoader = customSchemaLoader()
 
 let activeConfiguration = CONFIGURATIONS['ontology'];
 
-let runActiveConfiguration = function(presetSchema, presetItemList) {
+let runActiveConfiguration = function(presetSchema = null, presetItemList = null) {
   dataProvider = parallelHierarchies.dataProvider()
     .itemFile(activeConfiguration.itemsURI)
     .schemaFile(activeConfiguration.schemaURI)
@@ -107,34 +107,52 @@ d3.select('button#swapDataset').on('click', function() {
 
 d3.select('#reset').on('click', runActiveConfiguration);
 
-d3.select('#datasetModal').selectAll('li button').on('click', function() {
+d3.select('#datasetModal').selectAll('li button.preset').on('click', () => {
   const presetName = d3.event.target.value;
   activeConfiguration = CONFIGURATIONS[presetName];
   runActiveConfiguration();
   d3.select('#datasetModal').classed('hidden', true);
 });
+d3.select('#datasetModal li button#toggleCustom').on('click', () => {
+  d3.select('#ownDataset').classed('hidden', !d3.select('#ownDataset').classed('hidden'));
+});
 
-d3.select('#datasetModal div.hide').on('click', function() {
+d3.select('#datasetModal div.hide').on('click', () => {
   d3.select('#datasetModal').classed('hidden', true);
 });
 
-d3.select('#userSchemaLoad').on('click', () => {
-  if (d3.select('#userItems').node().files.length === 0) return;
+d3.select('#userSchemaStart').on('click', () => {
+  if (d3.select('#userItems').node().files.length === 0) {
+    d3.select('#userSchemaError').classed('hidden', false).text('CSV File not set');
+    return;
+  };
 
   mySchemaLoader.loadSchemaAndItems();
+  d3.select('#userSchemaError').classed('hidden', true);
 });
 d3.select('#addUserHierarchyButton').on('click', function() {
-  const label = d3.select('#userHierarchyLabel').node().value;
+  const label = d3.select('#userHierarchyLabel').node().value.trim();
   const levels = d3.select('#userHierarchyLevels').node().value.split(',').map(s => s.trim());
 
-  if (label.length === 0 || levels.length === 1) return;
+  if (label.length === 0) {
+    d3.select('#userSchemaError').classed('hidden', false).text('Label must be set');
+    return;
+  } else if (levels.length === 0) {
+    d3.select('#userSchemaError').classed('hidden', false).text('Levels must not be empty');
+    return;
+  }
 
   mySchemaLoader.addUserHierarchy(label, levels);
 
-  let entry = d3.select('#userHierarchies').append('div');
-  entry.append('div').attr('class', 'label').text(label);
-  entry.append('div').attr('class', 'levels').text(levels.join(', '));
+  let entry = d3.select('#userHierarchies').append('li');
+  entry.append('strong').attr('class', 'label').text(label);
+  entry.append('span').attr('class', 'levels').text(levels.join(' > '));
+  entry.append('button').attr('class', 'delete_level').text('remove').on('click', function() {
+    mySchemaLoader.removeUserHierarchy(label);
+    d3.select(this.parentNode).remove();
+  });
 
   d3.select('#userHierarchyLabel').node().value = '';
   d3.select('#userHierarchyLevels').node().value = '';
+  d3.select('#userSchemaError').classed('hidden', true);
 });

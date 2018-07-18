@@ -53,22 +53,28 @@
         <div class="hide">✖</div>
         <h2>Pick a dataset</h2>
         <ul>
-          <li><button value="ontology"><i class="material-icons">folder_open</i>Yeast Gene Ontology</button></li>
-          <li><button value="census10k"><i class="material-icons">folder_open</i>1990 Census (sample of 10k)</button></li>
-          <li><button value="census100k"><i class="material-icons">folder_open</i>1990 Census (sample of 100k)</button></li>
+          <li><button class="preset" value="ontology"><i class="material-icons">folder_open</i>Yeast Gene Ontology</button></li>
+          <li><button class="preset" value="census10k"><i class="material-icons">folder_open</i>1990 Census (sample of 10k)</button></li>
+          <li><button class="preset" value="census100k"><i class="material-icons">folder_open</i>1990 Census (sample of 100k)</button></li>
+          <li><button id="toggleCustom"><i class="material-icons">build</i>Use your own Dataset</button></li>
         </ul>
 
-        <div class="ownDataset">
+        <div id="ownDataset" class="hidden">
+          <h3>Custom Dataset (CSV)</h3>
+          <input id="userItems" type="file" accept=".csv" />
+          <p class="data_info">Your data will be handled locally by your browser only and will <strong>not</strong> be uploaded to external services.</p>
+          <h3>Hierarchies in the Data</h3>
+          <p><strong>label:</strong> displayed name of the hierarchical dimension</p>
+          <p><strong>levels:</strong> a comma-seperated list of column headers in your CSV file. The position of each term in this list defines its level in the hierarchy.</p>
+          <ul id="userHierarchies"></ul>
           <div id="addHierarchyGroup">
-            <input id="userHierarchyLabel" />
-            <input id="userHierarchyLevels" />
-            <button id="addUserHierarchyButton">+</button>
+            <input type="text" id="userHierarchyLabel" style="width: 40%" placeholder="label"/>
+            <input type="text" id="userHierarchyLevels" style="width: 40%" placeholder="levels"/>
+            <button id="addUserHierarchyButton">add</button>
           </div>
 
-          <div id="userHierarchies"></div>
-          <input id="userItems" type="file" accept=".csv" />
-
-          <button id="userSchemaLoad">Load</button>
+          <button id="userSchemaStart">Start</button>
+          <p class="hidden" id="userSchemaError">Label must be set</p>
         </div>
       </div>
 

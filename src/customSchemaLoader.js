@@ -37,6 +37,14 @@ const customSchemaLoader = function() {
     component.schema.hierarchies.push({label, levels});
   };
 
+  component.removeUserHierarchy = function(label) {
+    const hierarchy = component.schema.hierarchies.find(d => d.label === label);
+    if (hierarchy === undefined) return;
+    const indexOfHierarchy = component.schema.hierarchies.indexOf(hierarchy);
+
+    component.schema.hierarchies.splice(indexOfHierarchy, 1);
+  };
+
 
   component.itemsFileInput = function(_) {
     if (!arguments.length) return itemsFileInput;
