@@ -32,7 +32,7 @@ let parallelHierarchies = function() {
   // const easing = d3.easeElastic;
   const easing = d3.easePolyOut;
 
-  const fisheye = d3.fisheye.circular().radius(200).distortion(5);
+  const fisheye = d3.fisheye.circular().radius(200).distortion(6);
   let useCategoryFisheye = false;
   let useCategoryDragging = !useCategoryFisheye;
   let useIntersectionMinimization = true;

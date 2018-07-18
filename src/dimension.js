@@ -578,7 +578,7 @@ parallelHierarchies.dimension = function() {
       ancestors.selectAll('rect.sibling').attr('y', d => d.y);
     } else {
       category.each(function(cat) {
-        let f = fisheye({x: fisheye.focus()[0], y: cat.y() + y + 100 + cat.height() / 2});
+        let f = fisheye({x: x, y: cat.y() + y + 100 + cat.height() / 2});
         cat.fisheye(f);
       });
     	category.attr('transform', function(cat, i) {
@@ -586,14 +586,14 @@ parallelHierarchies.dimension = function() {
       });
       ancestors.selectAll('.activeAncestor').each(function(anc) {
         const fisheyeX = fisheye.focus()[0];
-        const ancestorPosition = {x: fisheyeX, y: anc.y + headerPadding};
+        const ancestorPosition = {x: x, y: anc.y + headerPadding};
         const transformedPosition = fisheye(ancestorPosition);
         d3.select(this)
           .attr('transform', d => `translate(0,${transformedPosition.y - headerPadding})`);
       });
       ancestors.selectAll('rect.sibling').each(function(anc) {
         const fisheyeX = fisheye.focus()[0];
-        const ancestorPosition = {x: fisheyeX, y: anc.y + headerPadding};
+        const ancestorPosition = {x: x, y: anc.y + headerPadding};
         const transformedPosition = fisheye(ancestorPosition);
         d3.select(this)
           .attr('y', transformedPosition.y - headerPadding);
