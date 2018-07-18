@@ -217,7 +217,6 @@ nav#uiControls #rulers > .ruler > div.delete::before {
   border: 1px solid #ccc;
 }
 #datasetModal > div.modalBody #ownDataset li {
-  border-top: 1px solid #ccc;
   padding: 5px 0;
   margin: 0;
   cursor: pointer;
@@ -243,10 +242,7 @@ nav#uiControls #rulers > .ruler > div.delete::before {
   background: steelblue;
 }
 #datasetModal > div.modalBody #ownDataset li:hover {
-  background: #eee;
-}
-#datasetModal > div.modalBody #ownDataset li:first-of-type {
-  border-top: none;
+  background: rgba(227,242,253, 1);
 }
 #datasetModal > div.modalBody #userHierarchies {
   margin-top: 10px;
@@ -254,7 +250,6 @@ nav#uiControls #rulers > .ruler > div.delete::before {
   overflow-y: scroll;
 }
 #datasetModal > div.modalBody #ownDataset button.delete_level {
-  color: firebrick;
   float: right;
   padding: 2px;
   margin-right: 5px;

@@ -137,7 +137,7 @@ d3.select('#addUserHierarchyButton').on('click', function() {
   if (label.length === 0) {
     d3.select('#userSchemaError').classed('hidden', false).text('Label must be set');
     return;
-  } else if (levels.length === 0) {
+  } else if (levels.length === 1 && levels[0] === '') {
     d3.select('#userSchemaError').classed('hidden', false).text('Levels must not be empty');
     return;
   }
