@@ -1,0 +1,69 @@
+body.dark {
+  background: #333;
+}
+
+body.dark g.dimension .header > g.dropdown text.option.clickable:hover,
+body.dark g.dimension .header > text.selected:hover {
+  fill: #aaa;
+}
+body.dark g.dimension .header > g.dropdown text.option {
+  fill: rgb(104, 104, 104);
+}
+body.dark g.dimension .header > g.dropdown text.option.active {
+  font-weight: bold;
+  fill: rgb(46, 46, 46);
+}
+body.dark g.dimension .header > g.dropdown text.option.clickable:hover,
+body.dark g.dimension .header > text.selected:hover {
+  fill: rgb(219, 219, 219);
+}
+
+body.dark g.category .category_label > rect.background {
+  fill: #eee;
+}
+body.dark g.category .category_label > text {
+  fill: #000;
+}
+
+body.dark g.ribbon path.partial {
+  fill: #fff;
+}
+body.dark g.ribbon path.main {
+  fill: #ccc;
+  fill-opacity: 0.5;
+}
+
+body.dark nav#uiControls > h1 {
+  color: #fff;
+}
+
+body.dark nav#uiControls button,
+body.dark nav#uiControls .inputGroup,
+body.dark nav#uiControls select {
+  background: #333;
+  box-shadow: none;
+  color: #fff;
+}
+
+body.dark nav#uiControls button.circle {
+  background: #fff;
+  box-shadow: none;
+}
+
+body.dark nav#uiControls .inputGroup {
+  fill: #fff;
+}
+
+body.dark #aggregateValues {
+  background: #333;
+  color: #fff;
+}
+
+body.dark footer {
+  background: #333;
+  color: #fff;
+}
+
+body.dark #prototypeNotice {
+  color: #000;
+}

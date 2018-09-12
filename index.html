@@ -7,39 +7,22 @@
     <title>Parallel Hierarchies</title>
 
     <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Raleway">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <link rel="stylesheet" type="text/css" href="./style/style.css" />
     <link rel="stylesheet" type="text/css" href="./style/parallelHierarchies.css" />
+    <link rel="stylesheet" type="text/css" href="./style/parallelHierarchies.darkTheme.css" />
     <link rel="stylesheet" type="text/css" href="./style/ui.css" />
   </head>
   <body class="">
-    <nav id="uiControls">
-      <h1 id="title" class="container" style="width: 30%">Parallel Hierarchies</h1>
+    <nav id="topNavigation">
+      <h1 id="title">Parallel Hierarchies</h1>
 
-      <div class="container" style="width: 65%; float:right">
-        <div class="inputGroup" id="percentageBars" style="border: 1px solid #ccc"></div>
+      <div class="widgetRow">
 
-        <button class="circle" id="reset" style="color: firebrick" title="reset visualization to default values" ><i class="material-icons">cached</i></button>
+        <div class="inputGroup" id="percentageBars" style="opacity:1.0"></div>
         <button class="circle" id="swapDataset" style="color:steelblue" title="change the dataset"><i class="material-icons">folder</i></button>
-
-        <span class="inputGroup">
-          <input id="toggleIntersectionMinimization" type="checkbox" />
-          <label for="toggleIntersectionMinimization" title="minimize ribbon intersections using the barycentric method">Optimize Intersections</label>
-          <input id="toggleGreedyMinimization" type="checkbox" />
-          <label for="toggleGreedyMinimization" title="use a greedy algorithm to enhance results of barycentric method">Use Greedy</label>
-        </span>
-
-        <span class="inputGroup">
-          <input id="fisheyeRadio" type="radio" name="fisheyeRadio" value="fisheye" />
-          <label for="fisheyeRadio" title="use fisheye effect on categories"><i class="material-icons">search</i>Fisheye</label>
-          <input id="draggingRadio" type="radio" name="fisheyeRadio" value="drag" checked="true"/>
-          <label for="draggingRadio" title="use dragging interaction on categories"><i class="material-icons">pan_tool</i>Dragging</label>
-        </span>
-
-        <button id="addRuler" class="style" title="add a guiding line for vertical comparison tasks"><i class="material-icons">border_horizontal</i>Ruler</button>
-
+        <button class="circle" id="reset" style="color: firebrick" title="reset visualization to default values" ><i class="material-icons">cached</i></button>
         <select id="dimensionPicker" title="add another dimension to the visualization"></select>
-        <div id="rulers"></div>
       </div>
     </nav>
 
@@ -47,25 +30,66 @@
 
     <div id="tooltip" class="hidden"></div>
 
+    <!-- <footer>
+      <ul>
+        <li id="prototypeNotice" style="background:#F8BBD0;height:1em;border-radius:0.5em;padding:0.2em 0.5em;">Experimental Version</li>
+        <li id="foundBugNotice">Found a Bug? Psssst, no need to yell! In the meantime, create an issue on our
+          <a href="https://github.com/ParallelHierarchies/ParallelHierarchies">
+            <img alt="github logo" class="icon" style="height:0.95em;opacity:0.73;margin:0 0.1em 0 0.25em;" src="./img/github-mark.png" />
+            GitHub Project
+          </a>
+        </li>
+      </ul>
+    </footer> -->
+    <nav id="uiControls">
+        <div id="uiWidgets">
+          <div id="rulers"></div>
+          <button id="addRuler" class="style" title="add a guiding line for vertical comparison tasks">
+            <i class="material-icons">border_horizontal</i>Ruler
+          </button>
 
-    <div id="datasetModal">
+          <div class="inputGroup">
+            <input id="fisheyeRadio" type="radio" name="fisheyeRadio" value="fisheye" />
+            <label for="fisheyeRadio" title="use fisheye effect on categories">
+                <i class="material-icons">search</i>Fisheye
+            </label>
+            <input id="draggingRadio" type="radio" name="fisheyeRadio" value="drag" checked="true"/>
+            <label for="draggingRadio" title="use dragging interaction on categories">
+              <i class="material-icons">pan_tool</i>Dragging
+            </label>
+          </div>
+
+          <div class="inputGroup">
+            <input id="toggleIntersectionMinimization" type="checkbox" />
+            <label for="toggleIntersectionMinimization">Optimize Intersections</label>
+            <input id="toggleGreedyMinimization" type="checkbox" />
+            <label for="toggleGreedyMinimization">Use Greedy</label>
+          </div>
+          <div id="aggregateValueSelection">
+            <span class="message">Aggregate Value:</span>
+            <ul id="aggregateValues" class="inputGroup" style="margin-left:0"></ul>
+          </div>
+        </div>
+      </nav>
+
+    <section id="datasetModal">
       <div class="modalBody">
         <div class="hide">✖</div>
         <h2>Pick a dataset</h2>
-        <ul>
-          <li><button class="preset" value="ontology"><i class="material-icons">folder_open</i>Yeast Gene Ontology</button></li>
-          <li><button class="preset" value="census10k"><i class="material-icons">folder_open</i>1990 Census (sample of 10k)</button></li>
-          <li><button class="preset" value="census100k"><i class="material-icons">folder_open</i>1990 Census (sample of 100k)</button></li>
-          <li><button id="toggleCustom"><i class="material-icons">build</i>Use your own Dataset</button></li>
-        </ul>
+        <ul id="presetDatasets"></ul>
 
-        <div id="ownDataset" class="hidden">
+        <!-- <div id="ownDataset" class="hidden">
           <h3>Custom Dataset (CSV)</h3>
           <input id="userItems" type="file" accept=".csv" />
-          <p class="data_info">Your data will be handled locally by your browser only and will <strong>not</strong> be uploaded to external services.</p>
+          <p>Make sure your values are actually <strong style="color:orangered">comma-seperated</strong> (Excel exports to CSV are semicolon-seperated by default).</p>
+          <p>Your data will be handled locally by your browser only and will <strong>not</strong> be uploaded to external services.</p>
+
+          <h3>Aggregate Dimension</h3>
+          <input type="text" id="userAggregateValue" placeholder="value"/>
+          <p>Name of the aggregate dimension that assigns a quantitative value to each row in your data.</p>
           <h3>Hierarchies in the Data</h3>
           <p><strong>label:</strong> displayed name of the hierarchical dimension</p>
-          <p><strong>levels:</strong> a comma-seperated list of column headers in your CSV file. The position of each term in this list defines its level in the hierarchy.</p>
+          <p><strong>levels:</strong> a comma-seperated list of dimensions from your data. The position of each term in this list defines its level in the hierarchy.</p>
           <ul id="userHierarchies"></ul>
           <div id="addHierarchyGroup">
             <input type="text" id="userHierarchyLabel" style="width: 40%" placeholder="Label"/>
@@ -75,24 +99,10 @@
 
           <button id="userSchemaStart">Start</button>
           <p class="hidden" id="userSchemaError">Label must be set</p>
-        </div>
+        </div> -->
       </div>
+    </section>
 
-    </div>
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-polyfill/6.23.0/polyfill.min.js"></script>
-    <script type="text/javascript" src="./plugins/d3.v4.min.js"></script>
-    <script type="text/javascript" src="./plugins/d3.fisheye.js"></script>
-
-    <script type="text/javascript" src="./src/parallelHierarchies.js"></script>
-    <script type="text/javascript" src="./src/dataProvider.js"></script>
-    <script type="text/javascript" src="./src/dimension.js"></script>
-    <script type="text/javascript" src="./src/category.js"></script>
-    <script type="text/javascript" src="./src/ribbon.js"></script>
-    <script type="text/javascript" src="./src/ui.js"></script>
-    <script type="text/javascript" src="./src/intersectionOptimizer.js"></script>
-    <script type="text/javascript" src="./src/percentageBars.js"></script>
-    <script type="text/javascript" src="./src/customSchemaLoader.js"></script>
-    <script type="text/javascript" src="./src/app.js"></script>
+    <script type="text/javascript" src="./build/bundle.js"></script>
   </body>
 </html>

@@ -1,99 +1,130 @@
-nav#uiControls {
+nav {
   width: 100%;
   width: -moz-available;
   width: -webkit-fill-available;
   padding: 0 80px;
-  padding-bottom: 2rem;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: space-between;
+  align-items: flex-start;
 }
 
-nav#uiControls * {
-  display: inline-block;
+#uiControls {
+  position: fixed;
+  bottom: 10px;
 }
 
-nav#uiControls h1 {
+#title {
   color: #525252;
+  max-width: 30%;
   padding: 0;
   margin: 0;
+  flex-grow: 1;
+}
+#uiWidgets {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: baseline;
+  justify-content: space-evenly;
+}
+#uiWidgets .widgetsRow {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: baseline;
+  justify-content: flex-end;
+}
+#uiWidgets .widgetsColumn {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  justify-content: space-between;
 }
 
-nav#uiControls button {
+nav button {
   box-shadow: 0 1px 3px #ccc;
 }
-nav#uiControls button:hover {
+nav button:hover {
   background-color: #eee;
   cursor: pointer;
   opacity: 1;
   box-shadow: 0 0px 1px #ccc;
 }
 
-nav#uiControls button,
-nav#uiControls .inputGroup,
-nav#uiControls #dimensionPicker {
+nav button,
+nav .inputGroup,
+nav select {
   font-size: 1rem;
   float: right;
   background: #fff;
   color: #000;
-  opacity: .73;
   border: none;
   padding: 0.4rem;
   margin: 0 0 0 1rem;
   transition: box-shadow 0.2s;
   border-bottom: 2px solid #ccc;
 }
-nav#uiControls input {
+nav input {
   display: none;
 }
-nav#uiControls input+label {
+nav input+label {
   color: #ccc;
   margin-right: 10px;
   cursor: pointer;
 }
-nav#uiControls i {
+nav i.material-icons {
   font-size: 15px;
 }
-nav#uiControls label > i,
-nav#uiControls button > i {
+nav label > i,
+nav button > i {
   margin-right: 10px;
+  font-size: 15px;
 }
-nav#uiControls button {
+nav button {
   border-radius: 2px;
 }
-nav#uiControls button.circle {
+nav button.circle {
   width: 30px;
   height: 30px;
   border-radius: 15px;
   border: 1px solid #ccc;
   padding: 0;
+  line-height: 30px;
+  box-sizing: border-box;
 }
-nav#uiControls button.circle > i {
+nav button.circle > i {
   margin-right: 0;
+  font-size: 15px;
 }
-nav#uiControls input:checked+label {
+nav input:checked+label {
   font-weight: bold;
   color: steelblue;
 }
-nav#uiControls input:disabled+label {
+nav input:disabled+label {
   color: #ccc;
 }
-nav#uiControls button:hover,
-nav#uiControls .inputGroup:hover,
-nav#uiControls #dimensionPicker:hover {
+nav button:hover,
+nav .inputGroup:hover,
+nav select:hover {
   border-color: steelblue;
 }
-nav#uiControls .inputGroup button {
+nav .inputGroup button {
   padding: 0rem 0.75rem;
 }
 
-nav#uiControls #dimensionPicker {
+nav #dimensionPicker {
   width: 200px;
 }
 
-nav#uiControls #rulers > .ruler {
+nav #rulers > .ruler {
   position: absolute;
   left: 20px;
   top: 10px;
 }
-nav#uiControls #rulers > .ruler > div.handle {
+nav #rulers > .ruler > div.handle {
   position: absolute;
   left: 20px;
   top: 2px;
@@ -103,12 +134,13 @@ nav#uiControls #rulers > .ruler > div.handle {
   border: 1px solid #555;
   border-radius: 50%;
 }
-nav#uiControls #rulers > .ruler > div.guideline {
+nav #rulers > .ruler > div.guideline {
   height: 0;
   border: none;
   border-bottom: 1px dotted #555;
+  margin-top: 12px;
 }
-nav#uiControls #rulers > .ruler > div.delete {
+nav #rulers > .ruler > div.delete {
   position: absolute;
   right: 0px;
   top: 35px;
@@ -123,7 +155,7 @@ nav#uiControls #rulers > .ruler > div.delete {
   transform: translateY(-28px);
   text-align: center;
 }
-nav#uiControls #rulers > .ruler > div.delete::before {
+nav #rulers > .ruler > div.delete::before {
   content: 'x';
 }
 
@@ -137,7 +169,7 @@ nav#uiControls #rulers > .ruler > div.delete::before {
 #datasetModal > div.modalBody {
   width: 400px;
   margin: 0 auto;
-  margin-top: 150px;
+  margin-top: 75px;
   padding: 20px;
   background: #fff;
   border-radius: 2px;
@@ -190,14 +222,13 @@ nav#uiControls #rulers > .ruler > div.delete::before {
 }
 #ownDataset h3 {
   font-size: 16px;
-  margin: 5px 0;
   color: steelblue;
 }
 #ownDataset p {
   font-size: 14px;
   margin: 5px 0;
 }
-#ownDataset p.data_info {
+#ownDataset p.data_ {
   color: #888;
   font-size: 14px;
   margin: 10px 0 15px;
@@ -298,31 +329,118 @@ nav#uiControls #rulers > .ruler > div.delete::before {
   text-align: right;
 }
 
-#timestamps > .timestamp {
+#notifications {
+  position: absolute;
+  bottom: 4.5rem;
+  right: 0;
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: space-evenly;
+}
+#notifications .box {
+  padding: 0.4em 0 0.6em;
   width: 100%;
-  padding-bottom: 2.5rem;
+  background: #fff;
+  border: 1px solid transparent;
+  text-align: center;
+  font-weight: normal;
+  justify-content: space-between;
+  overflow: hidden;
+  transition: all 0.3s cubic-bezier(0.075, 0.82, 0.165, 1);
+  box-sizing: border-box;
+  white-space: nowrap;
 }
-#timestamps > .timestamp > * {
-  float: left;
+#notifications .box.hidden {
+  display: inline-flex;
+  visibility: hidden;
+  width: 0;
 }
-#timestamps > .timestamp > input.slider {
-  width: 80%;
+#notifications .box.error {
+  background: firebrick;
 }
-#timestamps > .timestamp > label {
-  text-align: right;
-  width: 10%;
-  padding-right: 1rem;
+#notifications .box.warning {
+  background: orange;
+}
+#notifications .box.hint {
+  background: steelblue;
+}
+#notifications .box span {
+  margin: 0 1em;
+  color: #fff;
+}
+#notifications .icon::before {
+  font-weight: bold;
+}
+#notifications .info .icon::before {
+  content: 'Info: ';
+}
+#notifications .warning .icon::before {
+  content: 'Warning: ';
+}
+#notifications .error .icon::before {
+  content: 'Error: ';
+}
+#notifications .box span.delete::before {
+  content: '✖';
+  cursor: pointer;
 }
 
-#tickmarks {
+#aggregateValueSelection {
+  margin: 0.5rem 0 0 1rem;
+  padding: 0.5rem;
+  box-sizing: border-box;
+  display: flex;
+}
+#aggregateValueSelection .message {
+  list-style: none;
+  margin: 0.5rem;
+}
+#aggregateValues {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: flex-start;
+  padding: 0;
   margin: 0;
-  margin-left: 2.5%;
-  margin-bottom: 1rem;
+  background: #fff;
+}
+#aggregateValues .aggregateValue {
+  list-style: none;
+  margin: 0 0.5rem;
+  padding: 0.4rem 0;
+  cursor: pointer;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  color: #ccc;
+}
+#aggregateValues .aggregateValue.active {
+  color: steelblue;
+  font-weight: bold;
+}
+
+footer {
+  position: absolute;
+  bottom: 0;
+  padding-top: 0.25em;
+  height: 1.5em;
+  width: 100%;
+  background: #fff;
+  color: #333;
+  padding: 0 5%;
+  box-sizing: border-box;
+}
+footer ul {
+  font-size: 0.75em;
+  margin: 0;
   padding: 0;
 }
-#tickmarks li {
+footer ul > li {
+  margin: 0;
+  list-style: none;
   display: inline-block;
-  text-align: center;
-  margin-right: 8%;
-  margin-left: 8%;
+  margin-right: 2em;
+}
+footer a {
+  color: #333;
 }

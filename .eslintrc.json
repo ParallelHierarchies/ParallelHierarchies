@@ -1,0 +1,21 @@
+{
+    "extends": "airbnb-base",
+    "rules": {
+        "linebreak-style": 0,
+        "func-names": 0,
+        "space-before-function-paren": 0,
+        "no-use-before-define": 0,
+        "no-plusplus": 0,
+        "padded-blocks": 0,
+        "quote-props": 0,
+        "eol-last": 0,
+        "no-param-reassign": 0,
+        "prefer-destructuring": 0
+    },
+    "globals": {
+        "window": true
+    },
+    "env": {
+        "browser": true
+    }
+}
