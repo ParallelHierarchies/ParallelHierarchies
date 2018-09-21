@@ -34,12 +34,19 @@ const DimensionHierarchyController = function() {
   controller.updateHierarchy = function() {
 
     const activeNodes = [];
+    const visibleNodes = [];
+
     hierarchy.each((node) => {
       node.isQueryLeaf = false;
       if (matchesQuery(node)) {
         activeNodes.push(node);
+        visibleNodes.push(node);
       } else if (matchesQuery(node.parent)) {
         activeNodes.push(node);
+
+        if (!isQueryLeaf(node.parent)) {
+          visibleNodes.push(node);
+        }
       }
     });
 
@@ -61,8 +68,9 @@ const DimensionHierarchyController = function() {
     });
 
     activeNodes.forEach(setQueryPropertiesToNode);
-    activeNodes.forEach(setInactiveHeightToNode);
-    activeNodes.forEach(setPaddingToNode);
+
+    visibleNodes.forEach(setInactiveHeightToNode);
+    visibleNodes.forEach(setPaddingToNode);
 
     hierarchy.each((node) => {
       node.heightPerAggregateDimension = {};
@@ -75,8 +83,8 @@ const DimensionHierarchyController = function() {
       calculateHeightPerAggregateDimension(hierarchy, name);
     });
 
-    activeNodes.forEach(setHeightToNode);
-    activeNodes.forEach(setYPositionToNode);
+    visibleNodes.forEach(setHeightToNode);
+    visibleNodes.forEach(setYPositionToNode);
   };
 
   controller.updateYPositions = function() {
