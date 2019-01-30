@@ -37,11 +37,14 @@ export default function HierarchiesFacade() {
 
   let aggregateDimensions = [];
 
+  let isRotated = false;
+
   // const fisheye = d3.fisheye.circular().radius(200).distortion(5);
   let useCategoryFisheye = true;
   let useCategoryDragging = !useCategoryFisheye;
   let useIntersectionMinimization = true;
   let useGreedyOptimization = false;
+  let useZoomableDimensions = false;
 
   // D3 SELECTIONS
   let svgContainer; // <svg> selection the parallelHiearchies are drawn onto
@@ -55,12 +58,12 @@ export default function HierarchiesFacade() {
   const margin = {
     'left': 100, 'top': 120, 'right': 100, 'bottom': 100,
   };
-  const dimensionHeaderPadding = 150;
+  let dimensionHeaderPadding = 150;
 
   const hierarchies = function(selection) {
     if (dataProvider == null) throw Error('parallelHierarchies: dataProvider not set');
 
-    itemID = dataProvider.itemID();
+    itemID = dataProvider.itemID;
 
     dimensionController = getDimensionControllerInstance();
     ribbonController = getRibbonControllerInstance();
@@ -96,11 +99,10 @@ export default function HierarchiesFacade() {
 
       // dimensionsdata is an empty object at this point. It is populated by dataconverter and then
       // passed to dimensionController
-      dataConverter
-        .itemList(itemList)
-        .dimensionsData(dimensionsData)
-        .color(color)
-        .createDimensions(result.schema);
+      dataConverter.itemList = itemList;
+      dataConverter.dimensionsData = dimensionsData;
+      dataConverter.color = color;
+      dataConverter.createDimensions(result.schema);
 
       dimensionController
         .dimensionsData(dimensionsData)
@@ -134,18 +136,19 @@ export default function HierarchiesFacade() {
   };
 
   let getDataConverterInstance = function() {
-    return new DataConverter()
-      .dataProvider(dataProvider)
-      .initialDimensions(initialDimensions)
-      .hierarchies(hierarchies);
+    const converter = new DataConverter();
+    converter.dataProvider = dataProvider;
+    converter.initialDimensions = initialDimensions;
+    converter.hierarchies = hierarchies;
+
+    return converter;
   };
 
   let configureEventMediator = function() {
-    EventMediator
-      .hierarchiesComponent(hierarchies)
-      .dimensionController(dimensionController)
-      .ribbonController(ribbonController)
-      .uiController(ui);
+    EventMediator.hierarchiesComponent = hierarchies;
+    EventMediator.dimensionController = dimensionController;
+    EventMediator.ribbonController = ribbonController;
+    EventMediator.uiController = ui;
   };
 
   /**
@@ -155,7 +158,10 @@ export default function HierarchiesFacade() {
    */
   let initialDraw = function() {
     svgContainer.selectAll('.parallelHierarchies').remove();
-    root = svgContainer.append('g').attr('class', 'parallelHierarchies');
+    root = svgContainer.append('g')
+      .attr('class', 'parallelHierarchies')
+      .attr('font-family', 'Raleway, sans-serif')
+      .style('transform', isRotated ? `translateY(${window.innerHeight - 200}px)rotateZ(-90deg)` : '');
 
     svgContainer
       .on('mousemove', function() {
@@ -184,6 +190,11 @@ export default function HierarchiesFacade() {
     ribbonController
       .root(ribbons)
       .init();
+  };
+
+  hierarchies.redraw = function() {
+    dimensionController.redraw();
+    ribbonController.redraw();
   };
 
   /**
@@ -232,8 +243,7 @@ export default function HierarchiesFacade() {
 
   hierarchies.ui = function(_) {
     if (!arguments.length) return ui;
-    if (typeof _ === 'function') ui = _;
-    else throw Error('parallelHierarchies: ui must be of type function');
+    ui = _;
     return hierarchies;
   };
 
@@ -258,6 +268,20 @@ export default function HierarchiesFacade() {
     else throw Error('parallelHierarchies: height must be a number');
     scaleY.range([0, height - margin.top - margin.bottom - dimensionHeaderPadding]);
     ItemValueProvider.setScale(scaleY);
+    return hierarchies;
+  };
+
+  hierarchies.isRotated = function(_) {
+    if (!arguments.length) return isRotated;
+    if (typeof _ === 'boolean') {
+      isRotated = _;
+      if (root !== undefined) {
+        root
+          .style('transform', _ ? `translateY(${window.innerHeight - 200}px)rotateZ(-90deg)` : '');
+      }
+    } else {
+      throw Error('parallelHierarchies: isRotated must be of type boolean');
+    }
     return hierarchies;
   };
 
@@ -315,6 +339,17 @@ export default function HierarchiesFacade() {
       EventMediator.notify('intersectionMinimizationModeChanged');
     } else {
       throw Error('parallelHierarchies: useIntersectionMinimization must be of type boolean');
+    }
+    return hierarchies;
+  };
+
+  hierarchies.useZoomableDimensions = function(_) {
+    if (!arguments.length) return useZoomableDimensions;
+    if (typeof _ === 'boolean') {
+      useZoomableDimensions = _;
+      EventMediator.notify('acordionModeChanged');
+    } else {
+      throw Error('parallelHierarchies: useZoomableDimensions must be of type boolean');
     }
     return hierarchies;
   };

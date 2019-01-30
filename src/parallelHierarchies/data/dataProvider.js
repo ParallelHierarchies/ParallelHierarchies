@@ -1,115 +1,114 @@
 import * as d3 from 'd3';
 
-const DataProvider = function() {
-  const provider = {};
+export default class DataProvider {
+  constructor() {
+    this.itemFile = ''; // path to file with items
+    this.schemaFile = ''; // path to file with schema
 
-  let itemFile = ''; // path to file with items
-  let schemaFile = ''; // path to file with schema
+    this.itemID = '_ID'; // unique identifier per item
+    this.itemValue = 'value'; // dimension that holds the value per item
 
-  let itemID = '_ID'; // unique identifier per item
-  let itemValue = 'value'; // dimension that holds the value per item
+    this.itemListPromise = null;
+    this.schemaPromise = null;
 
-  let itemListPromise;
-  let schemaPromise;
-
-  let itemList; // items as a list
-  let schema; // meta information about the items
-
+    this.itemList = null; // items as a list
+    this.schema = null; // meta information about the items
+  }
 
   /**
    * Add aggregateDimensions property to every item. This property saves the values at every
    * aggregate dimension in the data for easy future access.
    */
-  provider.addAggregateDimensions = function(item) {
+  addAggregateDimensions(item) {
     item.aggregateDimensions = {};
-    schema.timestamps.forEach((aggregateDimension) => {
+    this.schema.timestamps.forEach((aggregateDimension) => {
       item.aggregateDimensions[aggregateDimension] = item[aggregateDimension];
       delete item[aggregateDimension];
     });
-  };
+  }
 
 
   /**
    * Load the data from local source files.
    * @return {object} Promise that the data was loaded
    */
-  provider.getData = function() {
-    if (itemList != null && schema != null) {
+  getData() {
+    if (this.itemList != null && this.schema != null) {
       return new Promise((resolve) => {
-        resolve({ schema, itemList });
+        resolve({ schema: this.schema, itemList: this.itemList });
       });
     }
 
-    if (itemFile === '') throw Error('dataProvider: itemFile not set');
-    if (schemaFile === '') throw Error('dataProvider: schemaFile not set');
+    if (this.itemFile === '') throw Error('dataProvider: itemFile not set');
+    if (this.schemaFile === '') throw Error('dataProvider: schemaFile not set');
 
-    return getSchema()
-      .then(getItemList)
-      .then(() => ({ schema, itemList }));
-  };
+    return this.fetchSchema()
+      .then(() => this.fetchItemList())
+      .then(() => ({ schema: this.schema, itemList: this.itemList }));
+  }
 
-  let getSchema = async function() {
-    if (schemaPromise === undefined) {
-      schemaPromise = fetch(schemaFile)
+  async fetchSchema() {
+    if (this.schemaPromise === null) {
+      this.schemaPromise = fetch(this.schemaFile)
         .then(response => response.json())
-        .then(provider.setSchemaFromJson);
+        .then(res => this.setSchemaFromJson(res));
     }
 
-    await schemaPromise;
+    await this.schemaPromise;
 
-    return schema;
-  };
+    return this.schema;
+  }
 
-  let getItemList = async function() {
-    if (itemListPromise === undefined) {
-      itemListPromise = fetch(itemFile)
+  async fetchItemList() {
+    if (this.itemListPromise === null) {
+      this.itemListPromise = fetch(this.itemFile)
         .then(response => response.text())
         .then(text => d3.dsvFormat(',').parse(text))
-        .then(provider.setItemListFromCSV);
+        .then(res => this.setItemListFromCSV(res));
     }
 
-    await itemListPromise;
+    await this.itemListPromise;
 
-    return itemList;
-  };
+    return this.itemList;
+  }
 
-  provider.setSchemaFromJson = function(jsonData) {
+  setSchemaFromJson(jsonData) {
     // set the relevant parts of the schema
-    schema = {};
-    schema.title = (jsonData.title || '');
-    schema.hierarchies = (jsonData.hierarchies || {});
-    schema.unit = (jsonData.unit || '');
-    schema.labels = (jsonData.labels || {});
-    schema.timestamps = (jsonData.timestamps || [itemValue]);
-    schema.numerical = (jsonData.numerical || []);
-    schema.dimensions = schema.hierarchies.map(h => h.label);
-  };
+    this.schema = {};
+    this.schema.title = (jsonData.title || '');
+    this.schema.hierarchies = (jsonData.hierarchies || {});
+    this.schema.unit = (jsonData.unit || '');
+    this.schema.labels = (jsonData.labels || {});
+    this.schema.timestamps = (jsonData.timestamps || [this.itemValue]);
+    this.schema.numerical = (jsonData.numerical || []);
+    this.schema.dimensions = this.schema.hierarchies.map(h => h.label);
+  }
 
-  provider.setItemListFromCSV = function(csvData) {
+  setItemListFromCSV(csvData) {
     // save the items from data array in dictionary object 'items'
-    if (itemList == null) {
-      itemList = csvData;
+    if (this.itemList == null) {
+      this.itemList = csvData;
     }
 
-    if (itemList[0][itemID] == null) {
-      itemList.forEach((item, i) => { item[itemID] = i; });
+    if (this.itemList[0][this.itemID] == null) {
+      this.itemList.forEach((item, i) => { item[this.itemID] = i; });
     }
 
     let levels = [];
-    Object.values(schema.hierarchies).forEach((h) => { levels = levels.concat(h.levels); });
+    Object.values(this.schema.hierarchies).forEach((h) => { levels = levels.concat(h.levels); });
 
-    Object.keys(itemList[0])
-      .filter(dim => dim !== itemValue)
-      .filter(dim => dim !== itemID)
+    Object.keys(this.itemList[0])
+      .filter(dim => dim !== this.itemValue)
+      .filter(dim => dim !== this.itemID)
       .filter(dim => dim !== 'aggregateDimensions')
       .filter(dim => dim !== 'uncertainty')
-      .filter(dim => schema.timestamps.indexOf(dim) === -1)
+      .filter(dim => this.schema.timestamps.indexOf(dim) === -1)
       .filter(dim => levels.indexOf(dim) === -1)
-      .filter(dim => schema.dimensions.indexOf(dim) === -1)
+      .filter(dim => this.schema.dimensions.indexOf(dim) === -1)
       .forEach((dim) => {
-        schema.dimensions.push(dim);
+        this.schema.dimensions.push(dim);
       });
-  };
+  }
 
   /**
    * Since the items are stored in csv for storage reasons, hierarchies are stored 'flat' inside the
@@ -117,8 +116,8 @@ const DataProvider = function() {
    * according to the schema file.
    * @return {void}
    */
-  provider.expandHierarchies = function(item) {
-    schema.hierarchies.forEach((hierarchy) => {
+  expandHierarchies(item) {
+    this.schema.hierarchies.forEach((hierarchy) => {
       // check if the item contains invalid property
       if (item[hierarchy.label] != null) throw Error('dataProvider: item has invalid property');
 
@@ -148,7 +147,7 @@ const DataProvider = function() {
         delete item[hierarchy.levels[l]];
       }
     });
-  };
+  }
 
   /**
    * Takes a key and a dimension for any item from the dataset and returns the specific label for
@@ -158,21 +157,21 @@ const DataProvider = function() {
    * @param   {string}  key       key that was stored in an item for this dimension
    * @return  {string}            the long-form label for this key in that dimension
    */
-  provider.getLabel = function(dim, level, key) {
+  getLabel(dim, level, key) {
     let dimension = dim;
     // check if a label exists for this key inside that dimension
-    const match = schema.hierarchies.find(s => s.label === dimension);
+    const match = this.schema.hierarchies.find(s => s.label === dimension);
     if (match !== undefined) dimension = match.levels[level];
 
-    if (dimension === itemID) return key;
-    if (dimension === itemValue) return key;
-    if (schema.labels[dimension] == null) return key;
+    if (dimension === this.itemID) return key;
+    if (dimension === this.itemValue) return key;
+    if (this.schema.labels[dimension] == null) return key;
 
     // if (schema.labels[dimension][key] == null) throw Error('dataProvider: key not found');
     // return schema.labels[dimension][key];
 
-    return schema.labels[dimension][key] == null ? key : schema.labels[dimension][key];
-  };
+    return this.schema.labels[dimension][key] == null ? key : this.schema.labels[dimension][key];
+  }
 
   /**
    * Returns the value for a given item at an optional version aggregateDimensions.
@@ -180,58 +179,24 @@ const DataProvider = function() {
    * @param   {string} aggregateDimension the specific dimension the value should be returned from
    * @return  {number}                    value of item at dimension
    */
-  provider.getValue = function(item, aggregateDimension = schema.timestamps[0]) {
+  getValue(item, aggregateDimension) {
+    // cannot use default parameters because schema itself may be  null
+    if (aggregateDimension === undefined && this.schema !== null) {
+      aggregateDimension = this.schema.timestamps[0];
+    }
     if (item.aggregateDimensions[aggregateDimension] == null) {
       throw Error('dataProvider: cannot get value because aggregate dimension is invalid');
     }
 
     return +item.aggregateDimensions[aggregateDimension];
-  };
+  }
 
   /**
    * Simple getter for the schema data.
    * @return  {object}  the schema object
    */
-  provider.getSchema = function() {
-    if (schema == null) throw Error('provider: schema not loaded or set');
-    return schema;
-  };
-
-
-  // GETTERS + SETTERS for parameters //////////////////////////////////////////////////////////////
-
-  provider.itemFile = function(_) {
-    if (!arguments.length) return itemFile;
-    if (typeof _ === 'string') itemFile = _;
-    else throw Error('dataProvider: itemFile must be of type string');
-    itemList = null;
-    return provider;
-  };
-
-  provider.schemaFile = function(_) {
-    if (!arguments.length) return schemaFile;
-    if (typeof _ === 'string') schemaFile = _;
-    else throw Error('dataProvider: schemaFile must be of type string');
-    schema = null;
-    return provider;
-  };
-
-  provider.itemID = function(_) {
-    if (!arguments.length) return itemID;
-    if (typeof _ === 'string') itemID = _;
-    else throw Error('dataProvider: itemID must be of type string');
-    return provider;
-  };
-
-  provider.itemValue = function(_) {
-    if (!arguments.length) return itemValue;
-    if (typeof _ === 'string') itemValue = _;
-    else throw Error('dataProvider: itemValue must be of type string');
-    return provider;
-  };
-
-
-  return provider;
-};
-
-export default DataProvider;
+  getSchema() {
+    if (this.schema == null) throw Error('provider: schema not loaded or set');
+    return this.schema;
+  }
+}

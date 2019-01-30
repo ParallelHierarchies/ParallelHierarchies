@@ -1,7 +1,11 @@
 import * as d3 from 'd3';
 import * as vsup from 'vsup';
 
-export const UNCERTAINTY_MODES = { NONE: 1, COLOR: 2, RIBBON: 3 };
+export const RIBBON_UNCERTAINTY_MODES = { NONE: 1, COLOR: 2, RIBBON: 3 };
+
+export const CATEGORY_UNCERTAINTY_MODES = {
+  NONE: 1, WHITE: 2, OPACITY: 3, GAP: 4,
+};
 
 export const UNCERTAINTY_COLOR_SCHEMES = [
   'interpolateViridis',
@@ -75,6 +79,7 @@ class UncertaintyProvider {
   }
 
   getPercentageForUncertainty(uncertainty) {
+    if (uncertainty === 0) return 0;
     return this.uncertaintyScale(uncertainty);
   }
 

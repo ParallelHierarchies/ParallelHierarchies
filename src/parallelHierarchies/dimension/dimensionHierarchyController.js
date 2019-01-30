@@ -8,11 +8,7 @@ const DimensionHierarchyController = function() {
   let hierarchy;
 
   let dimension;
-
-  const totalLeafNodePadding = 50;
-  const totalVerticalSpace = 100;
-  const totalVerticalPadding = totalVerticalSpace * 0.15;
-  const totalVerticalHeight = totalVerticalSpace * 0.85;
+  const inactiveHeight = 50;
 
 
   /**
@@ -34,19 +30,12 @@ const DimensionHierarchyController = function() {
   controller.updateHierarchy = function() {
 
     const activeNodes = [];
-    const visibleNodes = [];
-
     hierarchy.each((node) => {
       node.isQueryLeaf = false;
       if (matchesQuery(node)) {
         activeNodes.push(node);
-        visibleNodes.push(node);
       } else if (matchesQuery(node.parent)) {
         activeNodes.push(node);
-
-        if (!isQueryLeaf(node.parent)) {
-          visibleNodes.push(node);
-        }
       }
     });
 
@@ -68,9 +57,8 @@ const DimensionHierarchyController = function() {
     });
 
     activeNodes.forEach(setQueryPropertiesToNode);
-
-    visibleNodes.forEach(setInactiveHeightToNode);
-    visibleNodes.forEach(setPaddingToNode);
+    activeNodes.forEach(setInactiveHeightToNode);
+    activeNodes.forEach(setPaddingToNode);
 
     hierarchy.each((node) => {
       node.heightPerAggregateDimension = {};
@@ -83,8 +71,8 @@ const DimensionHierarchyController = function() {
       calculateHeightPerAggregateDimension(hierarchy, name);
     });
 
-    visibleNodes.forEach(setHeightToNode);
-    visibleNodes.forEach(setYPositionToNode);
+    activeNodes.forEach(setHeightToNode);
+    activeNodes.forEach(setYPositionToNode);
   };
 
   controller.updateYPositions = function() {
@@ -100,6 +88,16 @@ const DimensionHierarchyController = function() {
     });
 
     activeNodes.forEach(setYPositionToNode);
+  };
+
+  controller.getOrder = function() {
+    const order = [];
+
+    hierarchy.each((d) => {
+      order.push(d);
+    });
+
+    return order;
   };
 
   /**
@@ -154,37 +152,15 @@ const DimensionHierarchyController = function() {
         h = dimension.scaleY()(node.values[aggregateValue]);
         node.data.value.isQueryLeaf = true;
       } else if (node.children === undefined) {
-        // matches the query, is not a query leaf and has no child nodes
         h = 0;
       } else {
-        // aggregate node that partly matches the query and has child nodes
         node.data.value.isDrilledDown = true;
-
-        // if available, find the active child node in the node's children array
         const activeChildren = node.children
           .filter(child => !isFilteredOutByOtherDimensions(child));
-        const activeChildNode = activeChildren
-          .find(child => matchesQuery(child));
 
-        // padding is not included in height of children nodes, so add it seperately
-        if (activeChildNode !== undefined) {
-          if (isQueryLeaf(activeChildNode) && activeChildren.length > 1) {
-            h += totalLeafNodePadding;
-          } else if (!isQueryLeaf(activeChildNode)) {
-            const paddingPerQueryLevel = totalVerticalPadding / dimension.data().queryList.length;
-            h += paddingPerQueryLevel;
-
-            // add heights above or below active node if there are no siblings in those positions to
-            // ensure diamond shaped dimension hierarchies
-            const heightPerQueryLevel = totalVerticalHeight / dimension.data().queryList.length;
-            const aboveSiblings = activeChildNode.siblings.filter(isNodeAboveActiveSibling);
-
-            if (aboveSiblings.length === 0) {
-              h += heightPerQueryLevel / 2;
-            }
-            if (aboveSiblings.length === activeChildNode.siblings.length) {
-              h += heightPerQueryLevel / 2;
-            }
+        if (node.parent !== null) {
+          if (activeChildren.length > 1) {
+            h += node.paddingPerChild * (activeChildren.length - 1);
           }
         }
 
@@ -195,7 +171,7 @@ const DimensionHierarchyController = function() {
     } else if (matchesQuery(node.parent)) {
       // set heights of nodes that partly match the query, but are neither leafs nor ancestor of a
       // leaf node
-      h = node.inactiveHeightPerChild;
+      h = node.parent.inactiveHeightPerChild;
     }
 
     // do not show leaf nodes that have height 0 to reduce clutter
@@ -217,61 +193,22 @@ const DimensionHierarchyController = function() {
   let setYPositionToNode = function(node) {
     let absoluteY = 0;
     let relativeY = 0;
-    node.yOffset = 0;
 
     if (node.h === undefined) return;
 
-    if (node === hierarchy) {
-      if (dimension.data().queryList.length === 0) {
-        absoluteY = 0;
-        relativeY = 0;
-      } else {
-        absoluteY = -totalVerticalSpace / 2;
-        relativeY = -totalVerticalSpace / 2;
-      }
+    if (node.parent === null) {
+      absoluteY = 0;
+      relativeY = 0;
     } else if (isFilteredOutByOtherDimensions(node)) {
       absoluteY = 0;
       relativeY = 0;
-    } else if (matchesQuery(node) && isQueryLeaf(node)) {
-
+    } else {
       relativeY = node.parent.yOffset;
       absoluteY = relativeY + node.parent.absoluteY;
-      node.parent.yOffset += node.h + node.verticalPadding;
-
-    } else if (matchesQuery(node)) {
-
-      relativeY = node.parent.yOffset;
-      absoluteY = relativeY + node.parent.absoluteY;
-      node.parent.yOffset += node.h;
-
-      const aboveSiblings = node.siblings
-        .filter(d => !isFilteredOutByOtherDimensions(d))
-        .filter(isNodeAboveActiveSibling);
-
-      // if no siblings are above the active node, still move the block by the required spacing to
-      // achieve the diamond shape
-      if (aboveSiblings.length === 0) {
-        const queryLength = dimension.data().queryList.length;
-        const aboveHeightPerQueryLevel = totalVerticalHeight / 2 / queryLength;
-        const abovePaddingPerQueryLevel = totalVerticalPadding / 2 / queryLength;
-
-        relativeY += aboveHeightPerQueryLevel + abovePaddingPerQueryLevel;
-        absoluteY += aboveHeightPerQueryLevel + abovePaddingPerQueryLevel;
-        node.parent.yOffset += aboveHeightPerQueryLevel + abovePaddingPerQueryLevel;
-      }
-
-    } else if (matchesQuery(node.parent)) {
-      if (isNodeAboveActiveSibling(node)) {
-        relativeY = node.parent.yOffset;
-        absoluteY = relativeY + node.parent.absoluteY;
-        node.parent.yOffset += node.h + node.verticalPadding;
-      } else {
-        relativeY = node.parent.yOffset + node.verticalPadding;
-        absoluteY = relativeY + node.parent.absoluteY;
-        node.parent.yOffset += node.h + node.verticalPadding;
-      }
+      node.parent.yOffset += node.h + node.parent.paddingPerChild;
     }
 
+    node.yOffset = 0;
     node.relativeY = relativeY;
     node.absoluteY = absoluteY;
     node.y = absoluteY;
@@ -363,6 +300,8 @@ const DimensionHierarchyController = function() {
 
     if (result === undefined) return false;
 
+    if (result === undefined) return false;
+
     // if the node matches the query, but the result has no properties, it's a leaf to the query
     const isPerfectMatch = Object.keys(result).length === 0;
 
@@ -409,43 +348,30 @@ const DimensionHierarchyController = function() {
 
     let padding;
 
-    if (isFilteredOutByOtherDimensions(node)) {
-      padding = 0;
-    } else if (node === hierarchy) {
-      padding = 0;
-    } else if (matchesQuery(node)) {
-      // query leaf nodes split totalleafnodepadding
-      if (isQueryLeaf(node)) {
-        padding = totalLeafNodePadding / node.siblings
-          .filter(d => !isFilteredOutByOtherDimensions(d))
-          .length;
-      }
-    } else if (matchesQuery(node.parent)) {
-      // composite nodes split totalverticalPadding in two groups: above and below active sibling
-      const noOfQueryTerms = dimension.data().queryList.length;
+    // if (node.children === undefined) {
+    //   padding = 0;
+    // } else if (node.children.length === 1) {
+    //   padding = 0;
+    // } else if (node.aggregateValue === 0 && node.parent !== null) {
+    //   padding = 0;
+    // } else if (node.parent === null) {
+    //   padding = dimension.categoryPadding() / (node.children.length);
+    // } else if (node.parent.children.length === 1) {
+    //   padding = node.parent.paddingPerChild;
+    // } else {
+    //   padding = node.parent.paddingPerChild / (node.parent.children.length);
+    // }
+    // FIXME: uncomment the following lines to get padding indpenendent from ancestry
+    // this causes the nodes to be seperated more obviously but may also increase the total height
+    // of a dimension to be bigger than the SVG canvas
 
-      if (isNodeAboveActiveSibling(node)) {
-        const paddingAbovePerQueryLevel = (totalVerticalPadding / 2) / noOfQueryTerms;
-        const nodesAboveActiveSibling = node.parent.children
-          .filter(d => !isFilteredOutByOtherDimensions(d))
-          .filter(isNodeAboveActiveSibling);
+    // padding = node.height;
+    // if (node.height === 1 && node.depth === 0 && node.parent === null) {
+    //   padding = dimension.categoryPadding() / node.children.length;
+    // }
+    padding = 3;
 
-        // remove 1 because only n-1 paddings between n nodes
-        padding = paddingAbovePerQueryLevel / Math.max(nodesAboveActiveSibling.length - 1, 1);
-      } else {
-        const paddingBelowPerQueryLevel = (totalVerticalPadding / 2) / noOfQueryTerms;
-        const nodesBelowActiveSibling = node.parent.children
-          .filter(d => !isFilteredOutByOtherDimensions(d))
-          .filter(d => !isNodeAboveActiveSibling(d));
-
-        // remove 2 because only n-1 paddings between n nodes and one of them is the active node
-        padding = paddingBelowPerQueryLevel / Math.max(nodesBelowActiveSibling.length - 1, 1);
-      }
-    } else {
-      padding = 0;
-    }
-
-    node.verticalPadding = padding;
+    node.paddingPerChild = padding;
   };
 
   /**
@@ -454,7 +380,7 @@ const DimensionHierarchyController = function() {
    * @param   {object}  node element of hierarchy
    * @return  {boolean}      whether the element is above the active node in the neighborhood
    */
-  let isNodeAboveActiveSibling = function(node) {
+  const isNodeAboveActiveSibling = function(node) {
     // node is root --> nothing to do
     if (node === hierarchy) return false;
     // node itself is active --> nothing to do
@@ -480,59 +406,29 @@ const DimensionHierarchyController = function() {
    * @return  {void}
    */
   let setInactiveHeightToNode = function(node) {
-
-    const dimensionQueryLength = Math.max(dimension.data().queryList.length, 1);
-    const heightPerQueryLevel = totalVerticalHeight / dimensionQueryLength;
     let inactiveHeightPerChild;
 
-    if (isFilteredOutByOtherDimensions(node)) {
-      inactiveHeightPerChild = 0;
-    } else if (node === hierarchy) {
-      inactiveHeightPerChild = heightPerQueryLevel / 2 / node.children.length;
-    } else if (matchesQuery(node.parent)) {
-      if (isNodeAboveActiveSibling(node)) {
-        inactiveHeightPerChild = getHeightAboveActiveSibling(node);
-      } else {
-        inactiveHeightPerChild = getHeightBelowActiveSibling(node);
-      }
-    } else {
-      inactiveHeightPerChild = 0;
-    }
+    // FIXME: uncomment the following lines to split one height for inactive nodes among child nodes
+    // this makes inactive nodes smaller the deeper in the hierarchy they are (often too small)
+
+    // if (node.children === undefined) {
+    //   inactiveHeightPerChild = 0;
+    // } else if (node.children.length === 1) {
+    //   inactiveHeightPerChild = 0;
+    // } else if (node.value === 0 && node.parent !== null) {
+    //   inactiveHeightPerChild = 0;
+    // } else if (node.parent === null) {
+    //   inactiveHeightPerChild = inactiveHeight / (node.children.length - 1);
+    // } else {
+    //   ({ inactiveHeightPerChild } = node.parent);
+
+    //   if (node.parent.children.length > 1) {
+    //     inactiveHeightPerChild /= node.parent.children.length - 1;
+    //   }
+    // }
+    inactiveHeightPerChild = 10;
 
     node.inactiveHeightPerChild = inactiveHeightPerChild;
-  };
-
-  const getHeightAboveActiveSibling = function(node) {
-    const nodesAboveActiveSibling = node.parent.children
-      .filter(d => !isFilteredOutByOtherDimensions(d))
-      .filter(isNodeAboveActiveSibling);
-
-    const dimensionQueryLength = Math.max(dimension.data().queryList.length, 1);
-    const heightPerQueryLevel = totalVerticalHeight / dimensionQueryLength;
-    const noOfNodesAbove = Math.max(nodesAboveActiveSibling.length, 1);
-
-    const aboveInactiveHeightPerChild = (heightPerQueryLevel / 2) / noOfNodesAbove;
-
-    return aboveInactiveHeightPerChild;
-  };
-
-  const getHeightBelowActiveSibling = function(node) {
-    const nodesAboveActiveSibling = node.parent.children
-      .filter(d => !isFilteredOutByOtherDimensions(d))
-      .filter(isNodeAboveActiveSibling);
-
-    const dimensionQueryLength = Math.max(dimension.data().queryList.length, 1);
-    const heightPerQueryLevel = totalVerticalHeight / dimensionQueryLength;
-
-    if (nodesAboveActiveSibling.length === node.siblings.length) {
-      return heightPerQueryLevel;
-    }
-
-    const noOfNodesBelow = Math.max(node.siblings.length - nodesAboveActiveSibling.length, 1);
-
-    const belowInactiveHeightPerChild = (heightPerQueryLevel / 2) / noOfNodesBelow;
-
-    return belowInactiveHeightPerChild;
   };
 
   controller.getHierarchy = function() {

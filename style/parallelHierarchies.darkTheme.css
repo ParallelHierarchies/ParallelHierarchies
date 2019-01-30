@@ -33,24 +33,27 @@ body.dark g.ribbon path.main {
   fill-opacity: 0.5;
 }
 
-body.dark nav#uiControls > h1 {
+body.dark nav h1,
+body.dark nav #title,
+body.dark nav span,
+body.dark nav p {
   color: #fff;
 }
 
-body.dark nav#uiControls button,
-body.dark nav#uiControls .inputGroup,
-body.dark nav#uiControls select {
+body.dark nav button,
+body.dark nav .inputGroup,
+body.dark nav select {
   background: #333;
   box-shadow: none;
   color: #fff;
 }
 
-body.dark nav#uiControls button.circle {
+body.dark nav button.circle {
   background: #fff;
   box-shadow: none;
 }
 
-body.dark nav#uiControls .inputGroup {
+body.dark nav .inputGroup {
   fill: #fff;
 }
 

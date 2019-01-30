@@ -20,57 +20,75 @@
       <div class="widgetRow">
 
         <div class="inputGroup" id="percentageBars" style="opacity:1.0"></div>
-        <button class="circle" id="swapDataset" style="color:steelblue" title="change the dataset"><i class="material-icons">folder</i></button>
-        <button class="circle" id="reset" style="color: firebrick" title="reset visualization to default values" ><i class="material-icons">cached</i></button>
+        <button class="circle" id="rotateView" style="color:#555" title="Rotate visualization by 90 degrees">
+          <i class="material-icons">rotate_90_degrees_ccw</i>
+        </button>
+        <button class="circle" id="PDFDownload" style="color:#555" title="Download the visualization as SVG">
+          <i class="material-icons">description</i>
+        </button>
+        <button class="circle" id="PNGDownload" style="color:#555" title="Download the visualization as PNG">
+          <i class="material-icons">image</i>
+        </button>
+        <button class="circle" id="SVGDownload" style="color:#555" title="Download the visualization as SVG">
+          <i class="material-icons">code</i>
+        </button>
+        <button class="circle" id="swapDataset" style="color:steelblue" title="change the dataset">
+          <i class="material-icons">folder</i>
+        </button>
+        <button class="circle" id="reset" style="color: firebrick" title="reset visualization to default values" >
+          <i class="material-icons">cached</i>
+        </button>
+        <button class="circle" id="toggleDarkTheme" style="color:orange" title="Switch between a dark and light color scheme.">
+          <i class="material-icons">wb_sunny</i>
+        </button>
+        <button class="circle" id="optimizeIntersections" style="color:teal" title="Randomly scramble the category positions to reduce the number of ribbon intersections.">
+          <i class="material-icons">shuffle</i>
+        </button>
         <select id="dimensionPicker" title="add another dimension to the visualization"></select>
       </div>
     </nav>
 
-    <svg id="parallelHierarchies" style="margin-top: 50px"></svg>
+    <svg id="parallelHierarchies"></svg>
 
     <div id="tooltip" class="hidden"></div>
 
-    <!-- <footer>
-      <ul>
-        <li id="prototypeNotice" style="background:#F8BBD0;height:1em;border-radius:0.5em;padding:0.2em 0.5em;">Experimental Version</li>
-        <li id="foundBugNotice">Found a Bug? Psssst, no need to yell! In the meantime, create an issue on our
-          <a href="https://github.com/ParallelHierarchies/ParallelHierarchies">
-            <img alt="github logo" class="icon" style="height:0.95em;opacity:0.73;margin:0 0.1em 0 0.25em;" src="./img/github-mark.png" />
-            GitHub Project
-          </a>
-        </li>
-      </ul>
-    </footer> -->
+    <i id="showBottomNav" class="material-icons toggleBottomNav">menu</i>
     <nav id="uiControls">
-        <div id="uiWidgets">
-          <div id="rulers"></div>
-          <button id="addRuler" class="style" title="add a guiding line for vertical comparison tasks">
-            <i class="material-icons">border_horizontal</i>Ruler
-          </button>
+      <i id="hideBottomNav" class="material-icons toggleBottomNav">menu</i>
 
-          <div class="inputGroup">
-            <input id="fisheyeRadio" type="radio" name="fisheyeRadio" value="fisheye" />
-            <label for="fisheyeRadio" title="use fisheye effect on categories">
-                <i class="material-icons">search</i>Fisheye
-            </label>
-            <input id="draggingRadio" type="radio" name="fisheyeRadio" value="drag" checked="true"/>
-            <label for="draggingRadio" title="use dragging interaction on categories">
-              <i class="material-icons">pan_tool</i>Dragging
-            </label>
-          </div>
+      <div id="uiWidgets">
+        <div id="rulers"></div>
+        <button id="addRuler" class="style" title="add a guiding line for vertical comparison tasks">
+          <i class="material-icons">border_horizontal</i>Ruler
+        </button>
 
-          <div class="inputGroup">
-            <input id="toggleIntersectionMinimization" type="checkbox" />
-            <label for="toggleIntersectionMinimization">Optimize Intersections</label>
-            <input id="toggleGreedyMinimization" type="checkbox" />
-            <label for="toggleGreedyMinimization">Use Greedy</label>
-          </div>
-          <div id="aggregateValueSelection">
-            <span class="message">Aggregate Value:</span>
-            <ul id="aggregateValues" class="inputGroup" style="margin-left:0"></ul>
-          </div>
+        <div class="inputGroup">
+          <input id="fisheyeRadio" type="radio" name="fisheyeRadio" value="fisheye" />
+          <label for="fisheyeRadio" title="use fisheye effect on categories">
+              <i class="material-icons">search</i>Fisheye
+          </label>
+          <input id="draggingRadio" type="radio" name="fisheyeRadio" value="drag" checked="true"/>
+          <label for="draggingRadio" title="use dragging interaction on categories">
+            <i class="material-icons">pan_tool</i>Dragging
+          </label>
         </div>
-      </nav>
+
+        <div class="inputGroup">
+          <input id="acordionToggle" type="checkbox" />
+          <label for="acordionToggle">Enable Acordion</label>
+        </div>
+
+        <div id="aggregateValueSelection">
+          <span class="message">Aggregate Value:</span>
+          <ul id="aggregateValues" class="inputGroup" style="margin-left:0"></ul>
+        </div>
+        <select id="categoryComparisonModePicker" title="change the color that categories show to indicate differences in aggregate values"></select>
+
+        <select id="ribbonUncertaintyModePicker" title="change the uncertainty mode"></select>
+        <select id="categoryUncertaintyModePicker" title="change the uncertainty mode"></select>
+        <select id="uncertaintyColorSchemePicker" title="change the uncertainty color scheme"></select>
+      </div>
+    </nav>
 
     <section id="datasetModal">
       <div class="modalBody">
@@ -78,7 +96,7 @@
         <h2>Pick a dataset</h2>
         <ul id="presetDatasets"></ul>
 
-        <!-- <div id="ownDataset" class="hidden">
+        <div id="ownDataset" class="hidden">
           <h3>Custom Dataset (CSV)</h3>
           <input id="userItems" type="file" accept=".csv" />
           <p>Make sure your values are actually <strong style="color:orangered">comma-seperated</strong> (Excel exports to CSV are semicolon-seperated by default).</p>
@@ -96,12 +114,24 @@
             <input type="text" id="userHierarchyLevels" style="width: 40%" placeholder="Level1, Level2, ..."/>
             <button id="addUserHierarchyButton">add</button>
           </div>
+          <!-- <div class="inputGroup">
+            <input id="toggleIntersectionMinimization" type="checkbox" />
+            <label for="toggleIntersectionMinimization">Optimize Intersections</label>
+            <input id="toggleGreedyMinimization" type="checkbox" />
+            <label for="toggleGreedyMinimization">Use Greedy</label>
+          </div> -->
 
           <button id="userSchemaStart">Start</button>
           <p class="hidden" id="userSchemaError">Label must be set</p>
-        </div> -->
+        </div>
       </div>
     </section>
+
+    <!--
+      FIXME: svg2pdf and jspdf
+    -->
+    <script src="node_modules/jspdf-yworks/dist/jspdf.debug.js"></script>
+    <!-- <script src="node_modules/svg2pdf.js/dist/svg2pdf.js"></script> -->
 
     <script type="text/javascript" src="./build/bundle.js"></script>
   </body>

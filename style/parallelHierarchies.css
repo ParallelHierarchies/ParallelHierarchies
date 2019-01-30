@@ -21,8 +21,8 @@
   display: none;
 }
 
-g.parallelHierachies {
-
+g.parallelHierarchies {
+  transition: 0.3s;
 }
 
 g.dimension {

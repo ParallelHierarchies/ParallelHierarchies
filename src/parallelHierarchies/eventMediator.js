@@ -1,122 +1,134 @@
 import NotificationViewer from './notificationViewer';
 import ItemValueProvider from './itemValueProvider';
 
-const EventMediator = function() {
+class EventMediator {
+  constructor() {
+    this.mediator = {};
 
-  const mediator = {};
+    this.myNotificationViewer = new NotificationViewer();
+    this.myNotificationViewer.init();
 
-  const myNotificationViewer = new NotificationViewer();
-  myNotificationViewer.init();
+    this.ribbonController = null;
+    this.dimensionController = null;
 
-  let ribbonController;
-  let dimensionController;
+    this.pendingHighlightTiemouts = [];
 
-  let pendingHighlightTiemouts;
+    this.uiController = null;
+    this.hierarchiesComponent = null;
+    this.useHighlighting = true;
+  }
 
-  let uiController;
-  let hierarchiesComponent;
-  let useHighlighting = true;
+  notify (type, message) {
+    this.handleEvent({ type, message });
+  }
 
-  mediator.notify = function(type, message) {
-    handleEvent({ type, message });
-  };
-
-  let handleEvent = function(event) {
+  handleEvent(event) {
     if (event.type === 'categoryPositionChanged') {
-      ribbonController.updateVerticalRibbonPositions(event.message.category);
+      this.ribbonController.updateVerticalRibbonPositions(event.message.category);
     } else if (event.type === 'categoryClicked') {
-      dimensionController.updateDimensionsAfterQueryChange();
-      ribbonController.updateAfterQueryChange();
-      ribbonController.updateActiveRibbons();
-      uiController.drawPercentageBars();
+      this.dimensionController.updateDimensionsAfterQueryChange();
+      this.ribbonController.updateAfterQueryChange();
+      this.ribbonController.updateActiveRibbons();
+      this.uiController.drawPercentageBars();
     } else if (event.type === 'categoryMouseEnter') {
-      onElementMouseEvent(event.message);
+      this.onElementMouseEvent(event.message);
     } else if (event.type === 'categoryMouseMove') {
-      uiController.moveTooltip(event.message.event);
+      this.uiController.moveTooltip(event.message.event);
     } else if (event.type === 'categoryMouseOut') {
-      onElementMouseEvent(null);
+      this.onElementMouseEvent(null);
     } else if (event.type === 'categoryDraggingStarted') {
-      useHighlighting = false;
+      this.useHighlighting = false;
     } else if (event.type === 'categoryDraggingEnded') {
-      useHighlighting = true;
+      this.useHighlighting = true;
     } else if (event.type === 'categoryOrderingChanged') {
-      const message = `${ribbonController.getTotalNumberOfIntersections()} ribbon intersections`;
-      myNotificationViewer.hint(message);
+      const message = `${this.ribbonController.getTotalNumberOfIntersections()} ribbon intersections`;
+      this.myNotificationViewer.hint(message);
     } else if (event.type === 'dimensionPositionChanged') {
-      ribbonController.updateAfterQueryChange(event.message.positions);
-      ribbonController.updateActiveRibbons();
-      uiController.drawPercentageBars();
+      this.ribbonController.updateAfterQueryChange(event.message.positions);
+      this.ribbonController.updateActiveRibbons();
+      this.uiController.drawPercentageBars();
     } else if (event.type === 'dimensionDragged') {
-      ribbonController.updateHorizontalRibbonPositions(false);
+      this.ribbonController.updateHorizontalRibbonPositions(false);
     } else if (event.type === 'dimensionDragEnd') {
-      ribbonController.updateHorizontalRibbonPositions(true);
+      this.ribbonController.updateHorizontalRibbonPositions(true);
     } else if (event.type === 'dimensionAdded') {
-      dimensionController.addDimension(event.message);
-      ribbonController.updateAfterQueryChange();
-      ribbonController.updateActiveRibbons();
-      uiController.drawPercentageBars();
+      this.dimensionController.addDimension(event.message);
+      this.ribbonController.updateAfterQueryChange();
+      this.ribbonController.updateActiveRibbons();
+      this.uiController.drawPercentageBars();
     } else if (event.type === 'dimensionRemoved') {
-      dimensionController.removeDimension(event.message);
-      ribbonController.updateAfterQueryChange();
-      ribbonController.updateActiveRibbons();
-      uiController.drawPercentageBars();
+      this.dimensionController.removeDimension(event.message);
+      this.ribbonController.updateAfterQueryChange();
+      this.ribbonController.updateActiveRibbons();
+      this.uiController.drawPercentageBars();
     } else if (event.type === 'ribbonMouseEnter') {
-      onElementMouseEvent(event.message);
+      this.onElementMouseEvent(event.message);
     } else if (event.type === 'ribbonMouseMove') {
-      uiController.moveTooltip(event.message.event);
+      this.uiController.moveTooltip(event.message.event);
     } else if (event.type === 'ribbonMouseOut') {
-      onElementMouseEvent(null);
+      this.onElementMouseEvent(null);
     } else if (event.type === 'resize') {
-      dimensionController.height(hierarchiesComponent.height());
-      dimensionController.updateOnResize();
-      ribbonController.updateAfterQueryChange();
-      ribbonController.updateActiveRibbons();
+      this.dimensionController.height(this.hierarchiesComponent.height());
+      this.dimensionController.updateOnResize();
+      this.ribbonController.updateAfterQueryChange();
+      this.ribbonController.updateActiveRibbons();
     } else if (event.type === 'error') {
-      myNotificationViewer.error(event.message);
+      this.myNotificationViewer.error(event.message);
     } else if (event.type === 'warning') {
-      myNotificationViewer.warning(event.message);
+      this.myNotificationViewer.warning(event.message);
     } else if (event.type === 'hint') {
-      myNotificationViewer.hint(event.message);
+      this.myNotificationViewer.hint(event.message);
     } else if (event.type === 'uncertaintyModeChanged') {
-      ribbonController.updateActiveRibbons();
-      dimensionController.updateDimensionsAfterQueryChange();
+      this.ribbonController.updateActiveRibbons();
+      this.dimensionController.updateDimensionsAfterQueryChange();
+    } else if (event.type === 'categoryComparisonModeChanged') {
+      this.ribbonController.updateActiveRibbons();
+      this.dimensionController.updateDimensionsAfterQueryChange();
+    } else if (event.type === 'categoryUncertaintyModeChanged') {
+      this.ribbonController.updateActiveRibbons();
+      this.dimensionController.updateDimensionsAfterQueryChange();
     } else if (event.type === 'uncertaintyColorSchemeChanged') {
-      ribbonController.updateActiveRibbons();
-      dimensionController.updateDimensionsAfterQueryChange();
+      this.ribbonController.updateActiveRibbons();
+      this.dimensionController.updateDimensionsAfterQueryChange();
     } else if (event.type === 'primaryAggregateDimensionChanged') {
       ItemValueProvider.primaryAggregateDimension = event.message;
-      ItemValueProvider.secondaryAggregateDimension = event.message;
+      this.hierarchiesComponent.updateVerticalScaleDomain();
 
-      dimensionController.updateDimensionsAfterQueryChange();
-      ribbonController.updateAfterQueryChange();
-      ribbonController.updateActiveRibbons();
-      uiController.drawPercentageBars();
+      this.dimensionController.updateDimensionsAfterQueryChange();
+      this.ribbonController.updateAfterQueryChange();
+      this.ribbonController.updateActiveRibbons();
+      this.uiController.drawPercentageBars();
     } else if (event.type === 'secondaryAggregateDimensionChanged') {
-      // ItemValueProvider.secondaryAggregateDimension = event.message;
-      // hierarchiesComponent.updateVerticalScaleDomain();
+      ItemValueProvider.secondaryAggregateDimension = event.message;
+      this.hierarchiesComponent.updateVerticalScaleDomain();
 
-      // dimensionController.updateDimensionsAfterQueryChange();
-      // ribbonController.updateAfterQueryChange();
-      // ribbonController.updateActiveRibbons();
-      // uiController.drawPercentageBars();
+      this.dimensionController.updateDimensionsAfterQueryChange();
+      this.ribbonController.updateAfterQueryChange();
+      this.ribbonController.updateActiveRibbons();
+      this.uiController.drawPercentageBars();
     } else if (event.type === 'intersectionMinimizationModeChanged') {
-      if (hierarchiesComponent.useIntersectionMinimization()) {
-        ribbonController.optimizeIntersections(hierarchiesComponent.useGreedyOptimization());
-        dimensionController.updateDimensionsAfterQueryChange();
+      if (this.hierarchiesComponent.useIntersectionMinimization()) {
+        const useGreedy = this.hierarchiesComponent.useGreedyOptimization();
+        this.ribbonController.optimizeIntersections(useGreedy);
+        this.dimensionController.updateDimensionsAfterQueryChange();
       } else {
-        dimensionController.getObservedDimensions()
+        this.dimensionController.getObservedDimensions()
           .forEach(dim => dim.sortHierarchyByDescription());
 
-        ribbonController.updateActiveRibbons();
-        ribbonController.updateVerticalRibbonPositions();
+        this.ribbonController.updateActiveRibbons();
+        this.ribbonController.updateVerticalRibbonPositions();
       }
 
-      const message = `${ribbonController.getTotalNumberOfIntersections()} ribbon intersections`;
-      myNotificationViewer.hint(message);
+      const message = `${this.ribbonController.getTotalNumberOfIntersections()} ribbon intersections`;
+      this.myNotificationViewer.hint(message);
+    } else if (event.type === 'acordionModeChanged') {
+      this.hierarchiesComponent.redraw();
+    } else if (event.type === 'rotateView') {
+      this.dimensionController.updateOnRotate();
     } else {
       throw new TypeError();
     }
-  };
+  }
 
   /**
    * On mouse over events, highlight every category and ribbon that shares items with the category
@@ -124,7 +136,7 @@ const EventMediator = function() {
    * @param   {object} message message from hovered category
    * @return  {void}
    */
-  let onElementMouseEvent = function(message) {
+  onElementMouseEvent(message) {
     let items;
     let label;
 
@@ -141,31 +153,31 @@ const EventMediator = function() {
       label = `${sourceLabel} → ${targetLabel}`;
     }
 
-    if (useHighlighting) highlight(items);
+    if (this.useHighlighting) this.highlight(items);
 
     if (message === null) {
-      uiController.hideTooltip();
-    } else if (useHighlighting) {
-      tooltip(label, Object.values(items), message.event);
+      this.uiController.hideTooltip();
+    } else if (this.useHighlighting) {
+      this.tooltip(label, Object.values(items), message.event);
     }
-  };
+  }
 
   /**
    * Sends the 'highlight' event to all ribbons and dimensions, providing dictionary of items.
    * @param   {object} itemMap mapping from itemID -> item
    * @return  {void}
    */
-  let highlight = function(itemMap) {
-    const observedDimensions = dimensionController.getObservedDimensions();
-    const observedRibbons = ribbonController.getObservedRibbons();
+  highlight(itemMap) {
+    const observedDimensions = this.dimensionController.getObservedDimensions();
+    const observedRibbons = this.ribbonController.getObservedRibbons();
 
-    window.clearTimeout(pendingHighlightTiemouts);
+    window.clearTimeout(this.pendingHighlightTiemouts);
 
-    pendingHighlightTiemouts = setTimeout(() => {
+    this.pendingHighlightTiemouts = setTimeout(() => {
       observedDimensions.forEach((dim) => { dim.highlight(itemMap); });
       observedRibbons.forEach((rib) => { rib.highlight(itemMap); });
     }, 0);
-  };
+  }
 
   /**
    * Sends the tooltip information to the ui component to display metadata about highlighted items.
@@ -174,9 +186,9 @@ const EventMediator = function() {
    * @param   {object} event        d3.event that yielded the highlight function
    * @return  {void}
    */
-  let tooltip = function(label, listOfHighlightedItems, event) {
-    if (hierarchiesComponent.useCategoryFisheye()) return;
-    const listOfAllItems = hierarchiesComponent.getListOfAllItems();
+  tooltip (label, listOfHighlightedItems, event) {
+    if (this.hierarchiesComponent.useCategoryFisheye()) return;
+    const listOfAllItems = this.hierarchiesComponent.getListOfAllItems();
 
     const activeHighlightedValue = ItemValueProvider.getActiveItemValueSum(listOfHighlightedItems);
 
@@ -196,35 +208,9 @@ const EventMediator = function() {
 
     const body = { absolute, visible, total };
 
-    uiController.showTooltip(label, body, event);
-  };
-
-  // GETTERS + SETTERS for parameters //////////////////////////////////////////////////////////////
-
-  mediator.ribbonController = function(_) {
-    if (!arguments.length) return ribbonController;
-    ribbonController = _;
-    return mediator;
-  };
-  mediator.dimensionController = function(_) {
-    if (!arguments.length) return dimensionController;
-    dimensionController = _;
-    return mediator;
-  };
-  mediator.uiController = function(_) {
-    if (!arguments.length) return uiController;
-    uiController = _;
-    return mediator;
-  };
-  mediator.hierarchiesComponent = function(_) {
-    if (!arguments.length) return hierarchiesComponent;
-    hierarchiesComponent = _;
-    return mediator;
-  };
-
-
-  return mediator;
-};
+    this.uiController.showTooltip(label, body, event);
+  }
+}
 
 const instance = new EventMediator();
 

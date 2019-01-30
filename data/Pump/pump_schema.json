@@ -1,0 +1,10 @@
+{
+  "hierarchies": [
+    { "label": "Component Split", "levels": ["CS0", "CS1"] },
+    { "label": "Location", "levels": ["Region", "Plant", "Company Code"] },
+    { "label": "Cost Item", "levels": ["citem0", "citem1"] }
+  ],
+  "title": "Pump Data",
+  "timestamps": ["Value", "Value1"],
+  "unit": "€"
+}

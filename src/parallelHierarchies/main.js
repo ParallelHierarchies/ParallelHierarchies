@@ -17,6 +17,8 @@ export default class ParallelHierarchiesModule {
     this.activeConfiguration = null;
     this.hierarchiesComponent = null;
     this.uiComponent = null;
+    this.isBottomNavVisible = false;
+    this.isViewRotated = false;
 
     this.schemaLoader = this.getSchemaLoaderInstance();
     this.setupEventListeners();
@@ -37,19 +39,20 @@ export default class ParallelHierarchiesModule {
   run() {
     if (Object.keys(this.configurations).length === 0) return;
 
-    const WIDTH = window.innerWidth - 20;
-    const HEIGHT = window.innerHeight - 200;
+    const WIDTH = Math.max(window.innerWidth - 20, 500);
+    const HEIGHT = Math.max(window.innerHeight - 200, 500);
 
     svg
       .attr('width', WIDTH)
       .attr('height', HEIGHT);
 
-    this.dataProvider = new DataProvider()
-      .itemID('ID');
+    this.dataProvider = new DataProvider();
+    this.dataProvider.itemID = 'ID';
 
     this.hierarchiesComponent = this.getHierarchiesComponentInstance()
-      .width(WIDTH)
-      .height(HEIGHT);
+      .isRotated(this.isViewRotated)
+      .width(this.isViewRotated ? HEIGHT : WIDTH)
+      .height(this.isViewRotated ? WIDTH : HEIGHT);
 
     const schemaIsUndefined = this.activeConfiguration.presetSchema != null;
     const presetListIsUndefined = this.activeConfiguration.presetItemList != null;
@@ -62,25 +65,20 @@ export default class ParallelHierarchiesModule {
       this.loadPreset();
     }
 
-    this.uiComponent = this.getUIComponentInstance()
-      .rulerLength(WIDTH - 20);
+    this.uiComponent = this.getUIComponentInstance();
+    this.uiComponent.rulerLength = WIDTH - 20;
 
     this.uiComponent.setCategoryInteraction('drag');
 
     this.hierarchiesComponent.ui(this.uiComponent);
 
     svg.call(this.hierarchiesComponent);
-    d3.select('#rulers').call(this.uiComponent);
     d3.select('#datasetModal').classed('hidden', true);
-
-    d3.select('#toggleIntersectionMinimization').node().checked = true;
-    d3.select('#toggleGreedyMinimization').node().checked = false;
   }
 
   loadPreset() {
-    this.dataProvider
-      .itemFile(this.activeConfiguration.itemURI)
-      .schemaFile(this.activeConfiguration.schemaURI);
+    this.dataProvider.itemFile = this.activeConfiguration.itemURI;
+    this.dataProvider.schemaFile = this.activeConfiguration.schemaURI;
 
     if (this.activeConfiguration.initialDimensions) {
       this.hierarchiesComponent.initialDimensions(this.activeConfiguration.initialDimensions);
@@ -142,30 +140,42 @@ export default class ParallelHierarchiesModule {
   }
 
   getUIComponentInstance() {
-    return new UIComponent()
-      .hierarchies(this.hierarchiesComponent)
-      .dropDownMenu(d3.select('select#dimensionPicker'))
-      .tooltip(d3.select('#tooltip'))
-      .useDarkTheme(false)
-      .title(d3.select('nav > h1'))
-      .percentageBarSelection(d3.select('div#percentageBars'))
-      .uncertaintySelection(d3.select('#uncertaintyModePicker'))
-      .uncertaintyColorSchemeSelection(d3.select('#uncertaintyColorSchemePicker'));
+    const component = new UIComponent();
+    component.hierarchies = this.hierarchiesComponent;
+    component.dropDownMenu = d3.select('select#dimensionPicker');
+    component.tooltip = d3.select('#tooltip');
+    component.useDarkTheme = false;
+    component.title = d3.select('nav > h1');
+    component.percentageBarSelection = d3.select('div#percentageBars');
+    component.ribbonUncertaintySelection = d3.select('#ribbonUncertaintyModePicker');
+    component.categoryUncertaintySelection = d3.select('#categoryUncertaintyModePicker');
+    component.categoryComparisonSelection = d3.select('#categoryComparisonModePicker');
+    component.uncertaintyColorSchemeSelection = d3.select('#uncertaintyColorSchemePicker');
+    component.downloadSVGButton = d3.select('#SVGDownload');
+    component.downloadPNGButton = d3.select('#PNGDownload');
+    component.downloadPDFButton = d3.select('#PDFDownload');
+    component.init();
+
+    return component;
   }
 
   /**
-   * Update the width and height of the application when the window is resized.
+   * Update the width, height and rotation of the application when the window is resized.
    * @return {void}
    */
   resizeApplication() {
+    const WIDTH = Math.max(window.innerWidth - 20, 500);
+    const HEIGHT = Math.max(window.innerHeight - 200, 500);
+
     d3.select('svg#parallelHierarchies')
-      .attr('width', window.innerWidth - 20)
-      .attr('height', window.innerHeight - 230);
+      .attr('width', WIDTH)
+      .attr('height', HEIGHT);
 
     if (this.hierarchiesComponent != null) {
       this.hierarchiesComponent
-        .height(window.innerHeight - 230)
-        .width(window.innerWidth - 20);
+        .isRotated(this.isViewRotated)
+        .width(this.isViewRotated ? HEIGHT : WIDTH)
+        .height(this.isViewRotated ? WIDTH : HEIGHT);
 
       EventMediator.notify('resize');
     }
@@ -230,12 +240,18 @@ export default class ParallelHierarchiesModule {
 
     buttons.append('i').attr('class', 'material-icons').text('folder_open');
     buttons.append('span').text(d => d);
+
+    const custom = list.append('li').append('button');
+    custom.attr('id', 'toggleCustom').attr('class', 'preset custom');
+    custom.append('i').attr('class', 'material-icons').text('build');
+    custom.append('span').text('Use your own Dataset');
   }
 
   setupEventListeners() {
     // bind complex functions from above to listeners
     d3.select(window)
       .on('resize', () => this.resizeApplication());
+
     d3.select('#reset')
       .on('click', () => this.run());
     d3.select('#addUserHierarchyButton')
@@ -248,10 +264,33 @@ export default class ParallelHierarchiesModule {
     d3.select('#toggleDarkTheme')
       .on('click', () => this.uiComponent.toggleTheme());
 
+    d3.select('#showBottomNav')
+      .classed('hidden', false)
+      .on('click', function() {
+        d3.select(this).classed('hidden', true);
+        d3.select('#uiControls').classed('hidden', false);
+        d3.select('#hideBottomNav').classed('hidden', false);
+      });
+    d3.select('#hideBottomNav')
+      .classed('hidden', true)
+      .on('click', function() {
+        d3.select(this).classed('hidden', true);
+        d3.select('#uiControls').classed('hidden', true);
+        d3.select('#showBottomNav').classed('hidden', false);
+      });
+    d3.select('#uiControls').classed('hidden', true);
+
     // switch between dragging and fisheye interaction mode
     d3.selectAll('#fisheyeRadio,#draggingRadio').on('change', () => {
       this.uiComponent.setCategoryInteraction(d3.event.target.value);
     });
+
+    d3.select('input#acordionToggle')
+      .on('change', () => {
+        this.hierarchiesComponent.useZoomableDimensions(d3.event.target.checked);
+      });
+
+    d3.select('input#acordionToggle').node().checked = false;
 
     // show the dataset modal view to change the current dataset
     d3.select('button#swapDataset').on('click', () => {
@@ -266,11 +305,13 @@ export default class ParallelHierarchiesModule {
     // toggle the region for user-defined datasets and schemas in the dataset modal
     d3.select('#datasetModal li button#toggleCustom').on('click', () => {
       d3.select('#ownDataset').classed('hidden', !d3.select('#ownDataset').classed('hidden'));
+      d3.select('#datasetModal').classed('centred', !d3.select('#datasetModal').classed('centred'));
     });
 
-    d3.select('#userSchemaStart').on('click', this.runUserSchema);
+    d3.select('#userSchemaStart').on('click', () => this.runUserSchema());
 
-    // d3.select('#optimizeIntersections').on('click', () => this.hierarchiesComponent.optimizeIntersections());
+    // d3.select('#optimizeIntersections')
+    //   .on('click', () => this.hierarchiesComponent.optimizeIntersections());
     d3.select('#toggleIntersectionMinimization')
       .on('change', () => {
         this.hierarchiesComponent.useIntersectionMinimization(d3.event.target.checked);
@@ -279,6 +320,15 @@ export default class ParallelHierarchiesModule {
       .on('change', () => {
         this.hierarchiesComponent.useGreedyOptimization(d3.event.target.checked);
       });
+    d3.select('#optimizeIntersections')
+      .on('click', () => this.hierarchiesComponent.optimizeIntersections());
+
+    d3.select('#rotateView').on('click', () => {
+      this.isViewRotated = !this.isViewRotated;
+      this.resizeApplication();
+
+      EventMediator.notify('rotateView');
+    });
   }
 }
 

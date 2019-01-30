@@ -1,85 +1,99 @@
 import * as d3 from 'd3';
 
-const NotificationViewer = function() {
-  const viewer = {};
-  const SHOW_MESSAGE_DURATION = 5000;
-  let root;
+class NotificationViewer {
+  constructor() {
+    this.viewer = {};
+    this.SHOW_MESSAGE_DURATION = 5000;
+    this.root = null;
 
-  let errorBox;
-  let warningBox;
-  let hintBox;
+    this.errorBox = null;
+    this.warningBox = null;
+    this.hintBox = null;
 
-  let hideErrorTimeout = null;
-  let hideWarningTimout = null;
-  let hideHintTimeout = null;
+    this.hideErrorTimeout = null;
+    this.hideWarningTimout = null;
+    this.hideHintTimeout = null;
+  }
 
-  viewer.init = function() {
-    root = d3.select('body').append('div')
+  init() {
+    this.root = d3.select('body').append('div')
       .attr('id', 'notifications');
 
-    errorBox = root.append('div').attr('class', 'error box hidden');
-    errorBox.append('span').attr('class', 'delete').on('click', deleteBox);
-    errorBox.append('span').attr('class', 'icon');
-    errorBox.append('span').attr('class', 'text');
+    this.errorBox = this.root.append('div').attr('class', 'error box hidden');
+    this.errorBox.append('span').attr('class', 'delete').on('click', this.deleteBox);
+    this.errorBox.append('span').attr('class', 'icon');
+    this.errorBox.append('span').attr('class', 'text');
 
-    warningBox = root.append('div').attr('class', 'warning box hidden');
-    warningBox.append('span').attr('class', 'delete').on('click', deleteBox);
-    warningBox.append('span').attr('class', 'icon');
-    warningBox.append('span').attr('class', 'text');
+    this.warningBox = this.root.append('div').attr('class', 'warning box hidden');
+    this.warningBox.append('span').attr('class', 'delete').on('click', this.deleteBox);
+    this.warningBox.append('span').attr('class', 'icon');
+    this.warningBox.append('span').attr('class', 'text');
 
-    hintBox = root.append('div').attr('class', 'hint box hidden');
-    hintBox.append('span').attr('class', 'delete').on('click', deleteBox);
-    hintBox.append('span').attr('class', 'icon');
-    hintBox.append('span').attr('class', 'text');
-  };
+    this.hintBox = this.root.append('div').attr('class', 'hint box hidden');
+    this.hintBox.append('span').attr('class', 'delete').on('click', this.deleteBox);
+    this.hintBox.append('span').attr('class', 'icon');
+    this.hintBox.append('span').attr('class', 'text');
+  }
 
-  const hideAllBoxes = function() {
-    errorBox.classed('hidden', true);
-    warningBox.classed('hidden', true);
-    hintBox.classed('hidden', true);
-  };
+  hideAllBoxes() {
+    this.errorBox.classed('hidden', true);
+    this.warningBox.classed('hidden', true);
+    this.hintBox.classed('hidden', true);
+  }
 
-  let deleteBox = function() {
-    hideAllBoxes();
-  };
+  deleteBox() {
+    this.hideAllBoxes();
+  }
 
-  viewer.error = function(message) {
-    hideAllBoxes();
-    errorBox.classed('hidden', false);
-    errorBox.select('span.text').text(message);
+  error(message) {
+    setTimeout(() => {
+      this.hideAllBoxes();
+      this.errorBox.classed('hidden', false);
+      this.errorBox.select('span.text').text(message);
 
-    if (hideErrorTimeout !== null) {
-      clearTimeout(hideErrorTimeout);
+      if (this.hideErrorTimeout !== null) {
+        clearTimeout(this.hideErrorTimeout);
+      }
+
+      this.hideErrorTimeout = setTimeout(() => {
+        this.errorBox.classed('hidden', true);
+      }, this.SHOW_MESSAGE_DURATION);
+    }, 0);
+  }
+
+  warning(message) {
+    setTimeout(() => {
+
+    }, 0);
+    this.hideAllBoxes();
+    this.warningBox.classed('hidden', false);
+    this.warningBox.select('span.text').text(message);
+
+    if (this.hideWarningTimout !== null) {
+      clearTimeout(this.hideWarningTimout);
     }
 
-    hideErrorTimeout = setTimeout(() => { errorBox.classed('hidden', true); }, SHOW_MESSAGE_DURATION);
-  };
+    this.hideWarningTimout = setTimeout(() => {
+      this.warningBox.classed('hidden', true);
+    }, this.SHOW_MESSAGE_DURATION);
+  }
 
-  viewer.warning = function(message) {
-    hideAllBoxes();
-    warningBox.classed('hidden', false);
-    warningBox.select('span.text').text(message);
+  hint(message) {
+    setTimeout(() => {
 
-    if (hideWarningTimout !== null) {
-      clearTimeout(hideWarningTimout);
+    }, 0);
+    this.hideAllBoxes();
+    this.hintBox.classed('hidden', false);
+    this.hintBox.select('span.text').text(message);
+
+    if (this.hideHintTimeout !== null) {
+      clearTimeout(this.hideHintTimeout);
     }
 
-    hideWarningTimout = setTimeout(() => { warningBox.classed('hidden', true); }, SHOW_MESSAGE_DURATION);
-  };
-
-  viewer.hint = function(message) {
-    hideAllBoxes();
-    hintBox.classed('hidden', false);
-    hintBox.select('span.text').text(message);
-
-    if (hideHintTimeout !== null) {
-      clearTimeout(hideHintTimeout);
-    }
-
-    hideHintTimeout = setTimeout(() => { hintBox.classed('hidden', true); }, SHOW_MESSAGE_DURATION);
-  };
-
-  return viewer;
-};
+    this.hideHintTimeout = setTimeout(() => {
+      this.hintBox.classed('hidden', true);
+    }, this.SHOW_MESSAGE_DURATION);
+  }
+}
 
 export default NotificationViewer;

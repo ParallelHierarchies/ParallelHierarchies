@@ -3,6 +3,7 @@ import * as d3 from 'd3';
 import AdjacenciesController from './adjacenciesController';
 import RibbonGenerator from './ribbon';
 import ValueProvider from '../itemValueProvider';
+import EventMediator from '../eventMediator';
 
 const RibbonController = function() {
   const controller = {};
@@ -100,6 +101,12 @@ const RibbonController = function() {
     updateRibbonOffsets();
   };
 
+  controller.redraw = function() {
+    root.selectAll('.ribbon').remove();
+    observedRibbons.length = 0;
+    controller.init();
+  };
+
   /**
    * Returns a ribbon generator for the given path object. If a ribbon between source and target
    * category already exists, return that one. Otherwise create a new instance.
@@ -107,16 +114,20 @@ const RibbonController = function() {
    * @return {function}
    */
   let getRibbonGeneratorForPath = function(path) {
-    // const uncertaintyColor = ValueProvider
-    //   .getUncertaintyColorForItemList(Object.values(path.items));
+    const uncertaintyColor = ValueProvider
+      .getUncertaintyColorForItemList(Object.values(path.items));
+
+    const showsUncertainty = ValueProvider.ribbonUncertaintyMode === 2; // 2: color of ribbons shows unc.
 
     const existingRibbon = observedRibbons
       .find(rib => rib.source === path.source && rib.target === path.target);
 
     if (existingRibbon !== undefined) {
-      // existingRibbon.uncertaintyColor(uncertaintyColor);
+      existingRibbon.uncertaintyColor(uncertaintyColor);
       existingRibbon
         .data(path)
+        .uncertaintyColor(uncertaintyColor)
+        .showsUncertainty(showsUncertainty)
         .height(path.height);
 
       return existingRibbon;
@@ -125,7 +136,8 @@ const RibbonController = function() {
     const newRibbon = new RibbonGenerator()
       .data(path)
       .height(path.height)
-      // .uncertaintyColor(uncertaintyColor)
+      .uncertaintyColor(uncertaintyColor)
+      .showsUncertainty(showsUncertainty)
       .scaleY(scaleY);
 
     newRibbon.source = path.source;
@@ -236,6 +248,7 @@ const RibbonController = function() {
     adjacencyController.minimizeIntersections(useGreedy);
     controller.updateActiveRibbons();
     controller.updateVerticalRibbonPositions();
+    EventMediator.notify('categoryOrderingChanged');
   };
 
   controller.getTotalNumberOfIntersections = function() {
@@ -255,21 +268,21 @@ const RibbonController = function() {
   controller.hierarchies = function(_) {
     if (!arguments.length) return hierarchies;
     hierarchies = _;
-    adjacencyController.hierarchies(_);
+    adjacencyController.hierarchies = _;
     return controller;
   };
 
   controller.itemList = function(_) {
     if (!arguments.length) return itemList;
     itemList = _;
-    adjacencyController.itemList(_);
+    adjacencyController.itemList = _;
     return controller;
   };
 
   controller.itemID = function(_) {
     if (!arguments.length) return itemID;
     itemID = _;
-    adjacencyController.itemID(_);
+    adjacencyController.itemID = _;
     return controller;
   };
 

@@ -58,6 +58,7 @@ const DimensionController = function() {
    */
   let updateDimensionPositions = function() {
     root.selectAll('.dimension').each(function(d) {
+      d.isRotated(hierarchies.isRotated());
       d3.select(this).transition()
         .ease(transitionEasingFunction)
         .duration(transitionDuration)
@@ -123,6 +124,7 @@ const DimensionController = function() {
       .index(horizontalIndex)
       .isFirst(horizontalIndex === 0 && noOfActiveDimensions > 0)
       .isLast(horizontalIndex + 1 === noOfActiveDimensions && noOfActiveDimensions > 0)
+      .isRotated(hierarchies.isRotated())
       .x(xPosition)
       .y(0)
       .height(height - margin.top - margin.bottom)
@@ -156,6 +158,18 @@ const DimensionController = function() {
     });
 
     updateDimensionPositions();
+  };
+
+  controller.updateOnRotate = function() {
+    observedDimensions.forEach((dim) => {
+      dim
+        .isRotated(hierarchies.isRotated())
+        .update();
+    });
+  };
+
+  controller.redraw = function() {
+    observedDimensions.forEach(dim => dim.redraw());
   };
 
   /**
@@ -367,6 +381,10 @@ const DimensionController = function() {
    */
   controller.fisheye = function(transformation) {
     observedDimensions.forEach(dim => dim.fisheye(transformation));
+  };
+
+  controller.onAcordionModeChanged = function() {
+    controller.redraw();
   };
 
   // GETTERS AND SETTERS ///////////////////////////////////////////////////////////////////////////

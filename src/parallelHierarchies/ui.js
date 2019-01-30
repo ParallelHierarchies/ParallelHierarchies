@@ -1,124 +1,190 @@
 import * as d3 from 'd3';
 
 import VisiblePercentageBars from './percentageBars';
-import UncertaintyProvider, { UNCERTAINTY_MODES, UNCERTAINTY_COLOR_SCHEMES } from './uncertaintyProvider';
+import UncertaintyProvider, { RIBBON_UNCERTAINTY_MODES, UNCERTAINTY_COLOR_SCHEMES, CATEGORY_UNCERTAINTY_MODES } from './uncertaintyProvider';
 import ValueSelectionComponent from './valueSelectionComponent';
-import ValueProvider from './itemValueProvider';
+import ValueProvider, { CATEGORY_COMPARISON_MODES } from './itemValueProvider';
 import EventMediator from './eventMediator';
+import FileDownloader from '../plugins/fileDownloader';
 
-const UIComponent = function() {
-  let root;
+export default class UIComponent {
+  constructor() {
 
-  let data;
-  let hierarchies;
+    this.root = null;
 
-  let useDarkTheme = true;
+    this.data = null;
+    this.hierarchies = null;
 
-  // D3 CONFIGURATION
-  let dropDownMenu;
-  let tooltip;
+    this.useDarkTheme = true;
 
-  let percentageBarSelection;
-  let percentageBarGenerator;
+    // D3 CONFIGURATION
+    this.dropDownMenu = null;
+    this.tooltip = null;
+    this.downloadSVGButton = null;
+    this.downloadPNGButton = null;
+    this.downloadPDFButton = null;
 
-  let uncertaintySelection;
-  let uncertaintyColorSchemeSelection;
+    this.percentageBarSelection = null;
+    this.percentageBarGenerator = null;
 
-  let valueSelectionComponent;
+    this.ribbonUncertaintySelection = null;
+    this.categoryUncertaintyModeSelection = null;
+    this.uncertaintyColorSchemeSelection = null;
+    this.categoryComparisonSelection = null;
 
-  let title;
-  let rulerLength = 1000;
+    this.valueSelectionComponent = null;
 
-  const ui = function(selection) {
-    if (hierarchies == null) throw Error('ui: hierarchies must be set');
-    if (tooltip == null) throw Error('ui: tooltip must be set');
+    this.title = null;
+    this.rulerLength = 1000;
+  }
 
-    root = selection;
+  init(selection) {
+    if (this.hierarchies == null) throw Error('ui: hierarchies must be set');
+    if (this.tooltip == null) throw Error('ui: tooltip must be set');
 
-    hierarchies.dataProvider().getData().then((response) => {
-      data = response;
-      draw();
+    this.root = selection;
+
+    this.hierarchies.dataProvider().getData().then((response) => {
+      // FIXME: timeout to wait for parallelhierarchies component, which configures dependencies...
+      setTimeout(() => {
+        this.data = response;
+        this.draw();
+      }, 100);
     });
-  };
+  }
 
-  let draw = function() {
+  draw() {
     // if a titleSelection was set, set it's text to the value provided in schema
-    if (title != null) title.text(data.schema.title);
+    if (this.title != null) this.title.text(this.data.schema.title);
 
     // get a list of properties in the items (=dimension names)
-    const keys = hierarchies.dataProvider().getSchema().dimensions;
+    const keys = this.hierarchies.dataProvider().getSchema().dimensions;
 
-    dropDownMenu.selectAll('option').remove();
-    dropDownMenu.append('option').text('Add Dimension ...').attr('disabled', true);
+    this.dropDownMenu.selectAll('option').remove();
+    this.dropDownMenu.append('option').text('Add Dimension ...').attr('disabled', true);
     for (let l = 0; l < keys.length; l++) {
       const label = keys[l];
 
       // do not list options for the item id and value properties
-      dropDownMenu.append('option').text(label);
+      this.dropDownMenu.append('option').text(label);
     }
 
     // add the clicked on dimension to the parallelhierarchies
-    dropDownMenu.on('change', function() {
+    this.dropDownMenu.on('change', function() {
       EventMediator.notify('dimensionAdded', { 'name': this.value });
     });
 
     // add components to tooltip and hide it initially
-    tooltip.append('p').attr('class', 'heading');
-    tooltip.append('ul').attr('class', 'body');
-    tooltip.classed('hidden', true);
+    this.tooltip.append('p').attr('class', 'heading');
+    this.tooltip.append('ul').attr('class', 'body');
+    this.tooltip.classed('hidden', true);
 
-    d3.select('body').classed('dark', useDarkTheme);
+    d3.select('body').classed('dark', this.useDarkTheme);
 
-    uncertaintySelection.selectAll('option').remove();
-    uncertaintySelection.append('option').text('uncertainty').attr('disabled', true);
-    uncertaintySelection.selectAll('option').data(Object.keys(UNCERTAINTY_MODES), d => d).enter()
+    this.ribbonUncertaintySelection.selectAll('option').remove();
+    this.ribbonUncertaintySelection.append('option').text('ribbon uncertainty').attr('disabled', true);
+    this.ribbonUncertaintySelection.selectAll('option').data(Object.keys(RIBBON_UNCERTAINTY_MODES), d => d).enter()
       .append('option')
-      .attr('value', d => UNCERTAINTY_MODES[d])
+      .attr('value', d => RIBBON_UNCERTAINTY_MODES[d])
       .text(d => d);
 
-    uncertaintySelection.on('change', function() {
-      ValueProvider.uncertaintyMode = +this.value;
-      EventMediator.notify('uncertaintyModeChanged', ValueProvider.uncertaintyMode);
+    this.ribbonUncertaintySelection.on('change', function() {
+      ValueProvider.ribbonUncertaintyMode = +this.value;
+      EventMediator.notify('uncertaintyModeChanged', ValueProvider.ribbonUncertaintyMode);
     });
 
-    uncertaintyColorSchemeSelection.selectAll('option').remove();
-    uncertaintyColorSchemeSelection.append('option').text('uncertainty color schema').attr('disabled', true);
-    uncertaintyColorSchemeSelection.selectAll('option').data(UNCERTAINTY_COLOR_SCHEMES, d => d).enter()
+    this.categoryUncertaintySelection.selectAll('option').remove();
+    this.categoryUncertaintySelection
+      .append('option')
+      .text('category uncertainty').attr('disabled', true);
+    this.categoryUncertaintySelection.selectAll('option')
+      .data(Object.keys(CATEGORY_UNCERTAINTY_MODES), d => d).enter()
+      .append('option')
+      .attr('value', d => CATEGORY_UNCERTAINTY_MODES[d])
+      .text(d => d);
+
+    this.categoryUncertaintySelection.on('change', function() {
+      ValueProvider.categoryUncertaintyMode = +this.value;
+      EventMediator.notify('categoryUncertaintyModeChanged', ValueProvider.ribbonUncertaintyMode);
+    });
+
+    this.categoryComparisonSelection.selectAll('option').remove();
+    this.categoryComparisonSelection
+      .append('option')
+      .text('category comparison').attr('disabled', true);
+    this.categoryComparisonSelection.selectAll('option')
+      .data(Object.keys(CATEGORY_COMPARISON_MODES), d => d).enter()
+      .append('option')
+      .attr('value', d => CATEGORY_COMPARISON_MODES[d])
+      .text(d => d);
+
+    this.categoryComparisonSelection.on('change', function() {
+      ValueProvider.categoryComparisonMode = +this.value;
+      EventMediator.notify('categoryComparisonModeChanged', ValueProvider.categoryComparisonMode);
+    });
+
+    this.uncertaintyColorSchemeSelection.selectAll('option').remove();
+    this.uncertaintyColorSchemeSelection.append('option').text('uncertainty color schema').attr('disabled', true);
+    this.uncertaintyColorSchemeSelection.selectAll('option').data(UNCERTAINTY_COLOR_SCHEMES, d => d).enter()
       .append('option')
       .attr('value', d => d)
       .text(d => d);
 
-    uncertaintyColorSchemeSelection.on('change', function() {
+    this.uncertaintyColorSchemeSelection.on('change', function() {
       UncertaintyProvider.setColorSchema(this.value);
       EventMediator.notify('uncertaintyColorSchemeChanged');
     });
 
 
-    ui.drawPercentageBars();
+    this.drawPercentageBars();
 
-    valueSelectionComponent = new ValueSelectionComponent();
-    valueSelectionComponent.aggregateValues = hierarchies.aggregateDimensions();
-    valueSelectionComponent.onPrimaryAggregateValueChanged = ui.setPrimaryAggregateDimension;
-    valueSelectionComponent.onSecondaryAggregateValueChanged = ui.setSecondaryAggregateDimension;
+    this.valueSelectionComponent = new ValueSelectionComponent();
+    this.valueSelectionComponent.aggregateValues = this.hierarchies.aggregateDimensions();
+    this.valueSelectionComponent.onPrimaryAggregateValueChanged = setPrimaryAggregateDimension;
+    this.valueSelectionComponent.onSecondaryAggregateValueChanged = setSecondaryAggregateDimension;
 
-    valueSelectionComponent.draw();
+    this.valueSelectionComponent.draw();
 
     d3.select('#foundBugNotice').classed('hidden', true);
     d3.select('footer ul')
       .on('mouseenter', () => d3.select('#foundBugNotice').classed('hidden', false))
       .on('mouseleave', () => d3.select('#foundBugNotice').classed('hidden', true));
-  };
+
+    this.downloadSVGButton.on('click', () => {
+      setTimeout(() => {
+        const crowbar = new FileDownloader();
+        crowbar.svgs = document.querySelectorAll('#parallelHierarchies');
+        crowbar.downloadAsSVG();
+        this.hierarchies.redraw();
+      }, 0);
+    });
+
+    this.downloadPNGButton.on('click', () => {
+      setTimeout(() => {
+        const crowbar = new FileDownloader();
+        crowbar.svgs = document.querySelectorAll('#parallelHierarchies');
+        crowbar.downloadAsPNG();
+        this.hierarchies.redraw();
+      }, 0);
+    });
+
+    this.downloadPDFButton.on('click', () => {
+      const crowbar = new FileDownloader();
+      crowbar.svgs = document.querySelectorAll('#parallelHierarchies');
+      crowbar.downloadAsPDF();
+    });
+  }
 
   /*
    * Adds visual overview indicating the percentage of items selected per dimension as well as
    * the visible percentage.
    */
-  ui.drawPercentageBars = function() {
+  drawPercentageBars() {
     const dimensionEntries = {};
-    const anyItemValueSum = ValueProvider.getAnyItemValueSum(data.itemList);
-    const activeItemValueSum = ValueProvider.getActiveItemValueSum(data.itemList);
+    const anyItemValueSum = ValueProvider.getAnyItemValueSum(this.data.itemList);
+    const activeItemValueSum = ValueProvider.getActiveItemValueSum(this.data.itemList);
 
-    hierarchies.getObservedDimensions().forEach((dim) => {
+    this.hierarchies.getObservedDimensions().forEach((dim) => {
       const dimensionItems = [];
 
       dim.getActiveLeafCategories()
@@ -135,34 +201,34 @@ const UIComponent = function() {
       };
     });
 
-    if (percentageBarGenerator === undefined) {
-      percentageBarGenerator = new VisiblePercentageBars()
+    if (this.percentageBarGenerator === null) {
+      this.percentageBarGenerator = new VisiblePercentageBars()
         .height(70)
         .max(anyItemValueSum)
         .visible(activeItemValueSum)
         .dimensions(dimensionEntries);
 
-      percentageBarSelection.call(percentageBarGenerator);
+      this.percentageBarSelection.call(this.percentageBarGenerator);
     } else {
-      percentageBarGenerator
+      this.percentageBarGenerator
         .max(anyItemValueSum)
         .visible(activeItemValueSum)
         .dimensions(dimensionEntries)
         .updateView();
     }
-  };
+  }
 
   /**
    * Adds a visual element respresenting a ruler which can be used to compare heights in the
    * parallHierarchies.
    */
-  ui.addRuler = function() {
-    const ruler = root.append('div').attr('class', 'ruler grabbable');
+  addRuler() {
+    const ruler = d3.select('body').append('div').attr('class', 'ruler grabbable');
 
     // add horizontal line which cuts through the parallel Sets
     ruler.append('div')
       .attr('class', 'guideline')
-      .style('width', `${rulerLength}px`);
+      .style('width', `${this.rulerLength}px`);
 
     // add a handle for interaction
     ruler.append('div')
@@ -177,7 +243,7 @@ const UIComponent = function() {
     ruler.on('mousemove', function() {
       // restrict handle movement to length of ruler to not cover up the delete region
       d3.select(this).select('.handle')
-        .style('left', `${Math.min(d3.event.x - 30, rulerLength - 50)}px`);
+        .style('left', `${Math.min(d3.event.x - 30, this.rulerLength - 50)}px`);
     });
 
     // add drag behavior: dragging the ruler moves it vertically
@@ -187,20 +253,12 @@ const UIComponent = function() {
         d3.select(this).style('transform', `translateY(${d3.event.y}px)`);
       })
       .on('end', function() { d3.select(this).classed('dragging', false); }));
-  };
+  }
 
-  ui.setCategoryInteraction = function(flag) {
-    hierarchies.useCategoryFisheye(flag === 'fisheye');
-    hierarchies.useCategoryDragging(flag === 'drag');
-  };
-
-  ui.setPrimaryAggregateDimension = function(dimensionName) {
-    EventMediator.notify('primaryAggregateDimensionChanged', dimensionName);
-  };
-
-  ui.setSecondaryAggregateDimension = function(dimensionName) {
-    EventMediator.notify('secondaryAggregateDimensionChanged', dimensionName);
-  };
+  setCategoryInteraction(flag) {
+    this.hierarchies.useCategoryFisheye(flag === 'fisheye');
+    this.hierarchies.useCategoryDragging(flag === 'drag');
+  }
 
   /**
    * Sets the text inside the tooltip to the given parameters.
@@ -209,28 +267,28 @@ const UIComponent = function() {
    * @param   {object}  event   d3.event on mouseover
    * @return  {void}
    */
-  ui.showTooltip = function(heading, body, event) {
-    tooltip.select('p.heading').text(heading);
-    tooltip.select('ul.body').selectAll('li').remove();
+  showTooltip(heading, body, event) {
+    this.tooltip.select('p.heading').text(heading);
+    this.tooltip.select('ul.body').selectAll('li').remove();
 
     // tooltip.select('p.body').text(body);
     if (typeof body === 'string') {
-      tooltip.select('ul.body').append('li').text(body);
+      this.tooltip.select('ul.body').append('li').text(body);
     } else if (typeof body === 'object') {
       let row;
       Object.keys(body).forEach((property) => {
-        row = tooltip.select('ul.body').append('li');
+        row = this.tooltip.select('ul.body').append('li');
         row.append('span').attr('class', 'label').text(property);
         row.append('span').attr('class', 'value').text(body[property]);
       });
     }
-    tooltip.classed('hidden', false);
-    ui.moveTooltip(event);
-  };
+    this.tooltip.classed('hidden', false);
+    this.moveTooltip(event);
+  }
 
-  ui.moveTooltip = function(event) {
-    const ttWidth = +window.getComputedStyle(tooltip.node()).width.split('px')[0];
-    const ttHeight = +window.getComputedStyle(tooltip.node()).height.split('px')[0];
+  moveTooltip(event) {
+    const ttWidth = +window.getComputedStyle(this.tooltip.node()).width.split('px')[0];
+    const ttHeight = +window.getComputedStyle(this.tooltip.node()).height.split('px')[0];
     const ttPadding = 75;
 
     // keep tooltip inside the visible window, do not overshoot the edges
@@ -242,95 +300,34 @@ const UIComponent = function() {
       y = event.clientY - ttHeight - ttPadding;
     }
 
-    tooltip.style('left', `${x}px`).style('top', `${y}px`);
-  };
+    this.tooltip.style('left', `${x}px`).style('top', `${y}px`);
+  }
 
-  ui.hideTooltip = function() {
-    tooltip.classed('hidden', true);
-  };
+  hideTooltip() {
+    this.tooltip.classed('hidden', true);
+  }
 
   /**
    * Set the selection that will display the name of the visualization.
    */
-  ui.setTitle = function(_) {
-    if (typeof _ === 'string') title.text(_);
+  setTitle(_) {
+    if (typeof _ === 'string') this.title.text(_);
     else throw Error('ui: title must be of type string');
-  };
+  }
 
   /**
    * Toggles between the color themes of the application [bright, dark]
    */
-  ui.toggleTheme = function() {
-    useDarkTheme = !useDarkTheme;
-    d3.select('body').classed('dark', useDarkTheme);
-  };
+  toggleTheme() {
+    this.useDarkTheme = !this.useDarkTheme;
+    d3.select('body').classed('dark', this.useDarkTheme);
+  }
+}
 
-  // GETTERS + SETTERS for parameters //////////////////////////////////////////////////////////////
+function setPrimaryAggregateDimension(dimensionName) {
+  EventMediator.notify('primaryAggregateDimensionChanged', dimensionName);
+}
 
-  ui.hierarchies = function(_) {
-    if (!arguments.length) return hierarchies;
-    if (typeof _ === 'function') hierarchies = _;
-    else throw Error('ui: hierarchies must be of type function');
-    return ui;
-  };
-
-  ui.dropDownMenu = function(_) {
-    if (!arguments.length) return dropDownMenu;
-    if (typeof _ === 'object') dropDownMenu = _;
-    else throw Error('ui: dropDownMenu must be of type object');
-    return ui;
-  };
-
-  ui.tooltip = function(_) {
-    if (!arguments.length) return tooltip;
-    if (typeof _ === 'object') tooltip = _;
-    else throw Error('ui: tooltip must be of type object');
-    return ui;
-  };
-
-  ui.percentageBarSelection = function(_) {
-    if (!arguments.length) return percentageBarSelection;
-    if (typeof _ === 'object') percentageBarSelection = _;
-    else throw Error('ui: percentageBarSelection must be of type object');
-    return ui;
-  };
-
-  ui.title = function(_) {
-    if (!arguments.length) return title;
-    if (typeof _ === 'object') title = _;
-    else throw Error('ui: title must be of type object');
-    return ui;
-  };
-
-  ui.rulerLength = function(_) {
-    if (!arguments.length) return rulerLength;
-    if (typeof _ === 'number') rulerLength = _;
-    else throw Error('ui: rulerLength must be of type number');
-    return ui;
-  };
-
-  ui.useDarkTheme = function(_) {
-    if (!arguments.length) return useDarkTheme;
-    if (typeof _ === 'boolean') useDarkTheme = _;
-    else throw Error('ui: useDarkTheme must be of type boolean');
-    return ui;
-  };
-
-  ui.uncertaintySelection = function(_) {
-    if (!arguments.length) return uncertaintySelection;
-    if (typeof _ === 'object') uncertaintySelection = _;
-    else throw Error('ui: uncertaintySelection must be of type object');
-    return ui;
-  };
-
-  ui.uncertaintyColorSchemeSelection = function(_) {
-    if (!arguments.length) return uncertaintyColorSchemeSelection;
-    if (typeof _ === 'object') uncertaintyColorSchemeSelection = _;
-    else throw Error('ui: uncertaintyColorSchemeSelection must be of type object');
-    return ui;
-  };
-
-  return ui;
-};
-
-export default UIComponent;
+function setSecondaryAggregateDimension(dimensionName) {
+  EventMediator.notify('secondaryAggregateDimensionChanged', dimensionName);
+}

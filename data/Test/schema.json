@@ -1,0 +1,71 @@
+{
+  "title": "Test Datensatz",
+  "unit": "€",
+  "hierarchies": [
+    {"label": "dimC", "levels": ["dimC0", "dimC1", "dimC2", "dimC3", "dimC4"]},
+    {"label": "dimD", "levels": ["dimD0", "dimD1"]}
+  ],
+  "labels": {
+    "dimA": {
+      "0": "asdf",
+      "1": "sdfg",
+      "2": "dfgh",
+      "3": "fghj",
+      "4": "ghjk",
+      "5": "hjkl",
+      "6": "jklö",
+      "7": "klöä"
+    },
+    "dimB": {
+      "0": "qwer",
+      "1": "wert",
+      "2": "ertz",
+      "3": "rtzu",
+      "4": "tzui",
+      "5": "zuio"
+    },
+    "id": {},
+    "dimC": {},
+    "dimD": {},
+    "dimC0": {
+      "0": "yxcv",
+      "1": "xcvb",
+      "2": "cvbn"
+    },
+    "dimC1": {
+      "0": "testa",
+      "1": "testb",
+      "2": "testc"
+    },
+    "dimC2": {
+      "0": "xxx",
+      "1": "yyy",
+      "2": "zzz"
+    },
+    "dimC3": {
+      "0": "yxcv",
+      "1": "xcvb",
+      "2": "cvbn"
+    },
+    "dimC4": {
+      "0": "testa",
+      "1": "testb",
+      "2": "testc"
+    },
+    "dimC5": {
+      "0": "xxx",
+      "1": "yyy",
+      "2": "zzz"
+    },
+    "dimD0": {
+      "0": "d0",
+      "1": "d1",
+      "2": "d2"
+    },
+    "dimD1": {
+      "0": "dx",
+      "1": "dy",
+      "2": "dz"
+    }
+  }
+}

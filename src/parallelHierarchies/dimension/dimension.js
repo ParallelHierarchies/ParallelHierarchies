@@ -2,6 +2,7 @@ import * as d3 from 'd3';
 
 import DimensionBuilder from './dimensionBuilder';
 import DimensionHierarchyController from './dimensionHierarchyController';
+import ValueProvider, { CATEGORY_COMPARISON_MODES } from '../itemValueProvider';
 
 const DimensionGenerator = function() {
 
@@ -14,7 +15,8 @@ const DimensionGenerator = function() {
   // flags indicating the sorting of categories
   let isSortedByDescription = false;
   let isSortedByValue = false;
-  const isSortedByMinimization = false;
+
+  let isRotated = false;
 
   let bestOrder; // latest order the dimension was sorted by (i.e. optimized for ribbon inters.)
 
@@ -78,6 +80,13 @@ const DimensionGenerator = function() {
   dimension.update = function(useTransition = true) {
     dimensionHierarchyController.updateHierarchy();
     dimensionBuilder.updateHierarchy(useTransition);
+    dimensionBuilder.updateHeader(useTransition);
+  };
+
+  dimension.redraw = function() {
+    // remove all stylings that were possibly added by svg crowbar, as they may break some features
+    root.attr('style', '');
+    dimensionBuilder.redraw();
   };
 
   dimension.sortHierarchyByValue = function() {
@@ -114,9 +123,22 @@ const DimensionGenerator = function() {
   };
 
   dimension.sortHierarchyByYPosition = function() {
+    const orderBefore = dimensionHierarchyController.getOrder();
     dimensionHierarchyController.sortHierarchy((a, b) => a.y - b.y);
+    const orderAfter = dimensionHierarchyController.getOrder();
+
+    // make sure to only update the Custom label if the order has actually changed
+    let orderChanged = false;
+    orderBefore.forEach((e, position) => {
+      if (orderChanged) return;
+      orderChanged = orderBefore[position] !== orderAfter[position];
+    });
+
     dimensionHierarchyController.updateYPositions();
-    dimensionBuilder.setDimensionHeaderSortingText('Custom');
+
+    if (orderChanged) {
+      dimensionBuilder.setDimensionHeaderSortingText('Custom');
+    }
   };
 
   dimension.sortCategoriesRandomly = function() {
@@ -139,9 +161,16 @@ const DimensionGenerator = function() {
   };
 
   dimension.sortByOrdering = function(order = bestOrder) {
+    if (bestOrder === undefined) {
+      dimension.sortByBestRandomPositions();
+    }
+
     bestOrder = order;
-    dimensionHierarchyController
-      .sortHierarchy((a, b) => order[a.data.value.descriptor] - order[b.data.value.descriptor]);
+
+    if (order !== undefined) {
+      dimensionHierarchyController
+        .sortHierarchy((a, b) => order[a.data.value.descriptor] - order[b.data.value.descriptor]);
+    }
 
     dimension.update();
     dimensionBuilder.setDimensionHeaderSortingText('Minimized Intersections');
@@ -243,6 +272,10 @@ const DimensionGenerator = function() {
   dimension.ancestorPadding = function() { return dimensionBuilder.ancestorPadding(); };
 
   dimension.getColor = function(queryTerms) {
+    if (ValueProvider.categoryComparisonMode === CATEGORY_COMPARISON_MODES.GREY) {
+      return '#555';
+    }
+
     return colorScale(data.queryList.length - queryTerms.length);
   };
 
@@ -302,6 +335,13 @@ const DimensionGenerator = function() {
     if (!arguments.length) return aggregateDimension;
     if (typeof _ === 'string') aggregateDimension = _;
     else throw Error('dimension: aggregateDimension must be of type string');
+    return dimension;
+  };
+
+  dimension.isRotated = function(_) {
+    if (!arguments.length) return isRotated;
+    if (typeof _ === 'boolean') isRotated = _;
+    else throw Error('dimension: isRotated must be of type boolean');
     return dimension;
   };
 

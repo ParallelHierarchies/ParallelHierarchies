@@ -16,12 +16,25 @@ export default class ValueSelectionComponent {
     const aggregateValue = d3.select('#aggregateValues')
       .selectAll('li.aggregateValue').data(this.aggregateValues, d => d).enter()
       .append('li')
-      .attr('class', 'aggregateValue')
+      .attr('class', 'aggregateValue');
+
+    const options = aggregateValue.append('div').attr('class', 'options');
+
+    options.append('div')
+      .attr('class', 'option primary')
       .classed('active', (d, i) => i === 0)
       .on('click', function(d) {
-        d3.select('#aggregateValues .aggregateValue.active').classed('active', false);
+        d3.select('#aggregateValues .aggregateValue .primary.active').classed('active', false);
         d3.select(this).classed('active', true);
         that.onPrimaryAggregateValueChanged(d);
+      });
+
+    options.append('div')
+      .attr('class', 'option secondary')
+      .classed('active', (d, i) => i === 0)
+      .on('click', function(d) {
+        d3.select('#aggregateValues .aggregateValue .secondary.active').classed('active', false);
+        d3.select(this).classed('active', true);
         that.onSecondaryAggregateValueChanged(d);
       });
 

@@ -1,17 +1,17 @@
 import IntersectionOptimizer from './intersectionOptimizer';
 import ValueProvider from '../itemValueProvider';
 
-const AdjacenciesController = function() {
-  const controller = {};
+export default class AdjacenciesController {
+  constructor() {
+    // minimizes intersections between ribbons
+    this.intersectionOptimizer = IntersectionOptimizer();
 
-  // minimizes intersections between ribbons
-  const intersectionOptimizer = IntersectionOptimizer();
+    this.adjacencies = [];
 
-  const adjacencies = [];
-
-  let hierarchies;
-  let itemList;
-  let itemID;
+    this.hierarchies = null;
+    this.itemList = null;
+    this.itemID = null;
+  }
 
   /**
    * Update the adjacencies mapping between all neighboring dimensions. The mapping stores entries
@@ -19,7 +19,7 @@ const AdjacenciesController = function() {
    * @return {array} adjacencies objects for every pair of neighboring dimensions, sorted by
    *                 position in the visualization from left to right
    */
-  controller.updateAfterQueryChange = function() {
+  updateAfterQueryChange() {
     let sourceLabel;
     let targetLabel;
     let sourceDim;
@@ -32,20 +32,20 @@ const AdjacenciesController = function() {
     let sourceQs;
     let targetQs;
 
-    const observedDimensions = hierarchies.getObservedDimensions();
+    const observedDimensions = this.hierarchies.getObservedDimensions();
 
     // cached number of observed dimensions
     const numberAdjacencies = observedDimensions.length - 1;
 
     // map of query lists per dimension name
-    const activeQueries = getActiveQueryMap();
+    const activeQueries = this.getActiveQueryMap();
 
-    adjacencies.length = 0;
+    this.adjacencies.length = 0;
 
     // go through all items once and add the links between neighboring categories per item. This
     // approach does not require huge lists of items to be intersected, so it should perform better
     // than the category centred way.
-    itemList.forEach((item) => {
+    this.itemList.forEach((item) => {
       // inactive items don't fulfill the queries
       if (!item.active) return;
       // items with no value do not show up as height of ribbons
@@ -83,11 +83,11 @@ const AdjacenciesController = function() {
                 sourceLabel = getItemValueInDimensionForQuery(item, sourceQueryTerm, sourceDimName);
                 targetLabel = getItemValueInDimensionForQuery(item, targetQueryTerm, targetDimName);
 
-                createAdjacencyMapping(sourceLabel, targetLabel, sourceDim, targetDim, i);
+                this.createAdjacencyMapping(sourceLabel, targetLabel, sourceDim, targetDim, i);
 
                 // add reference to the item itself. The full 'items' property is used later on to
                 // calculate heights and offsets
-                adjacencies[i][sourceLabel][targetLabel].items[item[itemID]] = item;
+                this.adjacencies[i][sourceLabel][targetLabel].items[item[this.itemID]] = item;
               }
             }
           }
@@ -95,15 +95,15 @@ const AdjacenciesController = function() {
       }
     });
 
-    return adjacencies;
-  };
+    return this.adjacencies;
+  }
 
   /**
    * For every active dimension, get a list of their active queries
    * @return {object} map of dimensionName -> list of list of query terms
    */
-  let getActiveQueryMap = function() {
-    const observedDimensions = hierarchies.getObservedDimensions();
+  getActiveQueryMap() {
+    const observedDimensions = this.hierarchies.getObservedDimensions();
     const activeQueries = {};
     let q;
 
@@ -111,7 +111,7 @@ const AdjacenciesController = function() {
       // in case a dimension is active multiple times, getting query mapping only once is sufficient
       if (activeQueries[dim.data().name] != null) return;
 
-      q = hierarchies.getActiveQueries(dim.data().queryTree);
+      q = this.hierarchies.getActiveQueries(dim.data().queryTree);
 
       // only use length for this
       // activeQueries[dim.data().name] = Object.keys(q);
@@ -119,53 +119,7 @@ const AdjacenciesController = function() {
     });
 
     return activeQueries;
-  };
-
-  /**
-   * Find out if an item matches a query on a given dimension.
-   * @param   {object}  item          an item from the itemList
-   * @param   {array}   query         a list of strings for one query in a dimension
-   * @param   {string}  dimensionName name of the dimension the query is formulated on
-   * @return  {boolean}               whether this item matches all terms of the query in the given
-   *                                  dimension
-   */
-  let doesItemMatchQueryInDimension = function(item, query, dimensionName) {
-    const itemValue = item[dimensionName];
-
-    if (query.length === 0) return true;
-
-    // if the query contains entries, this means the itemValue is an object containing entries for
-    // levels of hierarchy of this dimension. Therefore, use a list of values of this object.
-    const itemValueList = Object.values(itemValue);
-
-    // item must have more values than there are query terms to match the query
-    if (query.length >= itemValueList.length) return false;
-
-    // get a prefix of this list the same length as the query (omitting irrelevant values)
-    const itemValueListPrefix = itemValueList.slice(0, query.length);
-
-    return compareLists(query, itemValueListPrefix);
-  };
-
-  /**
-   *
-   * @param   {object}  item          an item from the itemList
-   * @param   {array}   query         a list of strings for one query in a dimension
-   * @param   {string}  dimensionName name of the dimension the query is formulated on
-   * @return  {string}                label of item for this query in the given dimension
-   */
-  let getItemValueInDimensionForQuery = function(item, query, dimensionName) {
-    const itemValue = item[dimensionName];
-
-    if (query.length === 0) {
-      if (typeof itemValue === 'string') return `${dimensionName}:${itemValue}`;
-    }
-
-    const itemValueList = Object.values(itemValue);
-    const itemValuesForQuery = itemValueList.slice(0, query.length + 1);
-
-    return `${dimensionName}:${itemValuesForQuery.join('###')}`;
-  };
+  }
 
   /**
    * Creates a new entry in the adjacencies from source category to target category if none exists.
@@ -176,18 +130,15 @@ const AdjacenciesController = function() {
    * @param   {number}    adjacencyIndex  position in the adjacencies
    * @return  {object}                    the mapping from source to target category
    */
-  let createAdjacencyMapping = function(
-    sourceLabel, targetLabel, sourceDim, targetDim,
-    adjacencyIndex,
-  ) {
+  createAdjacencyMapping(sourceLabel, targetLabel, sourceDim, targetDim, adjacencyIndex) {
     // initialize each level of the adjacency if it was not yet created
-    if (adjacencies[adjacencyIndex] == null) {
-      adjacencies[adjacencyIndex] = {};
+    if (this.adjacencies[adjacencyIndex] == null) {
+      this.adjacencies[adjacencyIndex] = {};
     }
-    if (adjacencies[adjacencyIndex][sourceLabel] == null) {
-      adjacencies[adjacencyIndex][sourceLabel] = {};
+    if (this.adjacencies[adjacencyIndex][sourceLabel] == null) {
+      this.adjacencies[adjacencyIndex][sourceLabel] = {};
     }
-    if (adjacencies[adjacencyIndex][sourceLabel][targetLabel] == null) {
+    if (this.adjacencies[adjacencyIndex][sourceLabel][targetLabel] == null) {
 
       // find the category generators representing the labels for source and target dimension
       const sourceCategory = sourceDim.getActiveLeafCategories()
@@ -196,7 +147,7 @@ const AdjacenciesController = function() {
       const targetCategory = targetDim.getActiveLeafCategories()
         .find(cat => (cat.data().descriptor === targetLabel));
 
-      adjacencies[adjacencyIndex][sourceLabel][targetLabel] = {
+      this.adjacencies[adjacencyIndex][sourceLabel][targetLabel] = {
         'height': 0,
         'source': sourceCategory,
         'target': targetCategory,
@@ -206,16 +157,16 @@ const AdjacenciesController = function() {
       };
     }
 
-    return adjacencies[adjacencyIndex][sourceLabel][targetLabel];
-  };
+    return this.adjacencies[adjacencyIndex][sourceLabel][targetLabel];
+  }
 
-  // const randomizeCategoryHierarchies = function() {
-  //   const dimensions = hierarchies.getObservedDimensions();
-  //   dimensions.forEach(dim => dim.sortCategoriesRandomly());
-  // };
+  randomizeCategoryHierarchies() {
+    const dimensions = this.hierarchies.getObservedDimensions();
+    dimensions.forEach(dim => dim.sortCategoriesRandomly());
+  }
 
-  const getCategoryOrders = function() {
-    const dimensions = hierarchies.getObservedDimensions();
+  getCategoryOrders() {
+    const dimensions = this.hierarchies.getObservedDimensions();
     const categoryOrders = dimensions
       .map(dim => dim.getActiveLeafCategories())
       .map(catList => catList.sort((a, b) => a.y() - b.y()))
@@ -227,12 +178,12 @@ const AdjacenciesController = function() {
       });
 
     return categoryOrders;
-  };
+  }
 
-  controller.getTotalNumberOfIntersections = function() {
-    const orders = getCategoryOrders();
-    return intersectionOptimizer.getIntersections(adjacencies, orders);
-  };
+  getTotalNumberOfIntersections() {
+    const orders = this.getCategoryOrders();
+    return this.intersectionOptimizer.getIntersections(this.adjacencies, orders);
+  }
 
   /**
    * Using the optimized order of categories, update the position of ribbons and categories
@@ -240,23 +191,37 @@ const AdjacenciesController = function() {
    * @param  {number} iterations number of iterations
    * @return {void}
    */
-  controller.minimizeIntersections = function(useGreedy = false) {
-    const dimensions = hierarchies.getObservedDimensions();
+  minimizeIntersections(useGreedy = false) {
+    const iterations = 10;
+    const dimensions = this.hierarchies.getObservedDimensions();
 
-    const optimizedOrders = intersectionOptimizer.barycentricMethod(adjacencies, useGreedy);
-    dimensions.forEach((dim, i) => dim.sortByOrdering(optimizedOrders[i]));
+    // uncomment next lines for barycentric method
+    // const optimizedOrders = intersectionOptimizer.barycentricMethod(adjacencies, useGreedy);
+    // dimensions.forEach((dim, i) => dim.sortByOrdering(optimizedOrders[i]));
 
-    // dimensions.forEach(dim => dim.sortByBestRandomPositions());
-  };
+    let bestIntersections = this.getTotalNumberOfIntersections();
+
+    for (let i = 0; i < iterations; i++) {
+      this.randomizeCategoryHierarchies();
+      const randomIntersections = this.getTotalNumberOfIntersections();
+
+      if (randomIntersections < bestIntersections) {
+        dimensions.forEach(dim => dim.saveBestRandomPositions());
+        bestIntersections = randomIntersections;
+      }
+    }
+
+    dimensions.forEach(dim => dim.sortByBestRandomPositions());
+  }
 
   /**
    * Flattens the adjacency into a list of paths.
    * @return {obect} unordered list of unique paths between categories
    */
-  controller.getListOfPaths = function() {
+  getListOfPaths() {
     const pathList = [];
 
-    adjacencies.forEach((adjacency) => {
+    this.adjacencies.forEach((adjacency) => {
       Object.keys(adjacency).forEach((source) => {
         Object.keys(adjacency[source]).forEach((target) => {
           pathList.push(adjacency[source][target]);
@@ -265,49 +230,70 @@ const AdjacenciesController = function() {
     });
 
     return pathList;
-  };
+  }
 
-  /**
-   * Checks whether or not two (flat) lists store the same values on every position.
-   * @param   {object}  listA  the first list
-   * @param   {object}  listB  the second list
-   * @returns {boolean}        whether or not both lists store the same values on every position
-   */
-  let compareLists = function(listA, listB) {
-    if (listA.length !== listB.length) return false;
+  getAdjacencies() { return this.adjacencies; }
+}
 
-    let match = true;
-    for (let i = 0; match && i < listA.length; i++) {
-      match = match && listA[i] === listB[i];
-    }
+/**
+ * Checks whether or not two (flat) lists store the same values on every position.
+ * @param   {object}  listA  the first list
+ * @param   {object}  listB  the second list
+ * @returns {boolean}        whether or not both lists store the same values on every position
+ */
+function compareLists(listA, listB) {
+  if (listA.length !== listB.length) return false;
 
-    return match;
-  };
+  let match = true;
+  for (let i = 0; match && i < listA.length; i++) {
+    match = match && listA[i] === listB[i];
+  }
 
-  controller.getAdjacencies = function() { return adjacencies; };
+  return match;
+}
 
+/**
+ * Find out if an item matches a query on a given dimension.
+ * @param   {object}  item          an item from the itemList
+ * @param   {array}   query         a list of strings for one query in a dimension
+ * @param   {string}  dimensionName name of the dimension the query is formulated on
+ * @return  {boolean}               whether this item matches all terms of the query in the given
+ *                                  dimension
+ */
+function doesItemMatchQueryInDimension(item, query, dimensionName) {
+  const itemValue = item[dimensionName];
 
-  // GETTERS AND SETTERS ///////////////////////////////////////////////////////////////////////////
+  if (query.length === 0) return true;
 
-  controller.hierarchies = function(_) {
-    if (!arguments.length) return hierarchies;
-    hierarchies = _;
-    return controller;
-  };
+  // if the query contains entries, this means the itemValue is an object containing entries for
+  // levels of hierarchy of this dimension. Therefore, use a list of values of this object.
+  const itemValueList = Object.values(itemValue);
 
-  controller.itemList = function(_) {
-    if (!arguments.length) return itemList;
-    itemList = _;
-    return controller;
-  };
+  // item must have more values than there are query terms to match the query
+  if (query.length >= itemValueList.length) return false;
 
-  controller.itemID = function(_) {
-    if (!arguments.length) return itemID;
-    itemID = _;
-    return controller;
-  };
+  // get a prefix of this list the same length as the query (omitting irrelevant values)
+  const itemValueListPrefix = itemValueList.slice(0, query.length);
 
-  return controller;
-};
+  return compareLists(query, itemValueListPrefix);
+}
 
-export default AdjacenciesController;
+/**
+ *
+ * @param   {object}  item          an item from the itemList
+ * @param   {array}   query         a list of strings for one query in a dimension
+ * @param   {string}  dimensionName name of the dimension the query is formulated on
+ * @return  {string}                label of item for this query in the given dimension
+ */
+function getItemValueInDimensionForQuery(item, query, dimensionName) {
+  const itemValue = item[dimensionName];
+
+  if (query.length === 0) {
+    if (typeof itemValue === 'string') return `${dimensionName}:${itemValue}`;
+  }
+
+  const itemValueList = Object.values(itemValue);
+  const itemValuesForQuery = itemValueList.slice(0, query.length + 1);
+
+  return `${dimensionName}:${itemValuesForQuery.join('###')}`;
+}

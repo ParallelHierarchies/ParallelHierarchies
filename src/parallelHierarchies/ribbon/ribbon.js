@@ -1,9 +1,9 @@
 import * as d3 from 'd3';
 
-import { UNCERTAINTY_MODES } from '../uncertaintyProvider';
-// import UncertaintyRibbon from './uncertaintyRibbon';
+import { RIBBON_UNCERTAINTY_MODES } from '../uncertaintyProvider';
+import UncertaintyRibbon from './uncertaintyRibbon';
 import PartialRibbon from './partialRibbon';
-// import ComparisonRibbon from './comparisonRibbon';
+import ComparisonRibbon from './comparisonRibbon';
 import ValueProvider from '../itemValueProvider';
 import EventMediator from '../eventMediator';
 
@@ -18,13 +18,13 @@ const RibbonGenerator = function() {
 
   // SVG CONFIGURATION
   let height = -1;
-  // let uncertaintyColor = 0;
+  let uncertaintyColor = 0;
   let showsUncertainty = false;
   let scaleY = null;
 
   let partialRibbon;
-  // let uncertaintyRibbon;
-  // let comparisonRibbon;
+  let uncertaintyRibbon;
+  let comparisonRibbon;
 
   // constructs paths as cubic bezier splines
   const ribbonPath = d3.linkHorizontal()
@@ -41,16 +41,16 @@ const RibbonGenerator = function() {
     partialRibbon = new PartialRibbon()
       .parentRibbon(ribbon);
 
-    // uncertaintyRibbon = new UncertaintyRibbon()
-    //   .parentRibbon(ribbon)
-    //   .height(height)
-    //   .uncertaintyHeight(ValueProvider.getUncertaintyHeightForItemList(Object.values(data.items)));
+    uncertaintyRibbon = new UncertaintyRibbon()
+      .parentRibbon(ribbon)
+      .height(height)
+      .uncertaintyHeight(ValueProvider.getUncertaintyHeightForItemList(Object.values(data.items)));
 
-    // comparisonRibbon = new ComparisonRibbon()
-    //   .primaryDimension(ValueProvider.primaryAggregateDimension)
-    //   .secondaryDimension(ValueProvider.secondaryAggregateDimension)
-    //   .itemList(Object.values(data.items))
-    //   .parentRibbon(ribbon);
+    comparisonRibbon = new ComparisonRibbon()
+      .primaryDimension(ValueProvider.primaryAggregateDimension)
+      .secondaryDimension(ValueProvider.secondaryAggregateDimension)
+      .itemList(Object.values(data.items))
+      .parentRibbon(ribbon);
 
     draw();
   };
@@ -59,14 +59,18 @@ const RibbonGenerator = function() {
   ribbon.target = null;
 
   ribbon.getSVGPath = function(pathWidth = height) {
-    let uncertaintyMargin = 0;
-    if (ValueProvider.uncertaintyMode === UNCERTAINTY_MODES.RIBBON) uncertaintyMargin = 10;
+    const useRibbonUnc = ValueProvider.ribbonUncertaintyMode === RIBBON_UNCERTAINTY_MODES.RIBBON;
+    const uncertaintyMargin = useRibbonUnc ? 0 : 0;
+    const sourceWidth = ribbon.source.width();
+    const sourceW = sourceWidth / 2;
+    const targetWidth = ribbon.target.width();
+    const targetW = targetWidth / 2;
 
     // fy property indicates fisheye is active
-    const sourceX = ribbon.source.x() + ribbon.source.dimension().x() + uncertaintyMargin;
+    const sourceX = ribbon.source.x() + ribbon.source.dimension().x() + uncertaintyMargin + sourceW;
     const sourceY = ribbon.source.y() + ribbon.source.dimension().y() + data.sourceOffset;
 
-    const targetX = ribbon.target.dimension().x() - ribbon.target.x() - uncertaintyMargin;
+    const targetX = ribbon.target.dimension().x() - ribbon.target.x() - uncertaintyMargin - targetW;
     const targetY = ribbon.target.dimension().y() + ribbon.target.y() + data.targetOffset;
 
     const datumSourceTarget = {
@@ -113,11 +117,8 @@ const RibbonGenerator = function() {
       .attr('class', 'main');
 
     root.append('g').attr('class', 'partial').call(partialRibbon);
-
-    // if (ValueProvider.uncertaintyMode === UNCERTAINTY_MODES.RIBBON) {
-    //   root.append('g').attr('class', 'uncertainty').call(uncertaintyRibbon);
-    // }
-    // root.append('g').attr('class', 'comparison').call(comparisonRibbon);
+    root.append('g').attr('class', 'uncertainty').call(uncertaintyRibbon);
+    root.append('g').attr('class', 'comparison').call(comparisonRibbon);
 
     ribbon.update();
   };
@@ -138,17 +139,20 @@ const RibbonGenerator = function() {
     path.classed('uncertainty', showsUncertainty);
 
     path.transition().duration(duration).ease(easing)
-      // .style('fill', uncertaintyColor)
+      .style('fill', uncertaintyColor)
       .attr('height', height)
       .attr('d', ribbon.getSVGPath());
 
     partialRibbon.update(useTransition);
 
-    if (ValueProvider.uncertaintyMode === UNCERTAINTY_MODES.RIBBON) {
-      // uncertaintyRibbon.update(useTransition);
-    }
+    uncertaintyRibbon
+      .uncertaintyHeight(ValueProvider.getRibbonUncertaintyHeightForItemList(Object.values(data.items)))
+      .update(useTransition);
 
-    // comparisonRibbon.update();
+    comparisonRibbon
+      .primaryDimension(ValueProvider.primaryAggregateDimension)
+      .secondaryDimension(ValueProvider.secondaryAggregateDimension)
+      .update();
   };
 
   /**
@@ -204,11 +208,11 @@ const RibbonGenerator = function() {
     return ribbon;
   };
 
-  // ribbon.uncertaintyColor = function(_) {
-  //   if (!arguments.length) return uncertaintyColor;
-  //   uncertaintyColor = _;
-  //   return ribbon;
-  // };
+  ribbon.uncertaintyColor = function(_) {
+    if (!arguments.length) return uncertaintyColor;
+    uncertaintyColor = _;
+    return ribbon;
+  };
 
   ribbon.showsUncertainty = function(_) {
     if (!arguments.length) return showsUncertainty;

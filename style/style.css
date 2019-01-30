@@ -4,7 +4,6 @@ body {
   overflow: hidden;
   font-family: Raleway, sans-serif;
   font-weight: lighter;
-  font-feature-settings: lnum;
 }
 
 svg {

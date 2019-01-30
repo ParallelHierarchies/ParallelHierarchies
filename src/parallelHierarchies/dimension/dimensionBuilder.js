@@ -24,8 +24,8 @@ const DimensionBuilder = function() {
   let headerPadding = 120; // space between header and categories
   let ancestorPadding = 4; // horizontal padding between hierarchy levels
 
-  // let defaultAncestorPadding;
-  // let defaultCategoryWidth;
+  let defaultAncestorPadding = 120;
+  let defaultCategoryWidth = 12;
 
   /**
    * Adds the category hierarchy to the DOM.
@@ -39,8 +39,8 @@ const DimensionBuilder = function() {
       .attr('class', 'dimensionRoot clickable')
       .attr('transform', `translate(${-categoryWidth / 2}, ${headerPadding})`);
 
-    // defaultAncestorPadding = ancestorPadding;
-    // defaultCategoryWidth = categoryWidth;
+    defaultAncestorPadding = ancestorPadding;
+    defaultCategoryWidth = categoryWidth;
 
     observedCategories.length = 0;
 
@@ -60,6 +60,12 @@ const DimensionBuilder = function() {
       getCategoryGenerator(node);
     });
 
+    let interactionGenerator = drag;
+
+    if (dimension.hierarchies().useZoomableDimensions()) {
+      interactionGenerator = zoom;
+    }
+
     // adds a <g> for all observed categories without a visual representation
     dimensionRoot.selectAll('g.category').data(observedCategories, d => d.data().descriptor).enter()
       .append('g')
@@ -68,7 +74,7 @@ const DimensionBuilder = function() {
       .on('mouseenter', onCategoryMouseEnter)
       .on('mousemove', onCategoryMouseMove)
       .on('mouseleave', onCategoryMouseLeave)
-      .call(drag);
+      .call(interactionGenerator);
 
     dimensionRoot.selectAll('g.category').data(observedCategories, d => d.data().descriptor).exit()
       .remove();
@@ -89,6 +95,20 @@ const DimensionBuilder = function() {
     });
   };
 
+  builder.updateHeader = function(useAnimatedUpdate = true) {
+    const rotate = dimension.isRotated();
+    const duration = useAnimatedUpdate ? 200 : 0;
+
+    header.transition().duration(duration).ease(d3.easePolyOut)
+      .style('transform', rotate ? 'rotateZ(90deg)translate(75px, -10px)' : 'translate(0, 20px)');
+  };
+
+  builder.redraw = function() {
+    observedCategories.length = 0;
+    builder.drawHierarchy();
+    builder.drawDimensionHeader();
+  };
+
   /**
    * Creates the header box for the dimension
    * @return  {void}
@@ -96,9 +116,11 @@ const DimensionBuilder = function() {
   builder.drawDimensionHeader = function() {
     root.select('.header').remove();
 
+    const rotate = dimension.isRotated();
+
     header = root.append('g')
       .attr('class', 'header')
-      .attr('transform', 'translate(0, 20)');
+      .style('transform', rotate ? 'rotateZ(90deg)translate(75px, -10px)' : 'translate(0, 20px)');
 
     appendTitle();
 
@@ -263,7 +285,7 @@ const DimensionBuilder = function() {
     // to add its term to the query tree.
     const categoryQuery = categoryData.query;
     dimension.data().queryList = categoryData.query.concat(categoryData.identifier);
-    dimension.data().queryTree = {};
+
     let queryNode = dimension.data().queryTree;
     for (let t = 0; t < categoryQuery.length; t++) {
       if (queryNode[categoryQuery[t]] == null) queryNode[categoryQuery[t]] = {};
@@ -372,13 +394,13 @@ const DimensionBuilder = function() {
     EventMediator.notify('categoryDraggingEnded');
   };
 
-  // const onDimensionZoomed = function() {
-  //   ancestorPadding = defaultAncestorPadding * d3.event.transform.k;
-  //   categoryWidth = defaultCategoryWidth * d3.event.transform.k;
-  //   dimensionRoot.attr('transform', `translate(${-categoryWidth / 2}, ${headerPadding})`);
-  //   builder.updateHierarchy(false);
-  //   EventMediator.notify('categoryPositionChanged', { 'category': null });
-  // };
+  const onDimensionZoomed = function() {
+    ancestorPadding = defaultAncestorPadding * d3.event.transform.k;
+    categoryWidth = defaultCategoryWidth * d3.event.transform.k;
+    dimensionRoot.attr('transform', `translate(${-categoryWidth / 2}, ${headerPadding})`);
+    builder.updateHierarchy(false);
+    EventMediator.notify('categoryPositionChanged', { 'category': null });
+  };
 
   builder.getObservedCategories = function() {
     return observedCategories;
@@ -406,9 +428,9 @@ const DimensionBuilder = function() {
     header.select('text.selected').text(text);
   };
 
-  // const zoom = d3.zoom()
-  //   .scaleExtent([1, 10])
-  //   .on('zoom', onDimensionZoomed);
+  const zoom = d3.zoom()
+    .scaleExtent([1, 10])
+    .on('zoom', onDimensionZoomed);
 
   // GETTERS + SETTERS for parameters //////////////////////////////////////////////////////////////
 
@@ -442,7 +464,9 @@ const DimensionBuilder = function() {
 
   builder.ancestorPadding = function(_) {
     if (!arguments.length) return ancestorPadding;
-    if (typeof _ === 'number') ancestorPadding = _;
+    if (typeof _ === 'number') {
+      ancestorPadding = _;
+    }
     else throw Error('builder: ancestorPadding must be of type number');
     return builder;
   };
@@ -456,7 +480,9 @@ const DimensionBuilder = function() {
 
   builder.categoryWidth = function(_) {
     if (!arguments.length) return categoryWidth;
-    if (typeof _ === 'number') categoryWidth = _;
+    if (typeof _ === 'number') {
+      categoryWidth = _;
+    }
     else throw Error('builder: categoryWidth must be of type number');
     return builder;
   };

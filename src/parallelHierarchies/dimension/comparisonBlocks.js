@@ -1,6 +1,8 @@
 import * as d3 from 'd3';
 
-import ValueProvider from '../itemValueProvider';
+import ValueProvider, { CATEGORY_COMPARISON_MODES } from '../itemValueProvider';
+
+const COMPARISON_BLOCK_GREY = '#555';
 
 export default function ComparisonBlocks() {
   let root;
@@ -31,6 +33,7 @@ export default function ComparisonBlocks() {
 
   blocks.update = function() {
     const differenceHeight = getDifferenceHeight();
+
     const fillColor = getFillColor();
 
     topBlock
@@ -92,11 +95,21 @@ export default function ComparisonBlocks() {
     const primaryValue = ValueProvider.getActiveItemValueSum(itemList, primaryDimension);
     const secondaryValue = ValueProvider.getActiveItemValueSum(itemList, secondaryDimension);
 
-    if (primaryValue > secondaryValue) {
-      return d3.rgb(color).brighter(0.5);
+    let fillColor;
+
+    if (ValueProvider.categoryComparisonMode === CATEGORY_COMPARISON_MODES.OPACITY) {
+      if (primaryValue > secondaryValue) {
+        fillColor = d3.rgb(color).brighter(0.5);
+      } else {
+        fillColor = d3.rgb(color).darker(0.5);
+      }
+    } else if (ValueProvider.categoryComparisonMode === CATEGORY_COMPARISON_MODES.GREY) {
+      fillColor = COMPARISON_BLOCK_GREY;
+    } else if (ValueProvider.categoryComparisonMode === CATEGORY_COMPARISON_MODES.NONE) {
+      fillColor = color;
     }
 
-    return d3.rgb(color).darker(0.5);
+    return fillColor;
   };
 
   blocks.itemList = function(_) {

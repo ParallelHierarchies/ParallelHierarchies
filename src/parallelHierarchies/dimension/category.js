@@ -1,6 +1,8 @@
 import * as d3 from 'd3';
 
-import ValueProvider from '../itemValueProvider';
+import ValueProvider, { CATEGORY_COMPARISON_MODES } from '../itemValueProvider';
+import ComparisonBlocks from './comparisonBlocks';
+import UncertaintyBlock from './uncertaintyBlock';
 
 const CategoryGenerator = function() {
 
@@ -15,6 +17,9 @@ const CategoryGenerator = function() {
   let box; // <rect> representing the category
   let categoryLabel; // <g> with label next to category
   let ancestorLabel; // <g> with label on top of category if isDrilledDown
+
+  let comparisonBlocks;
+  let uncertaintyBlock;
 
   // SVG CONFIGURATION
   let width = 10; // width of category --> data independent, optional
@@ -43,6 +48,20 @@ const CategoryGenerator = function() {
       .attr('class', 'group')
       .attr('transform', 'translate(0, 0)');
 
+
+    comparisonBlocks = new ComparisonBlocks()
+      .scaleY(dimension.scaleY())
+      .color(dimension.data().color)
+      .width(width)
+      .isHidden(isHidden)
+      .itemList(Object.values(data.items));
+
+    uncertaintyBlock = new UncertaintyBlock()
+      .scaleY(dimension.scaleY())
+      .itemList(Object.values(data.items))
+      .isHidden(isHidden)
+      .parentCategory(category);
+
     draw();
 
     category.update();
@@ -64,6 +83,19 @@ const CategoryGenerator = function() {
     height = data.node.h;
     ({ y } = data.node);
 
+    comparisonBlocks
+      .x(x)
+      .parentHeight(getHeight())
+      .isDrilledDown(isDrilledDown)
+      .update();
+
+    uncertaintyBlock
+      .x(x)
+      .height(getHeight())
+      .width(width)
+      .fill(dimension.getColor(data.query))
+      .update();
+
     updateBlocks(useSmoothTransitions);
     updateLabels(useSmoothTransitions);
     updateExpandIndicators();
@@ -82,7 +114,7 @@ const CategoryGenerator = function() {
       .transition()
       .duration(duration)
       .ease(easing)
-      .style('fill', myFillColor)
+      .attr('fill', myFillColor)
       .attr('height', myHeight)
       .attr('width', width)
       .attr('transform', d => `translate(${d === 'left' ? -x : x},0)`);
@@ -96,7 +128,8 @@ const CategoryGenerator = function() {
   let getHeight = function() {
     if (height === 0) return 0;
 
-    const avgUncHgt = ValueProvider.getUncertaintyHeightForItemList(Object.values(data.items));
+    const itemList = Object.values(data.items);
+    const avgUncHgt = ValueProvider.getCategoryUncertaintyHeightForItemList(itemList);
 
     if (avgUncHgt !== null && !isDrilledDown) {
       return height - (avgUncHgt / 2);
@@ -107,7 +140,9 @@ const CategoryGenerator = function() {
 
   let getY = function() {
     if (height === 0) return 0;
-    const avgUncHgt = ValueProvider.getUncertaintyHeightForItemList(Object.values(data.items));
+
+    const itemList = Object.values(data.items);
+    const avgUncHgt = ValueProvider.getCategoryUncertaintyHeightForItemList(itemList);
 
     if (avgUncHgt !== null && !isDrilledDown) {
       return y + (avgUncHgt / 4);
@@ -118,7 +153,13 @@ const CategoryGenerator = function() {
 
   const getAncestorFontColor = function() {
     if (height === 0) return 0;
-    const avgUncHgt = ValueProvider.getUncertaintyHeightForItemList(Object.values(data.items));
+
+    const itemList = Object.values(data.items);
+    const avgUncHgt = ValueProvider.getCategoryUncertaintyHeightForItemList(itemList);
+
+    if (ValueProvider.categoryComparisonMode === CATEGORY_COMPARISON_MODES.GREY) {
+      return '#fff';
+    }
 
     if (avgUncHgt !== null) {
       return '#fff';
@@ -133,6 +174,10 @@ const CategoryGenerator = function() {
       : ((data.query.length + 1) * (dimension.ancestorPadding() + width));
 
     const duration = useSmoothTransitions ? 400 : 0;
+
+    const ancestorTransform = dimension.isRotated()
+      ? `translate(0,${height / 2})rotate(90)translate(0,${(-width) / 5})`
+      : `translate(0,${height / 2})rotate(-90)translate(0,${(width * 4) / 5})`;
 
     // animate position change of category label (background and text positioning)
     categoryLabel
@@ -152,7 +197,7 @@ const CategoryGenerator = function() {
       .transition().duration(duration)
       .attr('fill', getAncestorFontColor())
       .attr('font-size', width)
-      .attr('transform', `translate(0,${height / 2})rotate(-90)translate(0,${(width * 4) / 5})`)
+      .attr('transform', ancestorTransform)
       .text(hierarchies.cropText(data.label, height));
   };
 
@@ -204,9 +249,9 @@ const CategoryGenerator = function() {
     }
 
     if (highlightMe) {
-      box.selectAll('rect').attr('fill', d3.rgb(dimension.data().color).darker(1));
+      box.selectAll('rect').attr('fill', d3.rgb(dimension.getColor(data.query)).darker(1));
     } else {
-      box.selectAll('rect').attr('fill', dimension.data().color);
+      box.selectAll('rect').attr('fill', dimension.getColor(data.query));
     }
   };
 
@@ -232,6 +277,9 @@ const CategoryGenerator = function() {
       .attr('width', width)
       .attr('fill', dimension.data().color)
       .attr('transform', d => `translate(${d === 'left' ? -x : x},0)`);
+
+    group.append('g').attr('class', 'comparisonBlocks').call(comparisonBlocks);
+    group.append('g').attr('class', 'uncertaintyBlock').call(uncertaintyBlock);
   };
 
   /**
