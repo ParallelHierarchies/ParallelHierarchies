@@ -36,7 +36,7 @@ const DimensionGenerator = function() {
   // SVG CONFIGURATION
   let height = -1; // maximum vertical space for dimension, MUST be set
   let index = -1; // logical index relative to other dimensions
-  const categoryWidth = 12; // width of dimension rect
+  const categoryWidth = 'ontouchstart' in document.documentElement ? 20 : 12; // width of dimension rect
   let categoryPadding = 50; // total vertical padding split between all categories
   let headerPadding = 120; // space between header and categories
 

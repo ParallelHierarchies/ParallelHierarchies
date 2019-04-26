@@ -317,13 +317,22 @@ const DimensionBuilder = function() {
   const onCategoryDragStart = function(cat) {
     if (!cat.data().isQueryLeaf) return;
     EventMediator.notify('categoryDraggingStarted');
-    cat.mouseYOffsetOnStart = d3.mouse(d3.select(this).select('rect').node())[1];
+
+    const mouseYOffsetOnStart = !!d3.touches(d3.select(this).select('rect').node())[0]
+      ? d3.touches(d3.select(this).select('rect').node())[0][1]
+      : d3.mouse(d3.select(this).select('rect').node())[1]
+
+    cat.mouseYOffsetOnStart = mouseYOffsetOnStart;
+
     d3.select(this).classed('dragging', true);
   };
 
   const onCategoryDrag = function(cat) {
     if (!cat.data().isQueryLeaf) return;
-    const mousePositionY = d3.mouse(root.node())[1] - headerPadding - cat.mouseYOffsetOnStart;
+
+    const mousePositionY = !!d3.touches(root.node())[0]
+      ? d3.touches(root.node())[0][1] - headerPadding - cat.mouseYOffsetOnStart
+      : d3.mouse(root.node())[1] - headerPadding - cat.mouseYOffsetOnStart;
 
     const siblingNodes = cat.data().siblings;
     const siblingGenerators = observedCategories
